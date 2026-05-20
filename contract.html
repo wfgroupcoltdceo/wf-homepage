@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>계약서 미리보기 · WF GROUP</title>
+<meta name="description" content="WF GROUP 대리점 사업 계약서 22개 조항을 미리보기로 확인하고 PDF로 다운로드하실 수 있습니다." />
+<link rel="icon" type="image/png" href="./assets/images/wf-symbol.png" />
+
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: { sans: ['Pretendard Variable', 'Pretendard', 'sans-serif'] },
+      colors: {
+        wfblack: { DEFAULT: '#181818', light: '#3A3A3A', dark: '#0E0E0E', darker: '#000000' },
+        wfsilver: { DEFAULT: '#9CA0A4', light: '#C9CCCF', dark: '#5C5F66' },
+      },
+    } },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Pretendard Variable', Pretendard, sans-serif; }
+</style>
+</head>
+
+<body class="bg-white text-gray-900">
+
+<!-- 헤더 -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="./index.html" class="flex items-center gap-3 group">
+      <img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-10" />
+      <div class="hidden sm:flex flex-col leading-tight">
+        <span class="text-[10px] text-gray-500 font-medium tracking-wider">WF GROUP</span>
+        <span class="font-bold text-wfblack-dark text-sm">주식회사 더블유에프그룹</span>
+      </div>
+    </a>
+    <ul class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
+      <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
+      <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
+      <li><a href="./faq.html" class="hover:text-wfblack">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="text-wfblack font-semibold">계약서</a></li>
+    </ul>
+    <a href="./index.html#contact" class="hidden md:inline-flex items-center gap-2 bg-wfblack hover:bg-wfblack-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full">상담 신청</a>
+    <button class="md:hidden text-wfblack-dark" id="mobile-menu-btn"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+    <ul class="px-6 py-4 space-y-3 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="block py-2">홈</a></li>
+      <li><a href="./business.html" class="block py-2">About WF Business</a></li>
+      <li><a href="./strengths.html" class="block py-2">Why WF</a></li>
+      <li><a href="./faq.html" class="block py-2">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="block py-2 text-wfblack font-semibold">계약서</a></li>
+      <li><a href="./index.html#contact" class="block py-2 text-wfblack font-semibold">상담 신청 →</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- 페이지 헤더 -->
+<section class="pt-32 pb-12 bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker text-white">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 text-center">
+    <div class="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-wfsilver font-semibold text-sm px-4 py-1.5 rounded-full mb-4">CONTRACT</div>
+    <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight mb-4">대리점 사업 계약서</h1>
+    <p class="text-gray-300 text-lg mb-8">온라인 해외직구 구매대행 사업 계약서 · 22개 조항</p>
+    <a href="./assets/files/WF-Contract.pdf" download class="inline-flex items-center gap-2 bg-wfsilver hover:bg-wfsilver-light text-wfblack font-semibold px-8 py-4 rounded-full transition-all hover:shadow-xl">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      PDF 다운로드
+    </a>
+  </div>
+</section>
+
+<!-- 계약 당사자 -->
+<section class="py-12 bg-gray-50">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 lg:p-10">
+      <h2 class="text-xl font-bold text-wfblack-dark mb-6">계약 당사자</h2>
+      <div class="grid md:grid-cols-3 gap-4 text-sm">
+        <div class="bg-gray-50 rounded-xl p-5">
+          <div class="text-xs text-gray-500 mb-1">갑 (甲)</div>
+          <div class="font-bold text-wfblack-dark mb-1">㈜더블유에프그룹</div>
+          <div class="text-gray-600">대표 김예원</div>
+          <div class="text-xs text-gray-500 mt-2">상품 등록·관리</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-5">
+          <div class="text-xs text-gray-500 mb-1">을 (乙)</div>
+          <div class="font-bold text-wfblack-dark mb-1">데이터포유</div>
+          <div class="text-gray-600">대표 엄청식</div>
+          <div class="text-xs text-gray-500 mt-2">위탁 운영 · 주문 · CS</div>
+        </div>
+        <div class="bg-gradient-to-br from-wfsilver/10 to-wfblack/5 rounded-xl p-5 border-2 border-wfsilver">
+          <div class="text-xs text-wfsilver-dark font-bold mb-1">병 (丙)</div>
+          <div class="font-bold text-wfblack-dark mb-1">쇼핑몰 운영자</div>
+          <div class="text-gray-600">점주님</div>
+          <div class="text-xs text-gray-500 mt-2">자금 관리</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 핵심 조항 요약 -->
+<section class="py-16 bg-white">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl lg:text-4xl font-extrabold text-wfblack-dark mb-3">핵심 조항 요약</h2>
+      <p class="text-gray-600">계약서 22개 조항 중 자주 문의되는 핵심 내용</p>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">04</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제4조 (초기 비용)</h3>
+            <ul class="text-sm text-gray-700 space-y-1 list-disc list-inside">
+              <li>비상주 사무실 임대차: <strong>125,000원/건</strong> × 사업자 수 (1년 단위)</li>
+              <li>상품 유지·관리 서버: <strong>250,000원</strong> (연 1회)</li>
+              <li>위탁 세팅비 (희망 시 1회): <strong>1,500,000원</strong></li>
+              <li>통신판매 등록면허세: 사업자 직접 납부 또는 위탁 시 을이 대납</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">05</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제5조 (수수료 분배)</h3>
+            <div class="grid grid-cols-3 gap-3 text-sm">
+              <div class="bg-wfblack/10 rounded-xl p-3 text-center"><div class="font-bold text-wfblack-dark">40%</div><div class="text-xs text-gray-600">본사 (갑)</div><div class="text-xs text-gray-500 mt-1">상품 등록·관리</div></div>
+              <div class="bg-wfblack/10 rounded-xl p-3 text-center"><div class="font-bold text-wfblack-dark">20%</div><div class="text-xs text-gray-600">위탁 (을)</div><div class="text-xs text-gray-500 mt-1">운영·CS</div></div>
+              <div class="bg-wfsilver/20 rounded-xl p-3 text-center"><div class="font-bold text-wfblack-dark">40%</div><div class="text-xs text-gray-600">점주 (병)</div><div class="text-xs text-gray-500 mt-1">자금 관리</div></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">※ 점주님 계좌로 직접 정산 후, 익월 10일까지 갑·을에게 각각 수수료 입금</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">06</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제6조 (반품·재고 손실 분담)</h3>
+            <p class="text-sm text-gray-700">반품·재고 손실은 <strong>갑 40% / 을 20% / 병 40%</strong>로 분담. 점주님께만 손실이 전가되지 않는 구조입니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">09</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제9조 (계약 기간)</h3>
+            <p class="text-sm text-gray-700">계약 기간 1년. 만료 1개월 전까지 갱신 거절 의사 통지가 없으면 <strong>동일 조건으로 1년씩 자동 연장</strong>됩니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">11</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제11조 (면책 사유)</h3>
+            <p class="text-sm text-gray-700">국내 오픈마켓의 정책 변경, 국가 정책, 불가항력적인 외부 요인으로 인한 사업 규모 축소·손실에 대해 갑·을은 책임지지 않습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">12</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제12조 (지식재산권 책임)</h3>
+            <p class="text-sm text-gray-700"><strong class="text-wfsilver-dark">갑(본사)이 등록 상품의 지재권 관련 사항을 책임</strong>집니다. 단, 점주는 문제 발생 시 지체 없이 본사에 통보해야 하며, 통보 지연·누락 시 발생한 피해는 본사 책임이 아닙니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">15</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제15조 (해지 시 환불 규정)</h3>
+            <ul class="text-sm text-gray-700 space-y-2">
+              <li><strong>병(점주) 사유 해지</strong>: 기납부 초기 비용 환불 없음</li>
+              <li><strong>갑(본사) 사유 해지</strong>: 계약 기간 1년(365일) 기준 잔여 일수만큼 일할 계산하여 환불</li>
+              <li class="text-gray-500">※ 본 계약은 원금을 보장하지 아니합니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 lg:p-8 hover:shadow-lg transition-shadow">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-wfblack text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">20</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark text-lg mb-2">제20조 (관할 법원)</h3>
+            <p class="text-sm text-gray-700">분쟁 발생 시 <strong>수원지방법원</strong>을 전속적 합의 관할 법원으로 합니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10 p-6 bg-gray-100 border-l-4 border-gray-400 rounded-r-xl text-sm text-gray-800">
+      <p class="font-bold mb-1">전체 계약서 확인</p>
+      <p>위 요약은 자주 문의되는 조항 위주이며, 전체 22개 조항은 PDF 파일에서 확인하실 수 있습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PDF 임베드 -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl lg:text-3xl font-extrabold text-wfblack-dark mb-3">전체 계약서 미리보기</h2>
+      <p class="text-gray-600">계약서 PDF를 바로 열람할 수 있습니다.</p>
+    </div>
+    <div class="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+      <div class="bg-gray-100 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+          <span class="font-semibold text-wfblack-dark text-sm">WF-Contract.pdf</span>
+        </div>
+        <a href="./assets/files/WF-Contract.pdf" download class="text-sm font-semibold text-wfblack hover:text-wfblack-dark flex items-center gap-1">
+          다운로드
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </a>
+      </div>
+      <embed src="./assets/files/WF-Contract.pdf" type="application/pdf" class="w-full" style="height: 900px;" />
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-16 bg-gradient-to-br from-wfblack to-wfblack-darker text-white">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <h2 class="text-3xl lg:text-4xl font-extrabold mb-4">계약 진행 전 상담받아보세요</h2>
+    <p class="text-gray-300 mb-8">계약 조건과 사업 모델에 대해 상세히 안내해 드립니다.</p>
+    <a href="./index.html#contact" class="inline-flex items-center gap-2 bg-wfsilver hover:bg-wfsilver-light text-wfblack font-semibold px-8 py-4 rounded-full transition-all">
+      무료 상담 신청
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer class="bg-gray-50 border-t border-gray-200 py-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <div class="mb-4"><img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-14" /></div>
+        <p class="text-sm text-gray-600 leading-relaxed">㈜더블유에프그룹<br/>해외직구 대행업 운영대행 6년차<br/>누적 사업자 2,000개 · 상품등록 5,120만건+</p>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">바로가기</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
+          <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
+          <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
+          <li><a href="./faq.html" class="hover:text-wfblack">자주 묻는 질문</a></li>
+          <li><a href="./contract.html" class="hover:text-wfblack">계약서</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">연락처</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>이메일: <a href="mailto:wfgroupcoltd@gmail.com" class="hover:text-wfblack">wfgroupcoltd@gmail.com</a></li>
+          <li>주소: 경기도 화성시 동탄영천로 131, 코너원빌딩 530호</li>
+          <li>대표: 김예원</li>
+          <li>사업자등록번호: 718-88-03426</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 pt-6 text-center text-xs text-gray-500">© 2026 ㈜더블유에프그룹 (WF GROUP). All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
+
+</body>
+</html>

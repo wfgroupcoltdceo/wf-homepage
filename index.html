@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WF GROUP · 해외직구 대행업 운영대행 6년차</title>
+<meta name="description" content="가맹비 0원, 선입금 0원으로 시작하는 50개 사업체 해외직구대행. 6년 노하우의 WF GROUP에서 모든 운영을 책임집니다." />
+<link rel="icon" type="image/png" href="./assets/images/wf-symbol.png" />
+
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Pretendard Variable', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'] },
+        colors: {
+          wfblack: { DEFAULT: '#181818', light: '#3A3A3A', dark: '#0E0E0E', darker: '#000000' },
+          wfsilver: { DEFAULT: '#9CA0A4', light: '#C9CCCF', dark: '#5C5F66' },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Pretendard Variable', Pretendard, sans-serif; -webkit-font-smoothing: antialiased; }
+  .hero-bg {
+    background:
+      radial-gradient(ellipse at top right, rgba(199, 201, 205, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(48, 47, 47, 0.25) 0%, transparent 60%),
+      linear-gradient(135deg, #0E0E0E 0%, #181818 50%, #000000 100%);
+  }
+  .gradient-text {
+    background: linear-gradient(135deg,#7B7B7D 0%,#A8AAAB 30%,#FAFCFD 50%,#A8AAAB 70%,#5F6169 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .scroll-fade { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+  .scroll-fade.visible { opacity: 1; transform: translateY(0); }
+  .catalog-img {
+    box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+  }
+  .catalog-img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.45);
+  }
+  /* 일반 section 안 img 호버 확대 + 클릭 가능 표시 */
+  section img:not(.no-zoom) {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: zoom-in;
+  }
+  section img:not(.no-zoom):hover {
+    transform: scale(1.04);
+  }
+  /* 2026 포인트 펄스 애니메이션 */
+  @keyframes pulse-ring {
+    0% { r: 14; stroke-opacity: 0.8; }
+    100% { r: 38; stroke-opacity: 0; }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform-origin: 788px 29px; }
+    50% { opacity: 0.4; }
+  }
+  .pulse-ring { animation: pulse-ring 2s ease-out infinite; }
+  .pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+  /* 펄스 글로우 효과 */
+  @keyframes glow-pulse {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(199, 201, 205, 0.6)); }
+    50% { filter: drop-shadow(0 0 16px rgba(199, 201, 205, 1)); }
+  }
+  .pulse-glow { animation: glow-pulse 2s ease-in-out infinite; }
+  /* CTA 번쩍번쩍 효과 */
+  @keyframes cta-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(199, 201, 205, 0.5), 0 0 40px rgba(199, 201, 205, 0.2); }
+    50% { box-shadow: 0 0 35px rgba(199, 201, 205, 0.9), 0 0 70px rgba(199, 201, 205, 0.5), 0 0 100px rgba(199, 201, 205, 0.25); }
+  }
+  @keyframes cta-shimmer {
+    0% { transform: translateX(-150%) skewX(-20deg); }
+    100% { transform: translateX(250%) skewX(-20deg); }
+  }
+  .cta-sparkle { animation: cta-glow 2.2s ease-in-out infinite; position: relative; overflow: hidden; }
+  .cta-sparkle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: cta-shimmer 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes star-twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.7); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+  .star-twinkle { animation: star-twinkle 1.4s ease-in-out infinite; }
+  .star-twinkle.delay-1 { animation-delay: 0.4s; }
+  .star-twinkle.delay-2 { animation-delay: 0.8s; }
+</style>
+</head>
+
+<body class="bg-white text-gray-900">
+
+<!-- ============ 헤더 ============ -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-shadow" id="site-header">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="./index.html" class="flex items-center gap-3 group">
+      <img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-10" />
+      <div class="hidden sm:flex flex-col leading-tight">
+        <span class="text-[10px] text-gray-500 font-medium tracking-wider">WF GROUP</span>
+        <span class="font-bold text-wfblack-dark text-sm">주식회사 더블유에프그룹</span>
+      </div>
+    </a>
+    <ul class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="hover:text-wfblack transition-colors">홈</a></li>
+      <li><a href="./business.html" class="hover:text-wfblack transition-colors">About WF Business</a></li>
+      <li><a href="./strengths.html" class="hover:text-wfblack transition-colors">Why WF</a></li>
+      <li><a href="./faq.html" class="hover:text-wfblack transition-colors">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="hover:text-wfblack transition-colors">계약서</a></li>
+    </ul>
+    <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-wfblack hover:bg-wfblack-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all hover:shadow-lg hover:shadow-wfblack/30">
+      상담 신청
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+    </a>
+    <button class="md:hidden text-wfblack-dark" id="mobile-menu-btn" aria-label="메뉴">
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+    <ul class="px-6 py-4 space-y-3 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="block py-2">홈</a></li>
+      <li><a href="./business.html" class="block py-2">About WF Business</a></li>
+      <li><a href="./strengths.html" class="block py-2">Why WF</a></li>
+      <li><a href="./faq.html" class="block py-2">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="block py-2">계약서</a></li>
+      <li><a href="#contact" class="block py-2 text-wfblack font-semibold">상담 신청 →</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- ============ 라이트박스 (이미지 확대 모달) ============ -->
+<div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out" aria-hidden="true">
+  <button class="absolute top-6 right-6 text-white hover:text-wfsilver transition-colors p-2" aria-label="닫기" id="lightbox-close">
+    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+  </button>
+  <img id="lightbox-img" src="" alt="확대 이미지" class="max-w-full max-h-full rounded-2xl shadow-2xl object-contain cursor-default" onclick="event.stopPropagation();" />
+  <p class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm">ESC 또는 빈 영역 클릭으로 닫기</p>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero-bg relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-32">
+  <div class="absolute inset-0 opacity-20">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-wfsilver rounded-full mix-blend-screen filter blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-wfblack-light rounded-full mix-blend-screen filter blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+  </div>
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="text-white">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+        <span class="w-2 h-2 bg-wfsilver rounded-full animate-pulse"></span>
+        해외직구 대행업 운영대행 6년차
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
+        <span class="block">아무것도 하지 마세요.</span>
+        <span class="block gradient-text">저희가 다 해드릴게요.</span>
+      </h1>
+      <p class="text-lg lg:text-xl text-gray-200 leading-relaxed mb-8 max-w-xl">
+        가맹비 0원, 선입금 0원, 초기재고 0개로 시작하는<br class="hidden sm:block" />
+        해외직구 대행업. 6년 노하우의 WF GROUP이<br class="hidden sm:block" />
+        상품 등록부터 CS, 정산까지 모든 운영을 책임집니다.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="#contact" class="inline-flex items-center gap-2 bg-wfsilver hover:bg-wfsilver-light text-wfblack font-semibold px-7 py-3.5 rounded-full transition-all hover:shadow-xl hover:shadow-wfsilver/40 hover:-translate-y-0.5">
+          무료 상담 신청
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="./business.html" class="inline-flex items-center gap-2 glass hover:bg-white/15 text-white font-semibold px-7 py-3.5 rounded-full transition-all">
+          사업 모델 보기
+        </a>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/10">
+        <div>
+          <div class="text-3xl lg:text-4xl font-extrabold gradient-text">6<span class="text-base font-medium text-gray-300 ml-1">년</span></div>
+          <div class="text-sm text-gray-300 mt-1">운영 노하우</div>
+        </div>
+        <div>
+          <div class="text-3xl lg:text-4xl font-extrabold gradient-text">2,000<span class="text-base font-medium text-gray-300 ml-1">+</span></div>
+          <div class="text-sm text-gray-300 mt-1">누적 사업자</div>
+        </div>
+        <div>
+          <div class="text-3xl lg:text-4xl font-extrabold gradient-text">5,120<span class="text-base font-medium text-gray-300 ml-1">만+</span></div>
+          <div class="text-sm text-gray-300 mt-1">누적 상품 등록</div>
+        </div>
+      </div>
+    </div>
+    <div class="hidden lg:block">
+      <div class="relative max-w-md mx-auto">
+        <div class="bg-white rounded-3xl p-3 shadow-[0_30px_80px_-15px_rgba(0,0,0,0.6)] rotate-1 hover:rotate-0 transition-transform duration-500">
+          <img src="./assets/images/wf-cover.jpg" alt="WF GROUP 2026 카탈로그" class="w-full rounded-2xl block" />
+        </div>
+        <div class="absolute -bottom-5 -right-3 bg-wfsilver text-wfblack-darker px-6 py-3 rounded-2xl font-bold shadow-2xl rotate-3 z-10">2026 카탈로그</div>
+        <div class="absolute -top-4 -left-4 bg-white text-wfblack-darker px-4 py-2 rounded-xl font-semibold text-sm shadow-xl -rotate-6 z-10">★ NEW</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 회사 소개 ============ -->
+<section class="py-20 lg:py-28 bg-gradient-to-br from-gray-50 to-gray-100/30">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">ABOUT · WF SPIRIT</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4 leading-tight">
+        <span class="block">안주하지 않는 6년,</span>
+        <span class="block text-wfsilver">그리고 WF의 정신</span>
+      </h2>
+      <p class="text-gray-700 text-base lg:text-lg font-semibold mb-5 leading-relaxed">
+        전문성 위에 쌓인 도전으로 <span class="text-wfsilver">검증된 혁신</span>을 만들어 왔습니다.
+      </p>
+      <p class="text-gray-600 text-base lg:text-lg leading-relaxed mb-8">
+        누적 운영 사업자 <strong class="text-wfblack">2,000개 이상</strong>, 누적 상품 등록 <strong class="text-wfblack">약 5,120만 건</strong>의 데이터를<br/>
+        축적하며 1~2년 안에 80%가 폐업하는 업계에서 살아남았고,<br/>
+        이제 <strong class="text-wfblack">AI 시대를 가장 빠르게 받아들이며</strong> 다음 단계로 진화 중입니다.
+      </p>
+      <div class="space-y-4">
+        <div class="flex gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-wfsilver/10 text-wfsilver flex items-center justify-center font-bold flex-shrink-0 text-xs">01</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark mb-1">ALWAYS NEXT — 멈추지 않는 진화</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">성공에 안주하지 않고 다음 단계를 준비합니다.<br/>매년 새로운 기술과 시스템을 WF가 가장 먼저 학습·도입합니다.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-wfsilver/10 text-wfsilver flex items-center justify-center font-bold flex-shrink-0 text-xs">02</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark mb-1">검증된 혁신 — 전문성 × 도전</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">S대 출신 수석 개발자와 전 직원이 AI를 활용해 자체 시스템을 직접 개발합니다.<br/>막연한 도전이 아닌 검증된 결과만 점주님께 적용됩니다.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-wfsilver/10 text-wfsilver flex items-center justify-center font-bold flex-shrink-0 text-xs">03</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark mb-1">최초와 최고 — 자동화 × 생산성</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">국내 최초의 시스템과 업계 최고의 기술을 추구합니다.<br/>AI 자동화를 통해 모든 영역에서 압도적인 생산성을 달성합니다.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-wfsilver/10 text-wfsilver flex items-center justify-center font-bold flex-shrink-0 text-xs">04</div>
+          <div>
+            <h3 class="font-bold text-wfblack-dark mb-1">같이의 가치 — 점주와 함께</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">점주님의 NEED 한 마디에 시스템을 바꾸고,<br/>WF의 성장이 곧 점주님의 수익이 되는 구조를 만듭니다.<br/>같이 가야 더 멀리 갑니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- WF HISTORY 타임라인 (카탈로그 p-03 신버전) -->
+    <div class="scroll-fade">
+      <div class="bg-white rounded-3xl shadow-xl shadow-wfblack/5 border border-gray-100 p-6 lg:p-8">
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center">
+            <svg class="w-5 h-5 text-wfsilver-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <div class="text-wfsilver font-bold text-[10px] tracking-widest">WF HISTORY</div>
+            <h3 class="font-extrabold text-wfblack-dark">8년의 안주하지 않는 도전</h3>
+          </div>
+        </div>
+
+        <!-- 타임라인 -->
+        <ol class="relative border-l-2 border-gray-200 ml-3 space-y-5">
+          <!-- 2019 -->
+          <li class="ml-6">
+            <span class="absolute -left-[7px] w-3 h-3 bg-gray-300 rounded-full mt-1.5 ring-4 ring-white"></span>
+            <div class="text-xs font-bold text-gray-500 mb-1">2019</div>
+            <div class="text-sm text-gray-700 leading-snug">바르다몰 글로벌 · 에이치엔더블유코퍼레이션</div>
+          </li>
+          <!-- 2020 -->
+          <li class="ml-6">
+            <span class="absolute -left-[7px] w-3 h-3 bg-gray-300 rounded-full mt-1.5 ring-4 ring-white"></span>
+            <div class="text-xs font-bold text-gray-500 mb-1">2020</div>
+            <div class="text-sm text-gray-700 leading-snug">에이치엔더블유트레이드 · 용스드림 · 띠앗몰글로벌</div>
+          </li>
+          <!-- 2021 -->
+          <li class="ml-6">
+            <span class="absolute -left-[7px] w-3 h-3 bg-gray-300 rounded-full mt-1.5 ring-4 ring-white"></span>
+            <div class="text-xs font-bold text-gray-500 mb-1">2021</div>
+            <div class="text-sm text-gray-700 leading-snug">HnWmall korea · 쩡스글로벌 · 일비쇼핑코퍼레이션</div>
+          </li>
+          <!-- 2022 -->
+          <li class="ml-6">
+            <span class="absolute -left-[7px] w-3 h-3 bg-gray-300 rounded-full mt-1.5 ring-4 ring-white"></span>
+            <div class="text-xs font-bold text-gray-500 mb-1">2022</div>
+            <div class="text-sm text-gray-700 leading-snug">일비일렉트로닉스 · 일비차이나 · 일비직구코퍼레이션</div>
+          </li>
+          <!-- 2023 -->
+          <li class="ml-6">
+            <span class="absolute -left-[7px] w-3 h-3 bg-gray-300 rounded-full mt-1.5 ring-4 ring-white"></span>
+            <div class="text-xs font-bold text-gray-500 mb-1">2023</div>
+            <div class="text-sm text-gray-700 leading-snug">주식회사 에이치엔더블유 · 두더쇼핑 · 두쇼핑 · RODP</div>
+          </li>
+          <!-- 2024 ★ MILESTONE -->
+          <li class="ml-6">
+            <span class="absolute -left-[9px] w-4 h-4 bg-wfsilver rounded-full mt-1 ring-4 ring-white shadow-md shadow-wfsilver/40"></span>
+            <div class="flex items-center gap-2 mb-1">
+              <div class="text-sm font-extrabold text-wfsilver-dark">2024</div>
+              <span class="bg-wfblack text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full tracking-widest">★ MILESTONE</span>
+            </div>
+            <div class="text-sm text-wfblack-dark font-semibold leading-snug">주식회사 더블유에프그룹 정설<br/><span class="text-xs text-gray-600 font-normal">국내 최초 온라인 해외직구 프랜차이즈업 시작</span></div>
+          </li>
+          <!-- 2025 -->
+          <li class="ml-6">
+            <span class="absolute -left-[7px] w-3 h-3 bg-wfsilver/50 rounded-full mt-1.5 ring-4 ring-white"></span>
+            <div class="text-xs font-bold text-wfblack mb-1">2025</div>
+            <div class="text-sm text-gray-700 leading-snug">
+              AI 모델 바이럴 마케팅 시작<br/>
+              <span class="text-xs text-gray-500">AI 기반 주문·물류·CS 자동화 시스템 구축</span>
+            </div>
+          </li>
+          <!-- 2026 ★ NOW -->
+          <li class="ml-6">
+            <span class="absolute -left-[9px] w-4 h-4 bg-wfblack rounded-full mt-1 ring-4 ring-white shadow-md shadow-wfblack/40 animate-pulse"></span>
+            <div class="flex items-center gap-2 mb-1">
+              <div class="text-sm font-extrabold text-wfblack-dark">2026</div>
+              <span class="bg-wfblack text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full tracking-widest">★ NOW</span>
+            </div>
+            <div class="text-sm text-wfblack-dark font-semibold leading-snug">신사업 역직구 진출<br/><span class="text-xs text-gray-600 font-normal">2027년 스케일업 준비중</span></div>
+          </li>
+        </ol>
+
+        <!-- 푸터: 요약 -->
+        <div class="mt-6 pt-5 border-t border-gray-100 grid grid-cols-3 gap-3 text-center">
+          <div>
+            <div class="text-2xl font-extrabold text-wfblack-dark">8<span class="text-xs ml-0.5">년</span></div>
+            <div class="text-[10px] text-gray-500">운영 기간</div>
+          </div>
+          <div class="border-x border-gray-100">
+            <div class="text-2xl font-extrabold text-wfblack-dark">19<span class="text-xs ml-0.5">개사</span></div>
+            <div class="text-[10px] text-gray-500">설립 자회사</div>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-wfsilver-dark">1<span class="text-xs ml-0.5">위</span></div>
+            <div class="text-[10px] text-gray-500">국내 최초</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ CHAPTER 01 헤더 ============ -->
+<section class="py-12 lg:py-16 bg-white relative">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <div class="flex items-center justify-center gap-4 mb-5">
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+      <span class="text-wfsilver font-bold text-xs tracking-widest">CHAPTER 01</span>
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+    </div>
+    <h2 class="text-3xl lg:text-4xl font-extrabold text-wfblack-dark mb-3">구매대행업</h2>
+    <p class="text-gray-600 text-sm lg:text-base">해외직구 대행업이란 무엇이며, 시장은 어떻게 변하고 있는가</p>
+  </div>
+</section>
+
+
+<!-- ============ 해외직구 대행업이란? ============ -->
+<section class="py-20 lg:py-28 bg-white relative overflow-hidden">
+  <!-- 배경 장식 -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-wfsilver/5 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-wfblack/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+    <!-- 헤더 -->
+    <div class="text-center mb-16 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">BUSINESS MODEL</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4">
+        해외직구 대행업이란?
+      </h2>
+      <p class="text-gray-600 text-lg lg:text-xl leading-relaxed">
+        재고도, 매장도, 직원도 필요 없는<br class="sm:hidden" />
+        <span class="text-wfblack font-semibold">수수료 기반</span>의 디지털 비즈니스입니다.
+      </p>
+    </div>
+
+    <!-- 3-STEP 플로우 다이어그램 -->
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100/40 rounded-3xl p-8 lg:p-14 border border-gray-100 shadow-xl shadow-wfblack/5 mb-12 scroll-fade">
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 text-wfsilver-dark font-bold text-sm tracking-wider">
+          <span class="w-8 h-px bg-wfsilver-dark"></span>
+          HOW IT WORKS
+          <span class="w-8 h-px bg-wfsilver-dark"></span>
+        </div>
+        <h3 class="text-2xl lg:text-3xl font-bold text-wfblack-dark mt-2">3단계로 끝나는 거래 흐름</h3>
+      </div>
+
+      <!-- 데스크탑: 3개 카드 + 화살표 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-3 items-stretch">
+        <!-- STEP 1: 고객 -->
+        <div class="relative bg-white rounded-2xl p-6 lg:p-7 border-2 border-wfblack/10 shadow-md flex flex-col items-center text-center">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-wfblack text-white text-xs font-bold px-3 py-1 rounded-full">STEP 01</div>
+          <div class="w-20 h-20 mb-4 mt-2 flex items-center justify-center bg-gradient-to-br from-wfsilver/10 to-wfblack/10 rounded-2xl">
+            <svg viewBox="0 0 64 64" class="w-12 h-12 text-wfblack" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <rect x="18" y="6" width="28" height="52" rx="4" fill="none" stroke="currentColor" stroke-width="3"/>
+              <line x1="18" y1="14" x2="46" y2="14" stroke="currentColor" stroke-width="2"/>
+              <line x1="18" y1="50" x2="46" y2="50" stroke="currentColor" stroke-width="2"/>
+              <circle cx="32" cy="54" r="2" fill="currentColor"/>
+              <circle cx="40" cy="32" r="6" fill="#9CA0A4"/>
+            </svg>
+          </div>
+          <div class="text-xs font-semibold text-wfsilver-dark tracking-widest mb-1">CUSTOMER</div>
+          <h4 class="text-xl lg:text-2xl font-extrabold text-wfblack-dark mb-3">고객</h4>
+          <p class="text-gray-600 text-sm lg:text-base leading-relaxed">
+            점주님 사이트에서<br />
+            업로드된 상품을 구매합니다.
+          </p>
+        </div>
+
+        <!-- 화살표 1 (데스크탑) -->
+        <div class="hidden md:flex absolute" style="display:none;"></div>
+
+        <!-- STEP 2: 당사(점주) -->
+        <div class="relative bg-white rounded-2xl p-6 lg:p-7 border-2 border-wfsilver/30 shadow-lg flex flex-col items-center text-center transform md:scale-105">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-wfsilver-dark text-white text-xs font-bold px-3 py-1 rounded-full">STEP 02</div>
+          <div class="w-20 h-20 mb-4 mt-2 flex items-center justify-center bg-gradient-to-br from-wfsilver/15 to-wfblack/15 rounded-2xl">
+            <svg viewBox="0 0 64 64" class="w-12 h-12 text-wfblack" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="22" cy="50" r="4"/>
+              <circle cx="46" cy="50" r="4"/>
+              <path d="M6 12 H14 L20 40 H48 L54 18 H18"/>
+              <line x1="26" y1="24" x2="36" y2="24" stroke="#9CA0A4"/>
+            </svg>
+          </div>
+          <div class="text-xs font-semibold text-wfsilver-dark tracking-widest mb-1">AGENT (YOU)</div>
+          <h4 class="text-xl lg:text-2xl font-extrabold text-wfblack-dark mb-3">점주 (당사)</h4>
+          <p class="text-gray-600 text-sm lg:text-base leading-relaxed">
+            고객 주문을 확인하고<br />
+            해외 오픈마켓에 발주합니다.
+          </p>
+        </div>
+
+        <!-- STEP 3: 해외 오픈마켓 -->
+        <div class="relative bg-white rounded-2xl p-6 lg:p-7 border-2 border-wfblack/10 shadow-md flex flex-col items-center text-center">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-wfblack text-white text-xs font-bold px-3 py-1 rounded-full">STEP 03</div>
+          <div class="w-20 h-20 mb-4 mt-2 flex items-center justify-center bg-gradient-to-br from-wfsilver/10 to-wfblack/10 rounded-2xl">
+            <svg viewBox="0 0 64 64" class="w-12 h-12 text-wfblack" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 22 L32 8 L56 22 V54 H8 Z"/>
+              <line x1="8" y1="30" x2="56" y2="30"/>
+              <rect x="26" y="36" width="12" height="18" fill="#9CA0A4" stroke="none"/>
+              <circle cx="36" cy="45" r="1" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="text-xs font-semibold text-wfsilver-dark tracking-widest mb-1">OVERSEAS MARKET</div>
+          <h4 class="text-xl lg:text-2xl font-extrabold text-wfblack-dark mb-3">해외 오픈마켓</h4>
+          <p class="text-gray-600 text-sm lg:text-base leading-relaxed">
+            점주가 주문한 제품을<br />
+            고객에게 <span class="font-semibold text-wfblack">직배송</span>합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 흐름 라벨 (주문 / 발주 / 직배송) -->
+      <div class="hidden md:grid md:grid-cols-3 gap-3 mt-6 text-center">
+        <div></div>
+        <div class="relative">
+          <div class="absolute left-1/2 -translate-x-1/2 -top-12 hidden md:block">
+            <!-- 가운데 비행기 아이콘 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 핵심 포인트 -->
+      <div class="mt-10 pt-8 border-t border-wfblack/10 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+        <div class="px-4">
+          <div class="text-3xl mb-1">📦</div>
+          <div class="text-sm font-bold text-wfblack-dark mb-1">재고 보관 X</div>
+          <div class="text-xs text-gray-500 leading-relaxed">상품은 해외에서 고객에게<br />바로 배송됩니다.</div>
+        </div>
+        <div class="px-4">
+          <div class="text-3xl mb-1">🏢</div>
+          <div class="text-sm font-bold text-wfblack-dark mb-1">매장·창고 X</div>
+          <div class="text-xs text-gray-500 leading-relaxed">오프라인 매장 운영이<br />필요 없습니다.</div>
+        </div>
+        <div class="px-4">
+          <div class="text-3xl mb-1">💰</div>
+          <div class="text-sm font-bold text-wfblack-dark mb-1">수수료 수익</div>
+          <div class="text-xs text-gray-500 leading-relaxed">판매 마진을 수수료로<br />정산받습니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 도소매업 vs 대행업 비교 -->
+    <div class="scroll-fade">
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 text-wfsilver-dark font-bold text-sm tracking-wider">
+          <span class="w-8 h-px bg-wfsilver-dark"></span>
+          KEY POINT
+          <span class="w-8 h-px bg-wfsilver-dark"></span>
+        </div>
+        <h3 class="text-2xl lg:text-4xl font-extrabold text-wfblack-dark mt-2 mb-3 leading-tight">
+          도매·소매업이 아닙니다.<br class="md:hidden" />
+          <span class="text-wfsilver-dark">대행업</span>입니다.
+        </h3>
+        <p class="text-gray-600 text-base lg:text-lg">
+          같은 '판매'처럼 보이지만, 구조 자체가 완전히 다릅니다.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <!-- 일반 도소매업 -->
+        <div class="bg-gray-50 rounded-2xl p-7 lg:p-9 border border-gray-200 flex flex-col">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500 text-2xl font-bold">×</div>
+            <div>
+              <div class="text-xs font-semibold text-gray-500 tracking-widest">TRADITIONAL</div>
+              <h4 class="text-xl lg:text-2xl font-extrabold text-gray-700">일반 도소매업</h4>
+            </div>
+          </div>
+          <ul class="space-y-3 text-gray-600 flex-1">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              <span><span class="font-semibold text-gray-700">대량 재고</span> 매입·보관 필수</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              <span><span class="font-semibold text-gray-700">매장·창고</span> 임대료 부담</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              <span><span class="font-semibold text-gray-700">매출 전체</span>에 부가세·종합소득세 과세</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              <span><span class="font-semibold text-gray-700">팔리지 않으면</span> 그대로 재고 손실</span>
+            </li>
+          </ul>
+          <div class="mt-6 pt-5 border-t border-gray-200">
+            <div class="text-xs text-gray-500 mb-1">매출 100만원 발생 시</div>
+            <div class="text-lg font-bold text-gray-600">매출 전체가 과세 표준</div>
+          </div>
+        </div>
+
+        <!-- 해외직구 대행업 -->
+        <div class="bg-gradient-to-br from-wfblack to-wfblack-dark rounded-2xl p-7 lg:p-9 text-white shadow-2xl shadow-wfblack/30 flex flex-col relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-wfsilver/20 rounded-full blur-3xl"></div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-xl bg-wfsilver flex items-center justify-center text-wfblack-dark text-2xl font-extrabold">✓</div>
+              <div>
+                <div class="text-xs font-semibold text-wfsilver tracking-widest">WF MODEL</div>
+                <h4 class="text-xl lg:text-2xl font-extrabold text-white">해외직구 대행업</h4>
+              </div>
+            </div>
+            <ul class="space-y-3 text-white/90 flex-1">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-wfsilver" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span><span class="font-semibold text-white">초기 재고 0개</span> · 매입 부담 없음</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-wfsilver" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span><span class="font-semibold text-white">매장·창고 불필요</span> · 100% 온라인 운영</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-wfsilver" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span><span class="font-semibold text-white">수수료(마진)에만 과세</span> · 세금 부담 ↓</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-wfsilver" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span><span class="font-semibold text-white">팔린 만큼만</span> 발주 · 재고 리스크 X</span>
+              </li>
+            </ul>
+            <div class="mt-6 pt-5 border-t border-white/20">
+              <div class="text-xs text-wfsilver mb-1">매출 100만원 · 마진 30% 발생 시</div>
+              <div class="text-lg font-bold text-white">수수료 <span class="text-wfsilver">30만원</span>만 과세 표준</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단 마무리 메시지 -->
+      <div class="mt-10 text-center">
+        <p class="text-base lg:text-lg text-gray-600 leading-relaxed">
+          <span class="text-wfblack-dark font-bold">재고·매장·세금 부담 없이</span>, 디지털만으로 운영하는 신세대 비즈니스 모델.<br />
+          <span class="text-gray-500">→ 이것이 WF GROUP이 6년간 50개 사업체를 성공적으로 운영해온 이유입니다.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 시장 현황 ============ -->
+<section class="py-20 lg:py-28 bg-gradient-to-br from-gray-50 to-gray-100/30 relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">MARKET</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4">폭발적으로 증가하는 해외직구 시장</h2>
+      <p class="text-gray-600 text-lg">2026년, 해외직구 시장은 지금이 마지막 골든타임입니다.</p>
+    </div>
+
+    <!-- 메인 그래프 시각화 -->
+    <div class="bg-white rounded-3xl p-8 lg:p-14 shadow-xl shadow-wfblack/5 border border-gray-100 mb-8 relative overflow-hidden scroll-fade">
+      <div class="relative" style="min-height: 360px;">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 360" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#9CA0A4" stop-opacity="0.35" />
+              <stop offset="100%" stop-color="#9CA0A4" stop-opacity="0" />
+            </linearGradient>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#9CA0A4" />
+              <stop offset="100%" stop-color="#181818" />
+            </linearGradient>
+          </defs>
+          <path d="M 0 310 Q 80 300, 130 285 T 280 260 Q 380 250, 460 215 Q 560 175, 660 110 Q 720 70, 800 25 L 800 360 L 0 360 Z" fill="url(#areaGrad)" />
+          <path d="M 0 310 Q 80 300, 130 285 T 280 260 Q 380 250, 460 215 Q 560 175, 660 110 Q 720 70, 800 25" stroke="url(#lineGrad)" stroke-width="3.5" fill="none" stroke-linecap="round" />
+          <!-- 펄스 외부 링 (반복 확장) -->
+          <circle class="pulse-ring" cx="788" cy="29" r="14" fill="none" stroke="#9CA0A4" stroke-width="2.5" />
+          <!-- 메인 포인트 (흰 원 + 글로우) -->
+          <circle class="pulse-glow" cx="788" cy="29" r="14" fill="white" stroke="#181818" stroke-width="3.5" />
+          <!-- 내부 점 (깜빡임) -->
+          <circle class="pulse-dot" cx="788" cy="29" r="5" fill="#9CA0A4" />
+        </svg>
+        <div class="relative z-10 text-center pt-6 lg:pt-10">
+          <p class="text-gray-600 text-base lg:text-lg font-medium mb-3 lg:mb-5">폭발적으로 증가하는 해외직구 시장규모</p>
+          <div class="flex items-end justify-center gap-2">
+            <span class="text-7xl sm:text-8xl lg:text-9xl font-black text-wfblack-darker tracking-tighter leading-none">8.5</span>
+            <span class="text-3xl sm:text-4xl lg:text-5xl font-bold text-wfblack-darker mb-2 lg:mb-3">조원</span>
+          </div>
+          <p class="text-sm text-gray-500 mt-4 lg:mt-6">2025년 확정 · 통계청</p>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-400 font-medium px-2">
+          <span>2021년<br/><span class="text-gray-300">5.26조</span></span>
+          <span class="text-center">2023년<br/><span class="text-gray-300">6.82조</span></span>
+          <span class="text-right">2026년<br/><span class="text-wfsilver-dark font-bold">8.61조</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 보조 지표 3개 카드 -->
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-3xl p-8 shadow-xl shadow-wfblack/5 border border-gray-100 scroll-fade">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center">
+            <svg class="w-5 h-5 text-wfsilver" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          </div>
+          <div class="text-wfsilver-dark font-bold text-sm">2021 대비 2026</div>
+        </div>
+        <div class="text-5xl lg:text-6xl font-extrabold text-wfblack-dark mb-2">4.5<span class="text-3xl ml-1">배</span></div>
+        <div class="text-gray-600 text-sm">5년만에 약 4.5배 폭증<br/>(5.26조 → 8.61조)</div>
+      </div>
+      <div class="bg-white rounded-3xl p-8 shadow-xl shadow-wfblack/5 border border-gray-100 scroll-fade">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center">
+            <svg class="w-5 h-5 text-wfsilver" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          <div class="text-wfsilver-dark font-bold text-sm">해외직구 경험자</div>
+        </div>
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="text-5xl lg:text-6xl font-extrabold text-wfblack-dark">지속</span>
+          <span class="text-xl lg:text-2xl font-bold text-gray-500">증가 중</span>
+        </div>
+        <div class="text-gray-600 text-sm mt-2">고물가 시대에 저렴한 해외직구<br/>이용자 폭발적 증가</div>
+      </div>
+      <div class="bg-white rounded-3xl p-8 shadow-xl shadow-wfblack/5 border border-gray-100 scroll-fade">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center">
+            <svg class="w-5 h-5 text-wfsilver" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="text-wfsilver-dark font-bold text-sm">국가별 점유율</div>
+        </div>
+        <div class="flex items-baseline gap-2 mb-3">
+          <span class="text-5xl lg:text-6xl font-extrabold text-wfblack-dark">66.1<span class="text-2xl">%</span></span>
+          <span class="text-gray-500 text-sm font-medium">중국</span>
+        </div>
+        <div class="space-y-1.5 pt-3 border-t border-gray-100">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">미국</span>
+            <span class="font-bold text-wfblack-dark">16.8%</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">일본</span>
+            <span class="font-bold text-wfblack-dark">7.1%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ CHAPTER 02 헤더 ============ -->
+<section class="py-12 lg:py-16 bg-white relative">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <div class="flex items-center justify-center gap-4 mb-5">
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+      <span class="text-wfsilver font-bold text-xs tracking-widest">CHAPTER 02</span>
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+    </div>
+    <h2 class="text-3xl lg:text-4xl font-extrabold text-wfblack-dark mb-3">WF Business</h2>
+    <p class="text-gray-600 text-sm lg:text-base">국내 최초 안전한 무노동 온라인 프랜차이즈 시스템</p>
+  </div>
+</section>
+
+
+<!-- ============ WF BUSINESS 소개 (점주 무노동 + 0원·0원·0개) ============ -->
+<section class="py-20 lg:py-28 bg-white relative overflow-hidden">
+  <!-- 배경 장식 -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-wfsilver/5 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-wfblack/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+    <!-- 헤더 -->
+    <div class="text-center mb-14 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">WF BUSINESS</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-5 leading-tight">
+        <span class="block"><span class="text-wfsilver">노동도 비용도 재고도</span> 없는</span>
+        <span class="block">WF만의 비즈니스 모델</span>
+      </h2>
+      <p class="text-gray-600 text-lg leading-relaxed max-w-3xl mx-auto">
+        국내 최초 <span class="text-wfblack font-semibold">점주 무노동 3자 분업 구조</span>와<br/>
+        가맹비·선입금·재고 <span class="text-wfblack font-semibold">3 ZERO 안전 모델</span>로 설계되었습니다.
+      </p>
+    </div>
+
+    <!-- WF GROUP만의 4 키워드 (카탈로그 p-06) -->
+    <div class="mb-14 scroll-fade">
+      <p class="text-center text-sm text-gray-500 mb-5">— WF GROUP만의 사업 모델, 4가지 키워드로 정리합니다.</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- 01 FIRST IN KOREA -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 border border-gray-100 shadow-md hover:shadow-xl hover:shadow-wfblack/10 hover:-translate-y-0.5 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5 text-wfsilver-dark" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.39 7.39H22l-6.18 4.49L18.21 19 12 14.51 5.79 19l2.39-7.12L2 7.39h7.61z"/></svg>
+          </div>
+          <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-1">FIRST IN KOREA</div>
+          <h3 class="text-lg font-extrabold text-wfblack-dark mb-2">국내 최초</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">타사가 따라올 수 없는<br/>유일 모델</p>
+        </div>
+        <!-- 02 SAFE -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 border border-gray-100 shadow-md hover:shadow-xl hover:shadow-wfblack/10 hover:-translate-y-0.5 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5 text-wfsilver-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-1">SAFE</div>
+          <h3 class="text-lg font-extrabold text-wfblack-dark mb-2">안전한 시작</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">가맹비 · 선입금 · 초기재고<br/>모두 ZERO</p>
+        </div>
+        <!-- 03 ZERO-WORK -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 border border-gray-100 shadow-md hover:shadow-xl hover:shadow-wfblack/10 hover:-translate-y-0.5 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5 text-wfsilver-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+          </div>
+          <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-1">ZERO-WORK</div>
+          <h3 class="text-lg font-extrabold text-wfblack-dark mb-2">점주 무노동</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">본사·위탁이 운영 실무<br/><span class="text-wfsilver-dark font-bold">100% 대행</span></p>
+        </div>
+        <!-- 04 NEW ERA -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 border border-gray-100 shadow-md hover:shadow-xl hover:shadow-wfblack/10 hover:-translate-y-0.5 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-wfsilver/10 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5 text-wfsilver-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          </div>
+          <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-1">NEW ERA</div>
+          <h3 class="text-lg font-extrabold text-wfblack-dark mb-2">온라인 프랜차이즈</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">오프라인 매장에서<br/>온라인 시장으로</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 1: 노동 ZERO — 3자 분업 -->
+    <div class="mb-14 scroll-fade">
+      <div class="flex items-center justify-center gap-3 mb-7">
+        <span class="bg-wfblack text-white text-[11px] font-extrabold px-3 py-1 rounded-full tracking-wider">PART 01</span>
+        <h3 class="text-xl lg:text-2xl font-extrabold text-wfblack-dark">노동 ZERO · 국내 최초 점주 무노동 구조</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-7">
+        <!-- 본사 -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 lg:p-7 border border-gray-100 shadow-lg hover:shadow-xl hover:shadow-wfblack/10 transition-all">
+          <div class="inline-block bg-wfblack/10 text-wfblack text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full mb-3">HQ · 본사</div>
+          <h4 class="text-xl font-extrabold text-wfblack-dark mb-2">WF GROUP 본사</h4>
+          <div class="text-sm font-semibold text-wfsilver-dark mb-2">시스템 · 기술 영역</div>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            상품 소싱·업로드·지재권 관리·문제 대응 등<br/>
+            비즈니스 핵심을 본사가 직접 처리합니다.
+          </p>
+        </div>
+        <!-- 위탁운영사 -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 lg:p-7 border border-gray-100 shadow-lg hover:shadow-xl hover:shadow-wfblack/10 transition-all">
+          <div class="inline-block bg-wfblack/10 text-wfblack text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full mb-3">OPERATOR · 위탁운영사</div>
+          <h4 class="text-xl font-extrabold text-wfblack-dark mb-2">전문 위탁운영사</h4>
+          <div class="text-sm font-semibold text-wfsilver-dark mb-2">운영 실무 영역</div>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            주문 처리·CS·정산 등 일상 운영 실무를<br/>
+            전문 위탁운영사가 24시간 대행합니다.
+          </p>
+        </div>
+        <!-- 점주님 -->
+        <div class="bg-gradient-to-br from-wfsilver/15 to-wfsilver/5 rounded-2xl p-6 lg:p-7 border-2 border-wfsilver/40 shadow-xl shadow-wfsilver/15 transform md:scale-105 hover:shadow-2xl hover:shadow-wfsilver/25 transition-all">
+          <div class="inline-block bg-wfblack text-white text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full mb-3">OWNER · 점주님</div>
+          <h4 class="text-xl font-extrabold text-wfblack-dark mb-2">점주님 (당신)</h4>
+          <div class="text-sm font-bold text-wfsilver-dark mb-2">소유만 하시면 됩니다</div>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            자금 관리만 하시고, 월 매출 보고서로<br/>
+            수익을 확인하시면 됩니다. <strong class="text-wfblack-dark">노동 ZERO.</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- 일반 운영대행 vs WF 3자 분업 비교표 -->
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 lg:p-8 border border-gray-100 shadow-lg">
+        <div class="flex items-center gap-2 mb-5">
+          <span class="bg-wfsilver/20 text-wfsilver-dark text-[10px] font-extrabold px-2.5 py-1 rounded-full tracking-wider">VS</span>
+          <h4 class="text-wfblack-dark font-bold text-sm lg:text-base">일반 운영대행 vs WF 3자 분업 — 점주 부담 비교</h4>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="grid grid-cols-12 gap-2 pb-3 border-b border-gray-200 text-[11px] font-bold text-gray-500">
+            <div class="col-span-4">항목</div>
+            <div class="col-span-4 text-center">일반 운영대행</div>
+            <div class="col-span-4 text-center text-wfsilver-dark">WF GROUP</div>
+          </div>
+          <div class="grid grid-cols-12 gap-2 items-center text-xs lg:text-sm py-2">
+            <div class="col-span-4 font-semibold text-wfblack-dark">상품 업로드</div>
+            <div class="col-span-4 text-center text-gray-500">점주 또는 외주</div>
+            <div class="col-span-4 text-center text-wfsilver-dark font-bold">✓ 본사 처리</div>
+          </div>
+          <div class="grid grid-cols-12 gap-2 items-center text-xs lg:text-sm py-2 bg-white/60 rounded-lg px-2">
+            <div class="col-span-4 font-semibold text-wfblack-dark">지재권 관리</div>
+            <div class="col-span-4 text-center text-gray-500">점주 책임</div>
+            <div class="col-span-4 text-center text-wfsilver-dark font-bold">✓ 본사 처리</div>
+          </div>
+          <div class="grid grid-cols-12 gap-2 items-center text-xs lg:text-sm py-2">
+            <div class="col-span-4 font-semibold text-wfblack-dark">문제 대응</div>
+            <div class="col-span-4 text-center text-gray-500">점주 책임</div>
+            <div class="col-span-4 text-center text-wfsilver-dark font-bold">✓ 본사 처리</div>
+          </div>
+          <div class="grid grid-cols-12 gap-2 items-center text-xs lg:text-sm py-2 bg-white/60 rounded-lg px-2">
+            <div class="col-span-4 font-semibold text-wfblack-dark">주문 처리·CS</div>
+            <div class="col-span-4 text-center text-gray-500">점주 또는 외주</div>
+            <div class="col-span-4 text-center text-wfsilver-dark font-bold">✓ 위탁운영사</div>
+          </div>
+          <div class="grid grid-cols-12 gap-2 items-center text-xs lg:text-sm py-2">
+            <div class="col-span-4 font-semibold text-wfblack-dark">정산 · 보고</div>
+            <div class="col-span-4 text-center text-gray-500">점주 또는 외주</div>
+            <div class="col-span-4 text-center text-wfsilver-dark font-bold">✓ 위탁운영사</div>
+          </div>
+          <div class="grid grid-cols-12 gap-2 items-center pt-4 mt-3 border-t border-gray-200">
+            <div class="col-span-4 font-extrabold text-wfblack-dark text-sm lg:text-base">점주 부담</div>
+            <div class="col-span-4 text-center">
+              <span class="text-3xl lg:text-4xl font-extrabold text-gray-400">80<span class="text-base">%</span></span>
+            </div>
+            <div class="col-span-4 text-center">
+              <span class="text-3xl lg:text-4xl font-extrabold text-wfsilver-dark">0<span class="text-base">%</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 구분선 -->
+    <div class="flex items-center gap-4 my-12">
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <div class="text-wfsilver-dark text-xs font-bold tracking-widest">AND</div>
+      <div class="flex-1 h-px bg-gray-200"></div>
+    </div>
+
+    <!-- PART 2: 초기 부담 ZERO — 가맹비·선입금·초기재고 -->
+    <div class="scroll-fade">
+      <div class="flex items-center justify-center gap-3 mb-7">
+        <span class="bg-wfblack text-white text-[11px] font-extrabold px-3 py-1 rounded-full tracking-wider">PART 02</span>
+        <h3 class="text-xl lg:text-2xl font-extrabold text-wfblack-dark">초기 부담 ZERO · 안전한 비즈니스 모델</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- 가맹비 -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-8 lg:p-10 text-center border border-gray-100 shadow-lg hover:shadow-2xl hover:shadow-wfblack/10 transition-all">
+          <div class="text-xs text-wfblack font-bold tracking-widest mb-2">FRANCHISE FEE</div>
+          <div class="text-sm text-gray-500 mb-2">가맹비</div>
+          <div class="text-7xl lg:text-8xl font-black text-wfblack-dark mb-3 leading-none">0<span class="text-2xl font-bold align-top">원</span></div>
+          <div class="text-sm text-gray-600">프랜차이즈와 다른 합리적 구조</div>
+        </div>
+        <!-- 선입금 -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-8 lg:p-10 text-center border border-gray-100 shadow-lg hover:shadow-2xl hover:shadow-wfblack/10 transition-all">
+          <div class="text-xs text-wfblack font-bold tracking-widest mb-2">DEPOSIT</div>
+          <div class="text-sm text-gray-500 mb-2">선입금</div>
+          <div class="text-7xl lg:text-8xl font-black text-wfblack-dark mb-3 leading-none">0<span class="text-2xl font-bold align-top">원</span></div>
+          <div class="text-sm text-gray-600">정산금은 점주님 계좌로 직접</div>
+        </div>
+        <!-- 초기재고 -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-8 lg:p-10 text-center border border-gray-100 shadow-lg hover:shadow-2xl hover:shadow-wfblack/10 transition-all">
+          <div class="text-xs text-wfblack font-bold tracking-widest mb-2">STOCK</div>
+          <div class="text-sm text-gray-500 mb-2">초기재고</div>
+          <div class="text-7xl lg:text-8xl font-black text-wfblack-dark mb-3 leading-none">0<span class="text-2xl font-bold align-top">개</span></div>
+          <div class="text-sm text-gray-600">재고 리스크 0, 주문 후 발주</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-12 text-center scroll-fade">
+      <p class="text-gray-600 text-sm lg:text-base mb-4">
+        ✓ 직원 없음 &nbsp;·&nbsp; ✓ 출근 없음 &nbsp;·&nbsp; ✓ 관리 없음 &nbsp;·&nbsp; ✓ 재고 부담 없음
+      </p>
+      <a href="./strengths.html#s1" class="inline-flex items-center gap-2 bg-wfblack hover:bg-wfblack-dark text-white font-bold px-6 py-3 rounded-full transition-colors shadow-lg shadow-wfblack/30">
+        WF BUSINESS 자세히 보기
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 아무것도 하지 마세요 ============ -->
+<section class="py-20 lg:py-28 bg-gradient-to-br from-gray-50 to-gray-100/30">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">FULL CARE</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4 leading-tight">
+        <span class="block">아무것도 하지 마세요.</span>
+        <span class="block text-wfsilver">저희가 다 해드릴게요.</span>
+      </h2>
+      <p class="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+        CS · 물류 · 지재권 · 상품등록 · 주문 처리 · 매출 보고까지 — 운영의 모든 영역을 WF가 책임집니다.<br/>
+        <strong class="text-wfblack">점주님은 본업에만 충실하시고</strong>, 한 달에 한 번 매출 보고서와 통장 잔고만 확인하세요.
+      </p>
+    </div>
+    <!-- A-Z 올인원 솔루션 센터피스 (카탈로그 p-09 헤드라인) -->
+    <div class="bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker rounded-3xl p-8 lg:p-12 text-white text-center mb-8 relative overflow-hidden scroll-fade">
+      <div class="absolute -top-16 -right-16 w-72 h-72 bg-wfsilver rounded-full opacity-20 blur-3xl"></div>
+      <div class="absolute -bottom-16 -left-16 w-72 h-72 bg-wfsilver-dark rounded-full opacity-20 blur-3xl"></div>
+      <div class="relative">
+        <div class="text-wfsilver font-bold text-xs lg:text-sm tracking-widest mb-3">A — Z ALL-IN-ONE SOLUTION</div>
+        <h3 class="text-3xl lg:text-5xl font-extrabold mb-4 leading-tight">
+          운영의 <span class="text-wfsilver">모든 영역</span>을 WF가 처리합니다
+        </h3>
+        <p class="text-gray-300 text-base lg:text-lg max-w-2xl mx-auto">
+          8개 영역 · 24시간 자동화 · 점주는 자금관리만
+        </p>
+      </div>
+    </div>
+
+    <!-- 8 카테고리 grid (카탈로그 p-09: 6 → 8 확장) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+      <!-- 1. CS 응대 -->
+      <div class="bg-white rounded-2xl p-5 text-center shadow-md border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfblack/10 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfblack" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm">CS 응대</div>
+      </div>
+      <!-- 2. 상품 등록 (1.5M 강조) -->
+      <div class="bg-gradient-to-br from-wfsilver/10 to-wfsilver/5 rounded-2xl p-5 text-center shadow-md border-2 border-wfsilver/40 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfsilver/20 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfsilver-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm mb-1">상품 등록</div>
+        <div class="text-[11px] text-wfsilver-dark font-extrabold">대리점당 150만+</div>
+      </div>
+      <!-- 3. 물류 관리 -->
+      <div class="bg-white rounded-2xl p-5 text-center shadow-md border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfblack/10 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfblack" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm">물류 관리</div>
+      </div>
+      <!-- 4. AI 자동번역 (신규) -->
+      <div class="bg-white rounded-2xl p-5 text-center shadow-md border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfblack/10 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfblack" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm">AI 자동번역</div>
+      </div>
+      <!-- 5. 주문 처리 -->
+      <div class="bg-white rounded-2xl p-5 text-center shadow-md border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfblack/10 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfblack" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm">주문 처리</div>
+      </div>
+      <!-- 6. 지재권 보호 -->
+      <div class="bg-white rounded-2xl p-5 text-center shadow-md border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfblack/10 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfblack" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm">지재권 보호</div>
+      </div>
+      <!-- 7. 매출 보고 -->
+      <div class="bg-white rounded-2xl p-5 text-center shadow-md border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfblack/10 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfblack" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm">매출 보고</div>
+      </div>
+      <!-- 8. 사업자 등록·세팅 (신규) -->
+      <div class="bg-white rounded-2xl p-5 text-center shadow-md border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all scroll-fade">
+        <div class="w-12 h-12 bg-wfblack/10 rounded-xl flex items-center justify-center mx-auto mb-3"><svg class="w-6 h-6 text-wfblack" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+        <div class="font-bold text-wfblack-dark text-sm">사업자 등록·세팅</div>
+        <div class="text-[10px] text-gray-500 mt-1">통판 신고 · 쇼핑몰 세팅</div>
+      </div>
+    </div>
+    <div class="bg-gradient-to-br from-wfsilver/10 via-wfblack/5 to-wfsilver/10 border-2 border-dashed border-wfsilver/30 rounded-3xl p-8 lg:p-12 text-center scroll-fade">
+      <div class="text-2xl lg:text-4xl font-extrabold text-wfblack-dark mb-3 leading-tight">
+        점주님은 <span class="text-wfsilver">본업에만 집중</span>하세요.
+      </div>
+      <p class="text-gray-600 text-base lg:text-lg leading-relaxed max-w-2xl mx-auto">
+        한 달에 한 번, WF가 전달하는 매출 보고서 한 장과<br/>
+        통장 잔고가 늘어나는 재미만 느끼시면 됩니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 차별화 (4가지) ============ -->
+<section class="py-20 lg:py-28 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">WHY WF</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4">WF GROUP만의 4가지 차별점</h2>
+      <p class="text-gray-600 text-lg">다른 운영대행사가 따라올 수 없는 핵심 경쟁력</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- 01. 국내 최초 점주 무노동 시스템 -->
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-3xl p-8 lg:p-10 shadow-lg border border-gray-100 hover:shadow-2xl hover:shadow-wfblack/10 transition-all hover:-translate-y-1 scroll-fade">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-wfsilver text-sm font-bold">01</span>
+          <span class="text-wfsilver font-bold text-[10px] bg-wfsilver/10 px-2 py-0.5 rounded-full tracking-wider">FIRST IN KOREA</span>
+          <div class="h-px flex-1 bg-gray-200"></div>
+        </div>
+        <h3 class="text-2xl font-extrabold mb-3 text-wfblack-dark leading-tight">
+          <span class="text-wfsilver">국내 최초</span>
+          점주 무노동 온라인 프랜차이즈 시스템
+        </h3>
+        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+          본사가 상품 업로드·지재권·문제 대응까지 모두 처리하고,<br/>
+          위탁운영사가 운영 실무를 대행합니다.<br/>
+          <strong class="text-wfblack-dark">점주님은 소유만 하시면 되는 국내 유일 구조</strong>입니다.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">✓ 직원 없음</span>
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">✓ 출근 없음</span>
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">✓ 관리 없음</span>
+          <span class="inline-flex items-center gap-1 bg-wfblack text-white text-xs font-bold px-3 py-1 rounded-full">✓ 국내 최초 해외직구 프랜차이즈 대행 시스템</span>
+        </div>
+      </div>
+
+      <!-- 02. 6년 노하우 + AI 자동화 -->
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-3xl p-8 lg:p-10 shadow-lg border border-gray-100 hover:shadow-2xl hover:shadow-wfblack/10 transition-all hover:-translate-y-1 scroll-fade">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-wfsilver text-sm font-bold">02</span>
+          <span class="text-wfsilver font-bold text-[10px] bg-wfsilver/10 px-2 py-0.5 rounded-full tracking-wider">AI POWERED</span>
+          <div class="h-px flex-1 bg-gray-200"></div>
+        </div>
+        <h3 class="text-2xl font-extrabold mb-3 text-wfblack-dark leading-tight">
+          6년의 노하우 위에<br/>
+          <span class="text-wfsilver">AI가 24시간 일합니다</span>
+        </h3>
+        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+          누적 <strong class="text-wfblack-dark">5,120만 건의 업로드 상품데이터</strong>와 <strong class="text-wfblack-dark">6년치 운영 경험</strong>을 AI가 학습 중입니다.<br/>
+          사람이 잠든 새벽에도 WF의 시스템은 멈추지 않습니다.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">🤖 AI 분석·업로드</span>
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">📦 AI 주문처리</span>
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">🛡 AI 풀케어 운영</span>
+        </div>
+      </div>
+
+      <!-- 03. 든든한 백업 시스템 -->
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-3xl p-8 lg:p-10 shadow-lg border border-gray-100 hover:shadow-2xl hover:shadow-wfblack/10 transition-all hover:-translate-y-1 scroll-fade">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-wfsilver text-sm font-bold">03</span>
+          <span class="text-wfsilver font-bold text-[10px] bg-wfsilver/10 px-2 py-0.5 rounded-full tracking-wider">ALL-ROUND BACKUP</span>
+          <div class="h-px flex-1 bg-gray-200"></div>
+        </div>
+        <h3 class="text-2xl font-extrabold mb-3 text-wfblack-dark leading-tight">
+          혼자가 아닙니다<br/>
+          <span class="text-wfsilver">든든한 파트너들의 백업</span>
+        </h3>
+        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+          자체 인력에만 의존하지 않습니다.<br/>
+          운영의 핵심 영역마다 <strong class="text-wfblack-dark">업계 1·2위 전문 파트너</strong>와 공식 제휴를 맺고,<br/>
+          모든 운영 리스크에 24시간 대응합니다.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">🏛 세무</span>
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">⚖️ 법무</span>
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">💰 금융</span>
+          <span class="inline-flex items-center gap-1 bg-white border border-gray-200 text-wfblack-dark text-xs font-bold px-3 py-1 rounded-full">🏢 비상주</span>
+        </div>
+      </div>
+
+      <!-- 04. S대 출신 수석 개발자 -->
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-3xl p-8 lg:p-10 shadow-lg border border-gray-100 hover:shadow-2xl hover:shadow-wfblack/10 transition-all hover:-translate-y-1 scroll-fade">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-wfsilver text-sm font-bold">04</span>
+          <span class="text-wfsilver font-bold text-[10px] bg-wfsilver/10 px-2 py-0.5 rounded-full tracking-wider">TOP-TIER ENGINEERED</span>
+          <div class="h-px flex-1 bg-gray-200"></div>
+        </div>
+        <h3 class="text-2xl font-extrabold mb-3 text-wfblack-dark leading-tight">
+          <span class="text-wfsilver">압도적 기술력</span><br/>
+          S대 출신 수석 개발자가 만든<br/>
+          자체 업로드 시스템
+        </h3>
+        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+          외주 솔루션이 아닙니다.<br/>
+          <strong class="text-wfblack-dark">국내 1위 S대</strong> 출신 WF 수석 개발자가 6년간 직접 설계·운영해 온 자체 시스템으로,<br/>
+          대리점 1개당 평균 <strong class="text-wfblack-dark">150만 건+ </strong>의 압도적 업로드량을 만들어 냅니다.
+        </p>
+        <div class="bg-white border border-wfsilver/30 rounded-xl p-3 flex items-center justify-around text-center">
+          <div>
+            <div class="text-[10px] text-gray-500 font-medium">일반 셀러</div>
+            <div class="text-lg font-extrabold text-gray-400">5만 건</div>
+          </div>
+          <svg class="w-5 h-5 text-wfsilver" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          <div>
+            <div class="text-[10px] text-wfsilver font-medium">WF 대리점</div>
+            <div class="text-lg font-extrabold text-wfblack-dark">150만 건+</div>
+          </div>
+          <div class="text-wfsilver font-extrabold text-xs">30배</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- +1 · ALWAYS NEXT · 프랜차이즈 확대 -->
+    <div class="mt-6 scroll-fade">
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-3xl p-8 lg:p-10 shadow-lg border border-gray-100 hover:shadow-2xl hover:shadow-wfblack/10 transition-all hover:-translate-y-1">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-wfsilver text-sm font-bold">멈추지 않는 진화 · ALWAYS NEXT</span>
+          <div class="h-px flex-1 bg-gray-200"></div>
+        </div>
+        <h3 class="text-2xl lg:text-3xl font-extrabold mb-4 leading-tight text-wfblack-dark">
+          오늘의 성공에 안주하지 않습니다.<br/>
+          <span class="text-wfsilver">전문성 위에 쌓인 도전</span>으로 <span class="text-wfsilver">검증된 혁신</span>을 만듭니다.
+        </h3>
+        <p class="text-gray-600 text-sm lg:text-base leading-relaxed mb-6">
+          성공에 안주하지 않고, <strong class="text-wfblack-dark">ALWAYS NEXT</strong> — 다음을 합니다.<br/>
+          전문성 위의 도전만이 <strong class="text-wfblack-dark">검증된 혁신</strong>이 됩니다.<br/>
+          점주님과 <strong class="text-wfblack-dark">'같이의 가치'</strong>를 실현합니다 — 같이 가야 더 멀리 갑니다.
+        </p>
+
+        <!-- 프랜차이즈 확대 비전 (성장 비교 박스) -->
+        <div class="bg-gradient-to-r from-wfblack to-wfblack-dark rounded-2xl p-5 lg:p-6 text-white">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="bg-wfsilver text-wfblack-darker text-[10px] font-extrabold px-2 py-0.5 rounded-full tracking-wider">NEXT STEP</span>
+            <span class="text-wfsilver text-sm font-bold">프랜차이즈 확대 비전</span>
+          </div>
+          <div class="grid grid-cols-3 gap-3 items-center">
+            <div class="text-center">
+              <div class="text-[10px] text-gray-400 mb-1">2026 현재</div>
+              <div class="text-xl lg:text-2xl font-extrabold">40<span class="text-sm ml-0.5">명</span></div>
+              <div class="text-[10px] text-gray-300">대리점주</div>
+              <div class="text-base lg:text-lg font-bold mt-1">1,680<span class="text-xs ml-0.5">개</span></div>
+              <div class="text-[10px] text-gray-300">사업자등록</div>
+            </div>
+            <div class="text-center">
+              <svg class="w-6 h-6 lg:w-8 lg:h-8 text-wfsilver mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              <div class="text-wfsilver text-xs font-bold mt-1">5배 성장</div>
+            </div>
+            <div class="text-center">
+              <div class="text-[10px] text-wfsilver mb-1">2027 목표</div>
+              <div class="text-xl lg:text-2xl font-extrabold text-wfsilver">200<span class="text-sm ml-0.5">명</span></div>
+              <div class="text-[10px] text-gray-300">대리점주</div>
+              <div class="text-base lg:text-lg font-bold text-wfsilver mt-1">7,000<span class="text-xs ml-0.5">개</span></div>
+              <div class="text-[10px] text-gray-300">사업자등록</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 강조 CTA 버튼 (네이비 톤 · 번쩍번쩍) -->
+      <div class="text-center mt-8 scroll-fade">
+        <a href="./strengths.html" class="cta-sparkle inline-flex items-center gap-3 bg-gradient-to-r from-wfblack via-wfblack-dark to-wfblack text-white font-extrabold px-9 py-5 rounded-full text-base lg:text-lg group/btn relative z-10 hover:-translate-y-0.5 transition-transform">
+          <!-- 좌측 반짝이는 별 -->
+          <svg class="w-5 h-5 star-twinkle text-wfsilver" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0l2.39 7.39H22l-6.18 4.49L18.21 19 12 14.51 5.79 19l2.39-7.12L2 7.39h7.61z"/></svg>
+          <span class="relative z-10">더 자세하게 왜 WF를 선택해야 하는지 알아보기</span>
+          <!-- 우측 화살표 -->
+          <svg class="w-5 h-5 relative z-10 transition-transform group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 숫자로 증명된 사업 ============ -->
+<section class="py-20 lg:py-28 bg-gradient-to-br from-gray-50 to-gray-100/30">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">PROVEN DATA</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4">숫자로 증명된 사업</h2>
+      <p class="text-gray-600 text-lg">이론이 아닙니다. 40개 대리점이 1년 이상 운영 중인 <strong class="text-wfblack">실제 데이터</strong>입니다.</p>
+    </div>
+    <!-- 다*소 vs 해외직구 메가 비교 (카탈로그 p-13) -->
+    <div class="relative grid md:grid-cols-2 gap-5 lg:gap-8 mb-8 scroll-fade items-stretch">
+      <!-- 다*소 창업 카드 -->
+      <div class="bg-white rounded-3xl p-8 lg:p-10 shadow-lg border border-gray-100">
+        <div class="text-center mb-6">
+          <div class="text-gray-500 text-xs font-bold tracking-widest mb-1">OFFLINE</div>
+          <h3 class="text-2xl lg:text-3xl font-extrabold text-gray-700">다*소 창업</h3>
+        </div>
+        <div class="space-y-2.5 mb-6">
+          <div class="flex justify-between py-2 border-b border-gray-100">
+            <span class="text-gray-600 text-sm">가맹비</span>
+            <span class="font-semibold text-gray-700 text-sm">약 3,740만원</span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-gray-100">
+            <span class="text-gray-600 text-sm">보증금</span>
+            <span class="font-semibold text-gray-700 text-sm">약 6,000만원</span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-gray-100">
+            <span class="text-gray-600 text-sm">인테리어</span>
+            <span class="font-semibold text-gray-700 text-sm">약 2.75억원</span>
+          </div>
+          <div class="text-center text-gray-400 text-xs pt-1">⋮</div>
+        </div>
+        <div class="bg-gray-100 rounded-2xl p-5 text-center">
+          <div class="text-xs text-gray-500 font-bold mb-1">총 창업비용</div>
+          <div class="text-4xl lg:text-5xl font-black text-gray-600">약 5<span class="text-2xl ml-1">억원</span></div>
+        </div>
+      </div>
+
+      <!-- 해외직구 대행 카드 -->
+      <div class="bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker rounded-3xl p-8 lg:p-10 shadow-2xl shadow-wfblack/30 text-white relative overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-wfsilver rounded-full opacity-20 blur-3xl"></div>
+        <div class="relative">
+          <div class="text-center mb-6">
+            <div class="text-wfsilver text-xs font-bold tracking-widest mb-1">ONLINE FRANCHISE</div>
+            <h3 class="text-2xl lg:text-3xl font-extrabold">해외직구 대행</h3>
+          </div>
+          <div class="space-y-2.5 mb-6">
+            <div class="flex justify-between py-2 border-b border-white/10">
+              <span class="text-gray-300 text-sm">비상주 사무실</span>
+              <span class="font-semibold text-white text-sm">약 375만원</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-white/10">
+              <span class="text-gray-300 text-sm">통신판매면허세</span>
+              <span class="font-semibold text-white text-sm">약 120만원</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-white/10">
+              <span class="text-gray-300 text-sm">기타비용</span>
+              <span class="font-semibold text-white text-sm">약 25만원</span>
+            </div>
+            <div class="text-center text-gray-500 text-[10px] pt-1">* 프로세스 변경 시 추가비용이 발생할 수 있습니다.</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 text-center border border-wfsilver/30">
+            <div class="text-xs text-wfsilver font-bold mb-1">총 창업비용</div>
+            <div class="text-4xl lg:text-5xl font-black text-wfsilver">약 520<span class="text-2xl ml-1">만원</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 중간 VS 배지 -->
+      <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-14 h-14 bg-white border-2 border-wfsilver rounded-full items-center justify-center shadow-xl">
+        <span class="text-wfsilver font-extrabold text-base">VS</span>
+      </div>
+    </div>
+
+    <!-- 1/100 비용 강조 라인 -->
+    <div class="text-center mb-12 scroll-fade">
+      <p class="text-gray-700 text-base lg:text-lg">
+        약 <strong class="text-wfsilver-dark">1/100 비용</strong>으로 시작 · 매출 실현까지 <strong class="text-wfblack-dark">한 달</strong> · 연 <strong class="text-wfblack-dark">2,160만원 ~ 3,000만원</strong> 매출이익 실현
+      </p>
+    </div>
+
+    <!-- 기존 점주 6명 데이터 표 (카탈로그 p-12) -->
+    <div class="bg-white rounded-3xl p-8 lg:p-12 shadow-xl shadow-wfblack/5 border border-gray-100 mb-10 scroll-fade">
+      <div class="text-center mb-8">
+        <h3 class="text-2xl lg:text-3xl font-extrabold text-wfblack-dark mb-2">
+          기존 점주님들의 데이터가 <span class="text-wfsilver">입증</span>합니다
+        </h3>
+        <p class="text-gray-600 text-sm">실명은 보호를 위해 일부 가렸으며, 모두 1년 이상 운영 중인 WF 대리점의 실제 데이터입니다.</p>
+      </div>
+
+      <div class="overflow-hidden rounded-2xl border border-gray-100">
+        <table class="w-full text-sm lg:text-base">
+          <thead class="bg-wfblack-dark text-white">
+            <tr>
+              <th class="text-left p-4 font-bold">점주</th>
+              <th class="text-center p-4 font-bold">월 판매량</th>
+              <th class="text-right p-4 font-bold">월 이익</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="p-4 font-semibold text-wfblack-dark">R**P</td>
+              <td class="p-4 text-center text-gray-700">1,700개</td>
+              <td class="p-4 text-right font-extrabold text-wfsilver-dark text-lg">약 800만원</td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="p-4 font-semibold text-wfblack-dark">써**운</td>
+              <td class="p-4 text-center text-gray-700">900개</td>
+              <td class="p-4 text-right font-extrabold text-wfsilver-dark text-lg">약 490만원</td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="p-4 font-semibold text-wfblack-dark">푸**</td>
+              <td class="p-4 text-center text-gray-700">800개</td>
+              <td class="p-4 text-right font-extrabold text-wfsilver-dark text-lg">약 450만원</td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="p-4 font-semibold text-wfblack-dark">S*</td>
+              <td class="p-4 text-center text-gray-700">790개</td>
+              <td class="p-4 text-right font-extrabold text-wfsilver-dark text-lg">약 420만원</td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="p-4 font-semibold text-wfblack-dark">쇼핑**</td>
+              <td class="p-4 text-center text-gray-700">750개</td>
+              <td class="p-4 text-right font-extrabold text-wfsilver-dark text-lg">약 400만원</td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="p-4 font-semibold text-wfblack-dark">드**인</td>
+              <td class="p-4 text-center text-gray-700">750개</td>
+              <td class="p-4 text-right font-extrabold text-wfsilver-dark text-lg">약 400만원</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-wfsilver/5 border-t-2 border-wfsilver/30">
+            <tr>
+              <td class="p-4 font-extrabold text-wfblack-dark">전 대리점 평균</td>
+              <td class="p-4 text-center text-gray-500 text-sm">—</td>
+              <td class="p-4 text-right">
+                <span class="text-3xl lg:text-4xl font-extrabold text-wfsilver-dark">250<span class="text-base ml-1">만원</span></span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- 추가 수치 2개 카드 -->
+      <div class="grid grid-cols-2 gap-4 mt-6">
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-5 text-center border border-gray-100">
+          <div class="text-xs text-gray-500 font-bold tracking-widest mb-1">ROI</div>
+          <div class="text-3xl lg:text-4xl font-extrabold text-wfsilver-dark">94.2<span class="text-base ml-1">%</span></div>
+          <div class="text-[10px] text-gray-500 mt-1">2년차 기준</div>
+        </div>
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-5 text-center border border-gray-100">
+          <div class="text-xs text-gray-500 font-bold tracking-widest mb-1">원가대비 판매마진율</div>
+          <div class="text-3xl lg:text-4xl font-extrabold text-wfsilver-dark">53.7<span class="text-base ml-1">%</span></div>
+          <div class="text-[10px] text-gray-500 mt-1">전 대리점 평균</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker rounded-3xl p-10 lg:p-14 text-white relative overflow-hidden scroll-fade">
+      <div class="absolute -top-20 -right-20 w-80 h-80 bg-wfsilver rounded-full opacity-20 blur-3xl"></div>
+      <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-wfsilver-dark rounded-full opacity-20 blur-3xl"></div>
+      <div class="relative">
+        <div class="text-center mb-8">
+          <h3 class="text-2xl lg:text-3xl font-extrabold mb-2">오프라인 창업의 <span class="text-wfsilver">1/100 비용</span>으로</h3>
+          <p class="text-lg lg:text-xl text-gray-200">검증된 40개 대리점의 <span class="text-wfsilver font-bold">1.94배 연수익</span>을 만듭니다</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8 pt-8 border-t border-white/15">
+          <div class="text-center">
+            <div class="text-wfsilver font-bold text-xs lg:text-sm mb-2">오프라인 창업 대비</div>
+            <div class="text-4xl lg:text-5xl font-extrabold mb-2 tracking-tight">1/100<span class="text-xl ml-1">비용</span></div>
+            <div class="text-gray-300 text-sm">약 5억 → 520만원</div>
+          </div>
+          <div class="text-center border-x-0 md:border-x border-white/15 md:px-6">
+            <div class="text-wfsilver font-bold text-xs lg:text-sm mb-2">1년 이상 검증</div>
+            <div class="text-4xl lg:text-5xl font-extrabold mb-2 tracking-tight">40<span class="text-xl ml-1">개</span></div>
+            <div class="text-gray-300 text-sm">실제 운영 중 대리점</div>
+          </div>
+          <div class="text-center">
+            <div class="text-wfsilver font-bold text-xs lg:text-sm mb-2">창업비용 대비</div>
+            <div class="text-4xl lg:text-5xl font-extrabold mb-2 tracking-tight">1.94<span class="text-xl ml-1">배 수익</span></div>
+            <div class="text-gray-300 text-sm">2년차 ROI 94.2% 달성</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-xs text-gray-400 mt-6">※ 본 데이터는 30개 모델 · 운영대행(점주 40% 배분) 기준 연간 매출이익 데이터이며, 평균치이므로 수익을 확정 및 보장하지 않습니다.</p>
+  </div>
+</section>
+
+
+<!-- ============ CHAPTER 03 헤더 ============ -->
+<section class="py-12 lg:py-16 bg-white relative">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <div class="flex items-center justify-center gap-4 mb-5">
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+      <span class="text-wfsilver font-bold text-xs tracking-widest">CHAPTER 03</span>
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+    </div>
+    <h2 class="text-3xl lg:text-4xl font-extrabold text-wfblack-dark mb-3">모델 안내</h2>
+    <p class="text-gray-600 text-sm lg:text-base">30개 · 50개 사업자 모델 — 점주 수익 시뮬레이션</p>
+  </div>
+</section>
+
+
+<!-- ============ MODEL 30 / 50 미리보기 (블러 이미지) ============ -->
+<section class="py-20 lg:py-28 bg-white">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">REVENUE MODEL</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4">30 & 50 사업자 모델</h2>
+      <p class="text-gray-600 text-lg">규모에 따라 두 가지 모델로 합리적으로 설계했습니다.</p>
+    </div>
+
+    <!-- 평균 연 매출이익 + 수수료 배분 구조 + 1.94배 (카탈로그 p-14) -->
+    <div class="bg-white rounded-3xl p-8 lg:p-10 shadow-xl shadow-wfblack/5 border border-gray-100 mb-8 scroll-fade">
+      <div class="text-center mb-8">
+        <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-2">PROFIT</div>
+        <h3 class="text-2xl lg:text-3xl font-extrabold text-wfblack-dark">평균 연 매출이익 <span class="text-gray-500 text-sm font-medium">(수수료 배분 전)</span></h3>
+      </div>
+      <!-- 30개 / 50개 매출이익 비교 -->
+      <div class="grid md:grid-cols-2 gap-5 mb-8">
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-6 text-center border border-gray-100">
+          <div class="text-xs text-gray-500 font-bold tracking-widest mb-2">30 개 모델</div>
+          <div class="flex items-baseline justify-center gap-1">
+            <span class="text-4xl lg:text-5xl font-extrabold text-wfblack-dark">2,160</span>
+            <span class="text-lg font-bold text-wfblack-dark">만</span>
+          </div>
+          <div class="text-[10px] text-gray-500 mt-2">연 매출이익 (배분 전)</div>
+        </div>
+        <div class="bg-gradient-to-br from-wfsilver/10 to-wfsilver/5 rounded-2xl p-6 text-center border border-wfsilver/30">
+          <div class="text-xs text-wfsilver-dark font-bold tracking-widest mb-2">50 개 모델</div>
+          <div class="flex items-baseline justify-center gap-1">
+            <span class="text-4xl lg:text-5xl font-extrabold text-wfblack-dark">3,000</span>
+            <span class="text-lg font-bold text-wfblack-dark">만</span>
+          </div>
+          <div class="text-[10px] text-gray-500 mt-2">연 매출이익 (배분 전)</div>
+        </div>
+      </div>
+
+      <!-- 수수료 배분 구조 -->
+      <div class="border-t border-gray-100 pt-7 mb-8">
+        <div class="text-center mb-5">
+          <div class="text-xs text-gray-500 font-bold tracking-widest mb-1">SHARE</div>
+          <h4 class="text-lg font-extrabold text-wfblack-dark">수수료 배분 — 직접 운영 vs 운영대행</h4>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <!-- 직접 운영 -->
+          <div class="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+            <div class="text-xs font-bold text-gray-600 mb-4 text-center">직접 운영 시</div>
+            <div class="flex items-center justify-center gap-3">
+              <div class="text-center">
+                <div class="text-3xl font-extrabold text-wfblack-dark">50<span class="text-sm">%</span></div>
+                <div class="text-[10px] text-gray-500 mt-1">점주</div>
+              </div>
+              <span class="text-gray-300 text-lg font-bold">·</span>
+              <div class="text-center">
+                <div class="text-3xl font-extrabold text-gray-500">50<span class="text-sm">%</span></div>
+                <div class="text-[10px] text-gray-500 mt-1">본사</div>
+              </div>
+            </div>
+          </div>
+          <!-- 운영대행 -->
+          <div class="bg-gradient-to-br from-wfsilver/10 to-wfsilver/5 rounded-2xl p-5 border border-wfsilver/30 relative">
+            <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-wfblack text-white text-[9px] font-extrabold px-2.5 py-0.5 rounded-full tracking-wider">★ WF 추천</span>
+            <div class="text-xs font-bold text-wfsilver-dark mb-4 text-center">운영대행 시</div>
+            <div class="flex items-center justify-center gap-2">
+              <div class="text-center">
+                <div class="text-3xl font-extrabold text-wfsilver-dark">40<span class="text-sm">%</span></div>
+                <div class="text-[10px] text-gray-500 mt-1">점주</div>
+              </div>
+              <span class="text-gray-300 text-base font-bold">·</span>
+              <div class="text-center">
+                <div class="text-3xl font-extrabold text-gray-600">40<span class="text-sm">%</span></div>
+                <div class="text-[10px] text-gray-500 mt-1">본사</div>
+              </div>
+              <span class="text-gray-300 text-base font-bold">·</span>
+              <div class="text-center">
+                <div class="text-3xl font-extrabold text-gray-500">20<span class="text-sm">%</span></div>
+                <div class="text-[10px] text-gray-500 mt-1">운영대행사</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.94배 강조 박스 -->
+      <div class="bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker rounded-2xl p-7 lg:p-9 text-white text-center relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-wfsilver rounded-full opacity-20 blur-3xl"></div>
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-wfsilver-dark rounded-full opacity-20 blur-3xl"></div>
+        <div class="relative">
+          <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-2">점주의 진짜 수익률 · 투자 대비</div>
+          <div class="flex items-baseline justify-center gap-2 mb-2">
+            <span class="text-5xl lg:text-7xl font-black text-wfsilver">1.94</span>
+            <span class="text-2xl lg:text-3xl font-extrabold">배</span>
+          </div>
+          <p class="text-xs lg:text-sm text-gray-300">Model 30 · 2년차 기준 · 운영대행(점주 40% 배분) 모델</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 운영대행 모델 ROI 분석 표 (카탈로그 p-15) -->
+    <div class="bg-white rounded-3xl p-6 lg:p-10 shadow-xl shadow-wfblack/5 border border-gray-100 mb-8 scroll-fade">
+      <div class="text-center mb-6">
+        <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-2">ROI ANALYSIS</div>
+        <h3 class="text-2xl lg:text-3xl font-extrabold text-wfblack-dark">운영대행 모델 — 점주 40% 배분</h3>
+        <p class="text-sm text-gray-500 mt-2">1년차 (세팅비 포함) vs 2년차 (세팅비 제외) ROI 변화</p>
+      </div>
+
+      <!-- ROI 비교 표 -->
+      <div class="overflow-x-auto rounded-2xl border border-gray-100">
+        <table class="w-full text-xs lg:text-sm min-w-[480px]">
+          <thead class="bg-wfblack-dark text-white">
+            <tr>
+              <th class="text-left p-3 lg:p-4 font-bold">항목</th>
+              <th class="text-center p-3 lg:p-4 font-bold">Model 30</th>
+              <th class="text-center p-3 lg:p-4 font-bold">Model 50</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr>
+              <td class="p-3 lg:p-4 text-gray-700">배분 전 매출이익</td>
+              <td class="p-3 lg:p-4 text-center font-semibold text-wfblack-dark">2,160만원</td>
+              <td class="p-3 lg:p-4 text-center font-semibold text-wfblack-dark">3,000만원</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="p-3 lg:p-4 text-gray-700">배분 후 매출이익 <span class="text-gray-400">(40%)</span></td>
+              <td class="p-3 lg:p-4 text-center font-semibold text-wfblack-dark">864만원</td>
+              <td class="p-3 lg:p-4 text-center font-semibold text-wfblack-dark">1,200만원</td>
+            </tr>
+            <tr>
+              <td class="p-3 lg:p-4 text-gray-700">1년차 연 비용 <span class="text-gray-400">(세팅비 포함)</span></td>
+              <td class="p-3 lg:p-4 text-center text-gray-700">620만원</td>
+              <td class="p-3 lg:p-4 text-center text-gray-700">950만원</td>
+            </tr>
+            <tr class="bg-gray-100/40">
+              <td class="p-3 lg:p-4 font-bold text-wfblack-dark">1년차 순수익</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-wfblack-dark text-base">244만원</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-wfblack-dark text-base">250만원</td>
+            </tr>
+            <tr class="bg-gray-100/40">
+              <td class="p-3 lg:p-4 font-bold text-gray-700">1년차 ROI</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-gray-700 text-base">39.4%</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-gray-700 text-base">26.3%</td>
+            </tr>
+            <tr>
+              <td class="p-3 lg:p-4 text-gray-700">2년차 연 비용 <span class="text-gray-400">(세팅비 제외)</span></td>
+              <td class="p-3 lg:p-4 text-center text-gray-700">445만원</td>
+              <td class="p-3 lg:p-4 text-center text-gray-700">725만원</td>
+            </tr>
+            <tr class="bg-gray-100/40">
+              <td class="p-3 lg:p-4 font-bold text-wfblack-dark">2년차 순수익</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-wfblack-dark text-base">419만원</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-wfblack-dark text-base">475만원</td>
+            </tr>
+            <tr class="bg-wfsilver/10">
+              <td class="p-3 lg:p-4 font-bold text-wfsilver-dark">2년차 ROI</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-wfsilver-dark text-lg">94.2%</td>
+              <td class="p-3 lg:p-4 text-center font-extrabold text-wfsilver-dark text-lg">65.5%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ROI 의미 설명 -->
+      <div class="mt-6 p-5 bg-gradient-to-br from-gray-100 to-gray-100/50 border-l-4 border-gray-300 rounded-r-xl">
+        <h4 class="font-bold text-gray-800 text-sm mb-2 flex items-center gap-2">
+          <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+          ROI 의미
+        </h4>
+        <ul class="text-xs text-gray-800 leading-relaxed space-y-1">
+          <li>· <strong>ROI(투자수익률) = 수익 ÷ 연 비용 × 100</strong></li>
+          <li>· ROI가 양수(+) = 이미 투자금 전체를 회수하고도 추가 수익이 발생함</li>
+          <li>· WF 사업은 <strong>1년차에 투자금 회수 + 추가 순이익 발생</strong>하는 구조</li>
+        </ul>
+      </div>
+
+      <!-- 비용 구조 안내 2-카드 -->
+      <div class="mt-4 grid md:grid-cols-2 gap-3">
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+          <div class="font-bold text-wfblack-dark text-xs mb-1 flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-wfsilver-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            2년차부터 비용 감소
+          </div>
+          <p class="text-[11px] text-gray-600 leading-relaxed">창업비용에 포함된 세팅비(1회)가 2년차부터 빠져 운영비 부담이 감소합니다.</p>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+          <div class="font-bold text-wfblack-dark text-xs mb-1 flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-wfsilver-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            비상주 비용 연장 시 단가 인하
+          </div>
+          <p class="text-[11px] text-gray-600 leading-relaxed">Model 30: 12.5만 → <strong class="text-wfsilver-dark">10만</strong> · Model 50: 11.5만 → <strong class="text-wfsilver-dark">10만</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 30 & 50 모델 비용 안내 (카탈로그 p-15 — 창업 시 / 연장 시 비용 분해) -->
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-3xl p-6 lg:p-10 border border-gray-100 mb-10 scroll-fade">
+      <div class="text-center mb-7">
+        <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-2">COST</div>
+        <h3 class="text-xl lg:text-2xl font-extrabold text-wfblack-dark">창업 시 · 연장 시 비용 안내</h3>
+        <p class="text-sm text-gray-500 mt-1">연장 시 비상주 비용 단가 인하 + 세팅비 제외로 비용이 줄어듭니다.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-5 lg:gap-6">
+        <!-- MODEL 30 (RECOMMENDED) -->
+        <div class="bg-white rounded-2xl p-6 lg:p-7 shadow-lg border border-gray-100 relative overflow-hidden flex flex-col">
+          <div class="flex items-center gap-2 mb-4 flex-wrap">
+            <span class="bg-white border border-gray-300 text-wfblack-dark text-[10px] font-extrabold px-3 py-1 rounded-full tracking-wider">MODEL · 30</span>
+            <span class="bg-wfblack text-white text-[10px] font-extrabold px-3 py-1 rounded-full tracking-widest shadow-sm">RECOMMENDED</span>
+          </div>
+          <h3 class="text-2xl lg:text-3xl font-extrabold text-wfblack-dark mb-1">30 사업자 모델</h3>
+          <p class="text-sm text-gray-500 mb-6">초기 진입 · 투자금 최소화형</p>
+
+          <!-- 창업/연장 비용 표 -->
+          <div class="overflow-hidden rounded-xl border border-gray-100 mb-4 flex-1">
+            <table class="w-full text-xs lg:text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="text-left p-2.5 lg:p-3 font-bold text-gray-500 text-[11px]">항목</th>
+                  <th class="text-center p-2.5 lg:p-3 font-bold text-wfblack-dark text-[11px]">창업 시</th>
+                  <th class="text-center p-2.5 lg:p-3 font-bold text-wfsilver-dark text-[11px]">연장 시</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">비상주 비용</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">375만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfsilver-dark">300만원</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">통신판매면허세</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">120만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfsilver-dark">120만원</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">세팅비 <span class="text-gray-400 text-[10px]">(희망자)</span></td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">100만원</td>
+                  <td class="p-2.5 lg:p-3 text-center text-gray-400">—</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">서버이용비</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">25만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfsilver-dark">25만원</td>
+                </tr>
+              </tbody>
+              <tfoot class="bg-wfsilver/5 border-t-2 border-wfsilver/30">
+                <tr>
+                  <td class="p-2.5 lg:p-3 font-extrabold text-wfblack-dark">합계</td>
+                  <td class="p-2.5 lg:p-3 text-center font-extrabold text-wfblack-dark text-base">620만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-extrabold text-wfsilver-dark text-base">445만원</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <p class="text-[10px] text-gray-500 mb-5 leading-relaxed">※ 연장 시 비상주 비용 단가 인하 (12.5만 → 10만 / 구좌)</p>
+
+          <!-- Footer 배너 -->
+          <div class="-mx-6 -mb-6 lg:-mx-7 lg:-mb-7 bg-wfblack text-white rounded-b-2xl px-6 py-3 flex items-center gap-2 mt-auto">
+            <span class="bg-white text-wfblack-dark w-7 h-7 rounded-full flex items-center justify-center font-extrabold text-xs">30</span>
+            <span class="text-xs font-bold">초기 진입 · 투자금 최소화형</span>
+          </div>
+        </div>
+
+        <!-- MODEL 50 -->
+        <div class="bg-white rounded-2xl p-6 lg:p-7 shadow-md border border-gray-100 relative overflow-hidden flex flex-col">
+          <div class="flex items-center gap-2 mb-4 flex-wrap">
+            <span class="bg-white border border-gray-300 text-wfblack-dark text-[10px] font-extrabold px-3 py-1 rounded-full tracking-wider">MODEL · 50</span>
+          </div>
+          <h3 class="text-2xl lg:text-3xl font-extrabold text-wfblack-dark mb-1">50 사업자 모델</h3>
+          <p class="text-sm text-gray-500 mb-6">규모 확장 · 안정 운영형</p>
+
+          <!-- 창업/연장 비용 표 -->
+          <div class="overflow-hidden rounded-xl border border-gray-100 mb-4 flex-1">
+            <table class="w-full text-xs lg:text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="text-left p-2.5 lg:p-3 font-bold text-gray-500 text-[11px]">항목</th>
+                  <th class="text-center p-2.5 lg:p-3 font-bold text-wfblack-dark text-[11px]">창업 시</th>
+                  <th class="text-center p-2.5 lg:p-3 font-bold text-wfsilver-dark text-[11px]">연장 시</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">비상주 비용</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">575만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfsilver-dark">500만원</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">통신판매면허세</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">200만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfsilver-dark">200만원</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">세팅비 <span class="text-gray-400 text-[10px]">(희망자)</span></td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">150만원</td>
+                  <td class="p-2.5 lg:p-3 text-center text-gray-400">—</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 lg:p-3 text-gray-700">서버이용비</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfblack-dark">25만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-semibold text-wfsilver-dark">25만원</td>
+                </tr>
+              </tbody>
+              <tfoot class="bg-wfsilver/5 border-t-2 border-wfsilver/30">
+                <tr>
+                  <td class="p-2.5 lg:p-3 font-extrabold text-wfblack-dark">합계</td>
+                  <td class="p-2.5 lg:p-3 text-center font-extrabold text-wfblack-dark text-base">950만원</td>
+                  <td class="p-2.5 lg:p-3 text-center font-extrabold text-wfsilver-dark text-base">725만원</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <p class="text-[10px] text-gray-500 mb-5 leading-relaxed">※ 연장 시 비상주 비용 단가 인하 (11.5만 → 10만 / 구좌)</p>
+
+          <!-- Footer 배너 -->
+          <div class="-mx-6 -mb-6 lg:-mx-7 lg:-mb-7 bg-gray-700 text-white rounded-b-2xl px-6 py-3 flex items-center gap-2 mt-auto">
+            <span class="bg-white text-gray-700 w-7 h-7 rounded-full flex items-center justify-center font-extrabold text-xs">50</span>
+            <span class="text-xs font-bold">규모 확장 · 안정 운영형</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 면책 문구 -->
+      <div class="mt-8 space-y-1 text-[11px] text-gray-500 leading-relaxed">
+        <p>※ 비상주 비용 및 통신판매면허세는 1년 단위 갱신 항목입니다.</p>
+        <p>※ 세팅비는 가입 시 1회만 발생하며, 희망하시는 경우에 한해 적용됩니다.</p>
+        <p>※ 창업 시 = 1년차(세팅비 포함) · 연장 시 = 2년차 이후(세팅비 제외 + 비상주 단가 인하 적용).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ CHAPTER 04 헤더 ============ -->
+<section class="py-12 lg:py-16 bg-white relative">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <div class="flex items-center justify-center gap-4 mb-5">
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+      <span class="text-wfsilver font-bold text-xs tracking-widest">CHAPTER 04</span>
+      <div class="h-px flex-1 max-w-[80px] bg-wfsilver/40"></div>
+    </div>
+    <h2 class="text-3xl lg:text-4xl font-extrabold text-wfblack-dark mb-3">비전</h2>
+    <p class="text-gray-600 text-sm lg:text-base">역직구 · 해외 소싱 · AI 도입으로 2027년 5배 성장</p>
+  </div>
+</section>
+
+
+<!-- ============ WF가 가고 있는 길 (향후 계획) ============ -->
+<section class="py-20 lg:py-28 bg-gradient-to-br from-gray-50 to-gray-100/30">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">ROADMAP</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4">WF가 가고 있는 길</h2>
+      <p class="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+        단순 대리점 모집을 넘어, WF는 <strong class="text-wfblack">미래 시장의 변동성에 흔들리지 않는 사업 구조</strong>를 만들고 있습니다.<br/>
+        역직구 · 해외 소싱처 확대 · AI 도입까지 — 3가지 축으로 점주님의 사업을 지킵니다.
+      </p>
+    </div>
+    <!-- 1·2 한 줄 -->
+    <div class="grid md:grid-cols-2 gap-5 lg:gap-6 mb-8">
+      <div class="bg-white rounded-3xl shadow-xl shadow-wfblack/5 border border-gray-100 overflow-hidden hover:shadow-2xl transition-all scroll-fade flex flex-col">
+        <div class="bg-gradient-to-br from-wfblack to-wfblack-dark p-5 lg:p-6 text-white">
+          <div class="flex items-center gap-3 mb-2"><div class="bg-wfsilver text-wfblack-darker w-9 h-9 rounded-xl flex items-center justify-center font-extrabold">1</div><h3 class="text-xl lg:text-2xl font-extrabold">역직구</h3></div>
+          <p class="text-gray-300 text-xs lg:text-sm">국내 → 해외 판매로 환율 양방향 헤지</p>
+        </div>
+        <div class="p-5 lg:p-6 flex-1 flex flex-col">
+          <!-- K-카테고리 chips -->
+          <div class="mb-4">
+            <div class="text-[10px] text-gray-500 font-bold tracking-widest mb-2">한국 상품의 글로벌 인기</div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="inline-flex items-center gap-1 bg-wfsilver/10 border border-wfsilver/30 text-wfblack-dark text-xs font-bold px-2.5 py-1 rounded-full">💄 K-BEAUTY</span>
+              <span class="inline-flex items-center gap-1 bg-wfsilver/10 border border-wfsilver/30 text-wfblack-dark text-xs font-bold px-2.5 py-1 rounded-full">🍜 K-FOOD</span>
+              <span class="inline-flex items-center gap-1 bg-wfsilver/10 border border-wfsilver/30 text-wfblack-dark text-xs font-bold px-2.5 py-1 rounded-full">👕 K-FASHION</span>
+            </div>
+          </div>
+          <ul class="space-y-2.5 mb-5">
+            <li class="flex items-start gap-2.5"><svg class="w-4 h-4 text-wfsilver flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><div><div class="font-bold text-wfblack-dark text-sm">쇼피(Shopee) 입점 완료</div><div class="text-gray-600 text-xs mt-0.5">테스팅 10개 진행 중 · 동남아 시장 진출</div></div></li>
+            <li class="flex items-start gap-2.5"><svg class="w-4 h-4 text-wfsilver flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><div><div class="font-bold text-wfblack-dark text-sm">환율 양방향 헤지 효과</div><div class="text-gray-600 text-xs mt-0.5">환율 상승 시 → 역직구는 오히려 유리</div></div></li>
+          </ul>
+          <!-- 환율 시뮬 mini box -->
+          <div class="mt-auto bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-xl p-4 border border-gray-100">
+            <div class="text-[10px] text-gray-500 font-bold tracking-widest mb-3 text-center">SIMULATION · 환율 10% 상승 시</div>
+            <div class="grid grid-cols-3 gap-2 items-center">
+              <div class="text-center">
+                <div class="text-[10px] text-gray-500 mb-1">해외직구</div>
+                <div class="text-xl font-extrabold text-gray-500">−10<span class="text-[10px] ml-0.5">만</span></div>
+              </div>
+              <div class="text-center">
+                <div class="text-[10px] text-wfsilver-dark mb-1">+ 역직구</div>
+                <div class="text-xl font-extrabold text-wfsilver-dark">+10<span class="text-[10px] ml-0.5">만</span></div>
+              </div>
+              <div class="text-center border-l border-gray-200">
+                <div class="text-[10px] text-wfblack mb-1">= 합산</div>
+                <div class="text-xl font-extrabold text-wfblack-dark">±0</div>
+              </div>
+            </div>
+            <p class="text-[10px] text-gray-500 text-center mt-3">환율이 흔들려도 WF는 흔들리지 않습니다</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-3xl shadow-xl shadow-wfblack/5 border border-gray-100 overflow-hidden hover:shadow-2xl transition-all scroll-fade flex flex-col">
+        <div class="bg-gradient-to-br from-wfblack to-wfblack-dark p-5 lg:p-6 text-white">
+          <div class="flex items-center gap-3 mb-2"><div class="bg-wfsilver text-wfblack-darker w-9 h-9 rounded-xl flex items-center justify-center font-extrabold">2</div><h3 class="text-xl lg:text-2xl font-extrabold">해외 소싱처 확대</h3></div>
+          <p class="text-gray-300 text-xs lg:text-sm">중국 단일 의존 → 미국·일본·유럽 분산</p>
+        </div>
+        <div class="p-5 lg:p-6 flex-1 flex flex-col">
+          <!-- AS-IS → TO-BE 흐름 -->
+          <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+            <div class="bg-gray-100 rounded-xl px-3 py-2 text-center">
+              <div class="text-[9px] text-gray-500 font-bold tracking-widest mb-0.5">AS-IS</div>
+              <div class="text-base font-extrabold text-gray-600">CN</div>
+            </div>
+            <svg class="w-5 h-5 text-wfsilver flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <div class="flex-1">
+              <div class="text-[10px] text-wfsilver-dark font-bold tracking-widest">TO-BE</div>
+              <div class="text-xs text-wfblack-dark font-semibold">글로벌 다국가 분산</div>
+            </div>
+          </div>
+          <!-- 3 마켓 카드 -->
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center justify-between bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-xl px-3 py-2.5 border border-gray-100">
+              <div>
+                <div class="text-[10px] text-gray-500 mb-0.5">미국 · 유럽</div>
+                <div class="text-sm font-bold text-wfblack-dark">Amazon</div>
+              </div>
+              <span class="text-[10px] bg-gray-200 text-gray-600 font-bold px-2 py-1 rounded-full">준비 단계</span>
+            </div>
+            <div class="flex items-center justify-between bg-gradient-to-br from-wfsilver/10 to-wfsilver/5 rounded-xl px-3 py-2.5 border border-wfsilver/30">
+              <div>
+                <div class="text-[10px] text-wfsilver-dark mb-0.5">일본</div>
+                <div class="text-sm font-bold text-wfblack-dark">Yahoo! Japan</div>
+              </div>
+              <span class="text-[10px] bg-wfblack text-white font-bold px-2 py-1 rounded-full">추진 중</span>
+            </div>
+            <div class="flex items-center justify-between bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-xl px-3 py-2.5 border border-gray-100">
+              <div>
+                <div class="text-[10px] text-gray-500 mb-0.5">일본</div>
+                <div class="text-sm font-bold text-wfblack-dark">Rakuten</div>
+              </div>
+              <span class="text-[10px] bg-gray-200 text-gray-600 font-bold px-2 py-1 rounded-full">준비 단계</span>
+            </div>
+          </div>
+          <!-- 효과 체크 -->
+          <ul class="space-y-2 mt-auto">
+            <li class="flex items-start gap-2 text-xs"><svg class="w-3.5 h-3.5 text-wfsilver flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span class="text-gray-700">상품 다양성 확보 · 마진 강화</span></li>
+            <li class="flex items-start gap-2 text-xs"><svg class="w-3.5 h-3.5 text-wfsilver flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span class="text-gray-700">단일 시장 정책·물류 리스크 해소</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3번 · AI 도입 (강조 · 풀와이드 · 위 2개 카드와 톤 통일) -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-wfblack/5 border border-gray-100 overflow-hidden hover:shadow-2xl transition-all mb-16 scroll-fade">
+      <!-- 상단 네이비 헤더 (1·2 카드와 동일 톤) -->
+      <div class="bg-gradient-to-br from-wfblack to-wfblack-dark p-5 lg:p-6 text-white">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="bg-wfsilver text-wfblack-darker w-9 h-9 rounded-xl flex items-center justify-center font-extrabold">3</div>
+          <h3 class="text-xl lg:text-2xl font-extrabold">AI 도입, 대행에서 "브랜드"로</h3>
+          <span class="ml-auto text-wfsilver text-[10px] font-bold tracking-widest hidden sm:block">FEATURED · AI MARKETING</span>
+        </div>
+        <p class="text-gray-300 text-xs lg:text-sm">AI 모델 + 데이터 기반 PL 상품 · 광고비 0원 바이럴 마케팅</p>
+      </div>
+
+      <!-- 브랜드 전환 배너 (카탈로그 p-19: 우리는 대행을 넘어 브랜드를 만듭니다) -->
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 border-b border-gray-100 p-6 lg:p-8">
+        <div class="text-center mb-6 scroll-fade">
+          <h4 class="text-2xl lg:text-3xl font-extrabold text-wfblack-dark leading-tight mb-2">
+            우리는 <span class="text-wfsilver">대행을 넘어</span>, 브랜드를 만듭니다
+          </h4>
+          <p class="text-gray-600 text-sm lg:text-base">WF의 다음 단계는 단순 대행이 아닌 <strong class="text-wfblack-dark">자체 브랜드 사업</strong>입니다.</p>
+        </div>
+        <!-- DATA × MARKETING 2-card -->
+        <div class="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto items-stretch relative">
+          <!-- DATA ASSET -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-md">
+            <div class="text-[10px] text-wfsilver-dark font-bold tracking-widest mb-1">— DATA ASSET</div>
+            <div class="flex items-baseline gap-1 mb-3">
+              <span class="text-3xl lg:text-4xl font-black text-wfblack-dark">5,120</span>
+              <span class="text-base lg:text-lg font-bold text-wfblack-dark">만+</span>
+            </div>
+            <div class="text-xs text-gray-600 mb-2 pb-2 border-b border-gray-100">업로드 상품데이터</div>
+            <ul class="space-y-1 text-[11px] text-gray-700">
+              <li>· 잘 팔리고 안전한 상품 분석</li>
+              <li>· 데이터 기반 PL 상품화</li>
+            </ul>
+          </div>
+          <!-- MARKETING ASSET -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-md">
+            <div class="text-[10px] text-wfsilver-dark font-bold tracking-widest mb-1">— MARKETING ASSET</div>
+            <div class="text-3xl lg:text-4xl font-black text-wfblack-dark mb-3">ZERO</div>
+            <div class="text-xs text-gray-600 mb-2 pb-2 border-b border-gray-100">광고비 · 촬영비 · 모델료</div>
+            <ul class="space-y-1 text-[11px] text-gray-700">
+              <li>· AI 모델·영상 자체 제작</li>
+              <li>· 24시간 무한 콘텐츠 생성</li>
+            </ul>
+          </div>
+          <!-- 중간 × 배지 -->
+          <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-wfblack text-white rounded-full items-center justify-center shadow-lg font-extrabold text-lg">×</div>
+        </div>
+        <p class="text-center text-xs lg:text-sm text-gray-700 mt-5">
+          데이터 × AI = <strong class="text-wfsilver-dark">대행을 넘어선 브랜드로의 진화</strong>
+        </p>
+      </div>
+
+      <!-- 흰 배경 본문 -->
+      <div class="p-5 lg:p-8">
+        <div class="grid lg:grid-cols-12 gap-6 lg:gap-8">
+          <!-- 좌측: AI 콘텐츠 스튜디오 코드 비주얼 -->
+          <div class="lg:col-span-5 rounded-xl bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker border border-wfblack-dark relative overflow-hidden min-h-[320px] flex flex-col justify-center p-7 lg:p-8">
+            <div class="absolute -top-12 -right-12 w-44 h-44 bg-wfsilver rounded-full opacity-20 blur-3xl"></div>
+            <div class="absolute -bottom-12 -left-12 w-44 h-44 bg-wfsilver-dark rounded-full opacity-20 blur-3xl"></div>
+            <div class="relative text-white">
+              <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-5">✦ AI CONTENT STUDIO</div>
+              <!-- 콘텐츠 타입 2x2 -->
+              <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3.5 text-center">
+                  <svg class="w-6 h-6 text-wfsilver mx-auto mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <div class="text-xs font-bold">AI 이미지</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3.5 text-center">
+                  <svg class="w-6 h-6 text-wfsilver mx-auto mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  <div class="text-xs font-bold">AI 영상</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3.5 text-center">
+                  <svg class="w-6 h-6 text-wfsilver mx-auto mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                  <div class="text-xs font-bold">AI 모델</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3.5 text-center">
+                  <svg class="w-6 h-6 text-wfsilver mx-auto mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                  <div class="text-xs font-bold">SNS 배포</div>
+                </div>
+              </div>
+              <!-- 광고비 0원 강조 -->
+              <div class="bg-white/10 backdrop-blur-sm border border-wfsilver/30 rounded-xl p-4 text-center">
+                <div class="text-[10px] text-gray-300 mb-1">광고비 · 촬영비 · 모델료</div>
+                <div class="text-3xl lg:text-4xl font-black text-wfsilver">₩ 0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 우측: 위 텍스트 / 아래 3개 이미지 -->
+          <div class="lg:col-span-7 flex flex-col gap-6">
+            <!-- 위쪽: 글 + 설명 + 체크리스트 (사이즈 키움) -->
+            <div>
+              <p class="text-gray-700 text-base lg:text-lg leading-relaxed mb-7">
+                WF는 AI를 운영에만 쓰지 않습니다.<br/>
+                <strong class="text-wfblack-dark">자체 AI 모델을 직접 학습·생성</strong>해 광고 영상·이미지를 제작하고,<br/>
+                공식 인스타 <a href="https://www.instagram.com/kfamousitem/" target="_blank" rel="noopener" class="text-wfsilver hover:text-wfsilver-dark underline underline-offset-2 font-semibold">@kfamousitem</a>에서 바이럴 마케팅을 진행합니다.
+              </p>
+              <ul class="space-y-4">
+                <li class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-wfsilver flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <div><div class="font-bold text-wfblack-dark text-base lg:text-lg">광고비 · 촬영비 · 모델료 ZERO</div><div class="text-gray-600 text-sm mt-1">24시간 상시 노출 · 무한 콘텐츠 생산</div></div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-wfsilver flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <div><div class="font-bold text-wfblack-dark text-base lg:text-lg">AI 모델 SNS 홍보 + PL 상품 개발</div><div class="text-gray-600 text-sm mt-1">25.12 시안 제작 · 26.01 모션/립싱크 진행 중</div></div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-wfsilver flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <div><div class="font-bold text-wfblack-dark text-base lg:text-lg">셀럽 콜라보 형태 영상까지 자체 제작</div><div class="text-gray-600 text-sm mt-1">한국 가수와 촬영한 듯한 컨셉 영상 등 무한 확장</div></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 아래쪽: AI 콘텐츠 갤러리 -->
+            <div class="grid grid-cols-3 gap-3 mt-auto items-start">
+              <!-- AI 모델 화보 — WF AI BUSINESS MANAGER -->
+              <div class="aspect-square rounded-xl overflow-hidden relative border border-wfsilver/40 bg-gray-50">
+                <img src="./assets/images/wf-office-model.png" alt="WF AI BUSINESS MANAGER" class="w-full h-full object-cover object-top" />
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-2 pt-7 pb-2">
+                  <div class="text-[8px] font-bold text-wfsilver-light tracking-[0.12em] leading-none mb-1">AI MODEL</div>
+                  <div class="text-[10px] font-extrabold text-white leading-tight">WF AI BUSINESS MANAGER</div>
+                </div>
+              </div>
+              <!-- AI 광고 → WF PRODUCT LINE -->
+              <div class="aspect-square rounded-xl overflow-hidden relative border border-wfsilver/40 bg-[#eeeeee]">
+                <img src="./assets/images/wf-product.png" alt="WF PRODUCT LINE" class="w-full h-full object-cover" />
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-2 pt-7 pb-2">
+                  <div class="text-[8px] font-bold text-wfsilver-light tracking-[0.12em] leading-none mb-1">AI PRODUCT</div>
+                  <div class="text-[10px] font-extrabold text-white leading-tight">WF PRODUCT LINE</div>
+                </div>
+              </div>
+              <!-- AI 바이럴 영상 — WF AI MODEL MARKETING -->
+              <div class="aspect-square rounded-xl overflow-hidden relative border border-wfsilver/40 bg-gray-50">
+                <video src="./assets/videos/wf-ai-marketing.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-2 pt-7 pb-2 pointer-events-none">
+                  <div class="text-[8px] font-bold text-wfsilver-light tracking-[0.12em] leading-none mb-1">AI VIDEO</div>
+                  <div class="text-[10px] font-extrabold text-white leading-tight">WF AI MODEL MARKETING</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 1·2·3 동시 가동 + 5배 성장 비전 (카탈로그 p-16 하단) -->
+    <div class="bg-gradient-to-r from-wfblack via-wfblack-dark to-wfblack-darker rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden scroll-fade">
+      <!-- 배경 장식 -->
+      <div class="absolute -top-16 -right-16 w-72 h-72 bg-wfsilver rounded-full opacity-15 blur-3xl"></div>
+      <div class="absolute -bottom-16 -left-16 w-72 h-72 bg-wfsilver-dark rounded-full opacity-15 blur-3xl"></div>
+
+      <div class="relative">
+        <!-- 헤더 (5배 성장 메인 메시지) -->
+        <div class="text-center mb-7">
+          <div class="flex flex-wrap items-center justify-center gap-2.5 mb-4">
+            <span class="bg-wfsilver/20 text-wfsilver px-3 py-1 rounded-full text-xs font-bold">1 역직구</span>
+            <span class="bg-wfsilver/20 text-wfsilver px-3 py-1 rounded-full text-xs font-bold">2 해외 소싱처 확대</span>
+            <span class="bg-wfsilver/20 text-wfsilver px-3 py-1 rounded-full text-xs font-bold">3 AI 도입</span>
+          </div>
+          <h3 class="text-2xl lg:text-4xl font-extrabold leading-tight mb-3">
+            1·2·3 동시 가동으로,<br/>
+            <span class="text-wfsilver">5배 성장</span>에 도전합니다.
+          </h3>
+          <p class="text-gray-300 text-sm lg:text-base">
+            사업 안정화 + 확대화를 통해 <strong class="text-white">2027년까지 대리점주 5배 성장</strong>을 목표합니다.
+          </p>
+        </div>
+
+        <!-- 3 솔루션 미니 그리드 -->
+        <div class="grid grid-cols-3 gap-3 max-w-3xl mx-auto pt-6 pb-7 border-t border-b border-white/10 mb-8">
+          <div class="text-center">
+            <div class="text-wfsilver font-bold text-xs mb-1">환율</div>
+            <div class="text-xs lg:text-sm text-gray-200">양방향 헤지로 안정</div>
+          </div>
+          <div class="text-center">
+            <div class="text-wfsilver font-bold text-xs mb-1">시장</div>
+            <div class="text-xs lg:text-sm text-gray-200">중국 → 글로벌 분산</div>
+          </div>
+          <div class="text-center">
+            <div class="text-wfsilver font-bold text-xs mb-1">마케팅</div>
+            <div class="text-xs lg:text-sm text-gray-200">AI 모델 0원 노출</div>
+          </div>
+        </div>
+
+        <!-- 5배 성장 비전 카드 (2026 NOW × 5 → 2027 GOAL) -->
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4 lg:gap-6">
+          <!-- 2026 NOW -->
+          <div class="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 backdrop-blur-sm w-full md:w-auto text-center md:flex-1 md:max-w-xs">
+            <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-3">2026 NOW</div>
+            <div class="grid grid-cols-2 gap-5 divide-x divide-white/10">
+              <div>
+                <div class="text-2xl lg:text-3xl font-extrabold">40<span class="text-sm ml-0.5">명</span></div>
+                <div class="text-[10px] text-gray-300 mt-1">대리점주</div>
+              </div>
+              <div>
+                <div class="text-2xl lg:text-3xl font-extrabold">1,680<span class="text-sm ml-0.5">개</span></div>
+                <div class="text-[10px] text-gray-300 mt-1">사업자등록</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ×5 GROW 화살표 -->
+          <div class="flex md:flex-col items-center gap-1 px-2 shrink-0">
+            <div class="text-3xl lg:text-4xl font-black text-wfsilver">×5</div>
+            <div class="text-[10px] font-bold text-wfsilver tracking-widest">GROW →</div>
+          </div>
+
+          <!-- 2027 GOAL -->
+          <div class="bg-wfsilver/10 border border-wfsilver/40 rounded-2xl px-6 py-5 backdrop-blur-sm w-full md:w-auto text-center shadow-lg shadow-wfsilver/20 md:flex-1 md:max-w-xs">
+            <div class="text-wfsilver font-bold text-[10px] tracking-widest mb-3">2027 GOAL</div>
+            <div class="grid grid-cols-2 gap-5 divide-x divide-wfsilver/30">
+              <div>
+                <div class="text-2xl lg:text-3xl font-extrabold text-wfsilver">200<span class="text-sm ml-0.5">명</span></div>
+                <div class="text-[10px] text-gray-300 mt-1">대리점주</div>
+              </div>
+              <div>
+                <div class="text-2xl lg:text-3xl font-extrabold text-wfsilver">7,000<span class="text-sm ml-0.5">개</span></div>
+                <div class="text-[10px] text-gray-300 mt-1">사업자등록</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ FAQ 미리보기 ============ -->
+<section class="py-20 lg:py-28 bg-white">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 scroll-fade">
+      <div class="inline-block bg-wfblack/10 text-wfblack font-semibold text-sm px-4 py-1.5 rounded-full mb-4">FAQ</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold text-wfblack-dark tracking-tight mb-4">자주 묻는 질문</h2>
+      <p class="text-gray-600 text-lg">신규 점주님이 가장 자주 묻는 핵심 질문</p>
+    </div>
+    <div class="space-y-3">
+      <details class="group bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors">
+        <summary class="cursor-pointer p-6 list-none flex items-center justify-between">
+          <span class="font-bold text-wfblack-dark text-lg">평균 월 수익 250만원, 진짜인가요?</span>
+          <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-6 pb-6 text-gray-700 leading-relaxed text-sm">기존 점주님 데이터 기준 평균 매출 250만원, 마진율 약 50% 수준입니다. 평균 4개월차부터 안정화됩니다.</div>
+      </details>
+      <details class="group bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors">
+        <summary class="cursor-pointer p-6 list-none flex items-center justify-between">
+          <span class="font-bold text-wfblack-dark text-lg">직장인입니다. 직접 처리해야 하는 업무가 많나요?</span>
+          <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-6 pb-6 text-gray-700 leading-relaxed text-sm">아니요, 아무것도 하지 않으셔도 됩니다. 본업이 있으시거나 컴퓨터가 미숙하신 분을 위해 만들어진 모델입니다.</div>
+      </details>
+      <details class="group bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors">
+        <summary class="cursor-pointer p-6 list-none flex items-center justify-between">
+          <span class="font-bold text-wfblack-dark text-lg">중도 폐업하고 싶을 때 위약금이 있나요?</span>
+          <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-6 pb-6 text-gray-700 leading-relaxed text-sm">위약금은 없습니다. 점주님이 원하시는 시점에 자유롭게 종료하실 수 있습니다.</div>
+      </details>
+      <details class="group bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors">
+        <summary class="cursor-pointer p-6 list-none flex items-center justify-between">
+          <span class="font-bold text-wfblack-dark text-lg">지재권 분쟁이나 짝퉁 신고가 들어오면 어떻게 하나요?</span>
+          <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-6 pb-6 text-gray-700 leading-relaxed text-sm">WF는 6년간의 대응 노하우로 위험 상품을 사전 필터링합니다. 지재권 침해 관련 합의금 및 민·형사상 문제는 본사가 책임집니다.</div>
+      </details>
+    </div>
+    <div class="text-center mt-10">
+      <a href="./faq.html" class="inline-flex items-center gap-2 text-wfblack font-semibold hover:gap-3 transition-all">
+        전체 FAQ 보기 (12개 질문)
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 자료실 ============ -->
+<section class="py-20 lg:py-28 bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker text-white">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-fade">
+      <div class="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-wfsilver font-semibold text-sm px-4 py-1.5 rounded-full mb-4">RESOURCES</div>
+      <h2 class="text-3xl lg:text-5xl font-extrabold tracking-tight mb-4">자료실</h2>
+      <p class="text-gray-300 text-lg">카탈로그와 계약서를 자유롭게 받아보세요.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <a href="./assets/files/WF-Catalog.pdf" download class="group glass rounded-3xl p-8 hover:bg-white/15 transition-all hover:-translate-y-1">
+        <div class="flex items-start justify-between mb-6">
+          <div class="w-14 h-14 bg-wfsilver/20 rounded-2xl flex items-center justify-center"><svg class="w-7 h-7 text-wfsilver" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+          <svg class="w-6 h-6 text-gray-400 group-hover:text-wfsilver transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </div>
+        <h3 class="text-xl font-bold mb-2">2026 WF 카탈로그</h3>
+        <p class="text-gray-300 text-sm">사업 모델 · 수익 시뮬레이션 · 차별점 등 전체 안내자료 (PDF)</p>
+      </a>
+      <div class="group glass rounded-3xl p-8 hover:bg-white/15 transition-all hover:-translate-y-1 flex flex-col">
+        <a href="./assets/files/WF-Contract.pdf" download class="block flex-1">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-14 h-14 bg-wfsilver/20 rounded-2xl flex items-center justify-center"><svg class="w-7 h-7 text-wfsilver" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+            <svg class="w-6 h-6 text-gray-400 group-hover:text-wfsilver transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">대리점 사업 계약서</h3>
+          <p class="text-gray-300 text-sm">표준 사업 계약서 (PDF)</p>
+        </a>
+        <div class="flex justify-end mt-4 pt-4 border-t border-white/10">
+          <a href="./contract.html" class="inline-flex items-center gap-1 text-wfsilver hover:text-white text-sm font-semibold transition-colors">미리보기<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 상담 신청 CTA ============ -->
+<section id="contact" class="py-20 lg:py-28 bg-white">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="bg-gradient-to-br from-wfblack to-wfblack-darker rounded-[2.5rem] p-10 lg:p-16 text-white relative overflow-hidden scroll-fade">
+      <div class="absolute -top-20 -right-20 w-80 h-80 bg-wfsilver rounded-full opacity-20 blur-3xl"></div>
+      <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-wfsilver-dark rounded-full opacity-20 blur-3xl"></div>
+      <div class="relative">
+        <div class="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-wfsilver font-semibold text-sm px-4 py-1.5 rounded-full mb-4">CONTACT</div>
+        <h2 class="text-3xl lg:text-5xl font-extrabold tracking-tight mb-4 leading-tight">무료 상담으로<br/>50개 사업체 사장님이 되어보세요</h2>
+        <p class="text-gray-300 text-lg mb-10 max-w-2xl">상담 시 부담 없이 사업 모델 · 비용 구조 · 점주 수익 시뮬레이션을 직접 안내해 드립니다.</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <a href="mailto:wfgroupcoltd@gmail.com?subject=%5B%EC%83%81%EB%8B%B4%20%EC%8B%A0%EC%B2%AD%5D%20WF%20GROUP" class="group flex items-center justify-between glass hover:bg-white/15 rounded-2xl p-6 transition-all">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-wfsilver/20 rounded-xl flex items-center justify-center"><svg class="w-6 h-6 text-wfsilver" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+              <div><div class="font-bold">이메일 상담</div><div class="text-sm text-gray-300">wfgroupcoltd@gmail.com</div></div>
+            </div>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+          <div class="group flex items-center justify-between bg-gray-300/60 text-wfblack-darker/70 rounded-2xl p-6 cursor-not-allowed select-none relative" aria-disabled="true">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-wfblack-darker/10 rounded-xl flex items-center justify-center"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.75 1.78 5.16 4.47 6.55-.2.71-.71 2.56-.81 2.96-.13.5.18.49.39.36.16-.1 2.55-1.73 3.59-2.43.78.11 1.58.18 2.36.18 5.52 0 10-3.48 10-7.62S17.52 3 12 3z"/></svg></div>
+              <div><div class="font-bold">카카오톡 상담</div><div class="text-sm">곧 오픈 예정 · 1주 이내</div></div>
+            </div>
+            <span class="text-xs font-bold bg-wfblack-darker/10 px-3 py-1 rounded-full">OPEN SOON</span>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-6">※ 카카오톡 채널은 1주 이내 오픈 예정입니다. 우선 이메일로 상담 부탁드립니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 푸터 ============ -->
+<footer class="bg-gray-50 border-t border-gray-200 py-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <div class="mb-4"><img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-14" /></div>
+        <p class="text-sm text-gray-600 leading-relaxed">㈜더블유에프그룹<br/>해외직구 대행업 운영대행 6년차<br/>누적 사업자 2,000개 · 상품등록 5,120만건+</p>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">바로가기</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
+          <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
+          <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
+          <li><a href="./faq.html" class="hover:text-wfblack">자주 묻는 질문</a></li>
+          <li><a href="./contract.html" class="hover:text-wfblack">계약서</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">연락처</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>이메일: <a href="mailto:wfgroupcoltd@gmail.com" class="hover:text-wfblack">wfgroupcoltd@gmail.com</a></li>
+          <li>주소: 경기도 화성시 동탄영천로 131, 코너원빌딩 530호</li>
+          <li>대표: 김예원</li>
+          <li>사업자등록번호: 718-88-03426</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 pt-6 text-center text-xs text-gray-500">© 2026 ㈜더블유에프그룹 (WF GROUP). All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.scroll-fade').forEach((el) => observer.observe(el));
+
+  // 라이트박스
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('section img:not(.no-zoom)').forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src; lightboxImg.alt = img.alt;
+      lightbox.classList.remove('hidden'); document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLightbox() { lightbox.classList.add('hidden'); document.body.style.overflow = ''; }
+  lightbox.addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-close').addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) closeLightbox(); });
+</script>
+
+</body>
+</html>
