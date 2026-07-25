@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>수익 시뮬레이터 · WF GROUP</title>
+<meta name="description" content="WF GROUP 대리점 사업 수익 시뮬레이터 — 모델·조건을 직접 조절하며 24개월 통장 흐름과 예상 수익을 확인해 보세요." />
+<link rel="icon" type="image/png" href="./assets/images/wf-symbol.png" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="./assets/css/tw.css" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Pretendard Variable', Pretendard, sans-serif; -webkit-font-smoothing: antialiased; }
+  .hero-bg {
+    background:
+      radial-gradient(ellipse at top right, rgba(199, 201, 205, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(48, 47, 47, 0.25) 0%, transparent 60%),
+      linear-gradient(135deg, #0E0E0E 0%, #181818 50%, #000000 100%);
+  }
+  .gradient-text {
+    background: linear-gradient(135deg,#7B7B7D 0%,#A8AAAB 30%,#FAFCFD 50%,#A8AAAB 70%,#5F6169 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
+
+  /* ---- 시뮬레이터 전용 스타일 ---- */
+  .sim-wrap { max-width: 80rem; margin: 0 auto; padding: 0 1.5rem; }
+  .sim-panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 1.5rem; padding: 1.75rem; }
+  .sim-label { display: block; font-size: .8rem; font-weight: 700; color: #444444; margin-bottom: .45rem; letter-spacing: .01em; }
+  .sim-sub { font-size: .72rem; color: #8A8B8E; font-weight: 500; }
+  .sim-field { margin-bottom: 1.15rem; }
+  .sim-input, .sim-select {
+    width: 100%; border: 1.5px solid #d1d5db; border-radius: .75rem; padding: .6rem .85rem;
+    font-size: .95rem; font-weight: 600; color: #181818; background: #fff; outline: none;
+    transition: border-color .15s;
+  }
+  .sim-input:focus, .sim-select:focus { border-color: #181818; }
+  .sim-unit { font-size: .8rem; color: #8A8B8E; margin-left: .4rem; white-space: nowrap; }
+  .sim-range { width: 100%; accent-color: #181818; }
+  .model-btn {
+    flex: 1; padding: .7rem 0; border-radius: .8rem; font-weight: 800; font-size: .95rem;
+    border: 1.5px solid #d1d5db; color: #444; background: #fff; cursor: pointer; transition: all .15s;
+  }
+  .model-btn.on {
+    color: #fff; border-color: #181818;
+    background: linear-gradient(135deg, #302F2F 0%, #181818 100%);
+    box-shadow: 0 6px 18px rgba(24,24,24,.25);
+  }
+  .seg-btn {
+    padding: .45rem .8rem; border-radius: .6rem; font-weight: 700; font-size: .8rem;
+    border: 1.5px solid #d1d5db; color: #444; background: #fff; cursor: pointer;
+  }
+  .seg-btn.on { color: #fff; border-color: #181818; background: #181818; }
+  .kcard {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 1.25rem; padding: 1.15rem 1.3rem;
+  }
+  .kcard .t { font-size: .72rem; font-weight: 700; color: #8A8B8E; letter-spacing: .06em; }
+  .kcard .v { font-size: 1.45rem; font-weight: 800; color: #181818; margin-top: .3rem; line-height: 1.2; }
+  .kcard .s { font-size: .74rem; color: #666; margin-top: .3rem; overflow-wrap: anywhere; }
+  .kcard.dark {
+    border: none; color: #fff;
+    background: linear-gradient(160deg, #302F2F 0%, #181818 70%, #0E0E0E 100%);
+  }
+  .kcard.dark .t { color: #C7C9CD; }
+  .kcard.dark .v { color: #fff; }
+  .kcard.dark .s { color: #A8AAAB; }
+  .sim-table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+  .sim-table th {
+    background: #181818; color: #fff; font-weight: 700; padding: .55rem .5rem; text-align: right;
+    white-space: nowrap; position: sticky; top: 0;
+  }
+  .sim-table th:first-child, .sim-table th:nth-child(2) { text-align: center; }
+  .sim-table td { padding: .45rem .5rem; text-align: right; border-bottom: 1px solid #eee; white-space: nowrap; color: #302F2F; }
+  .sim-table td:first-child, .sim-table td:nth-child(2) { text-align: center; color: #8A8B8E; font-weight: 600; }
+  .sim-table tr.y2 td { background: #fafafa; }
+  .sim-table td.neg { color: #b91c1c; }
+  .sim-table td.inj { color: #b91c1c; font-weight: 700; }
+  .badge {
+    display: inline-block; font-size: .68rem; font-weight: 700; padding: .18rem .55rem;
+    border-radius: 999px; background: #F0F1F2; color: #444;
+  }
+  details.adv > summary { cursor: pointer; list-style: none; }
+  details.adv > summary::-webkit-details-marker { display: none; }
+  details.adv > summary .chev { transition: transform .2s; display: inline-block; }
+  details.adv[open] > summary .chev { transform: rotate(180deg); }
+  .disc {
+    background: #F0F1F2; border: 1px solid #e2e3e5; border-radius: 1rem;
+    padding: 1rem 1.25rem; font-size: .75rem; color: #666; line-height: 1.65;
+  }
+  .sim-hero { padding: 7.5rem 0 3.5rem; }
+  .sim-title { font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
+  @media (min-width: 1024px) { .sim-title { font-size: 3.2rem; } }
+  .sim-main { padding: 2.5rem 0 1rem; }
+  .sim-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .sim-grid > * { min-width: 0; }
+  @media (min-width: 1024px) {
+    .sim-grid { grid-template-columns: 340px minmax(0, 1fr); }
+    .sim-side { position: sticky; top: 5.5rem; }
+  }
+  .cards-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
+  @media (min-width: 1280px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) {
+    .sim-panel { padding: 1.2rem; }
+    .kcard .v { font-size: 1.2rem; }
+  }
+  @media (max-width: 420px) {
+    .cards-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+</head>
+<body class="bg-gray-50 text-wfblack-dark">
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-shadow" id="site-header">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="./index.html" class="flex items-center gap-3 group">
+      <img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-10" />
+      <div class="hidden sm:flex flex-col leading-tight">
+        <span class="text-[10px] text-gray-500 font-medium tracking-wider">WF GROUP</span>
+        <span class="font-bold text-wfblack-dark text-sm">주식회사 더블유에프그룹</span>
+      </div>
+    </a>
+    <ul class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="hover:text-wfblack transition-colors">홈</a></li>
+      <li><a href="./business.html" class="hover:text-wfblack transition-colors">About WF Business</a></li>
+      <li><a href="./strengths.html" class="hover:text-wfblack transition-colors">Why WF</a></li>
+      <li><a href="./simulator.html" class="font-bold text-wfblack transition-colors">수익 시뮬레이터</a></li>
+      <li><a href="./faq.html" class="hover:text-wfblack transition-colors">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="hover:text-wfblack transition-colors">계약서</a></li>
+    </ul>
+    <a href="./index.html#contact" class="hidden md:inline-flex items-center gap-2 bg-wfblack hover:bg-wfblack-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all hover:shadow-lg hover:shadow-wfblack/30">상담 신청</a>
+    <button class="md:hidden text-wfblack-dark" id="mobile-menu-btn" aria-label="메뉴">
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+    <ul class="px-6 py-4 space-y-3 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="block py-2">홈</a></li>
+      <li><a href="./business.html" class="block py-2">About WF Business</a></li>
+      <li><a href="./strengths.html" class="block py-2">Why WF</a></li>
+      <li><a href="./simulator.html" class="block py-2 font-bold text-wfblack">수익 시뮬레이터</a></li>
+      <li><a href="./faq.html" class="block py-2">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="block py-2">계약서</a></li>
+      <li><a href="./index.html#contact" class="block py-2 text-wfblack font-semibold">상담 신청 →</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- ============ 히어로 ============ -->
+<section class="hero-bg text-white sim-hero">
+  <div class="sim-wrap">
+    <div class="text-xs font-bold text-wfsilver mb-4" style="letter-spacing:.25em">SIMULATOR</div>
+    <h1 class="sim-title">
+      내 조건으로 직접 돌려보는<br /><span class="gradient-text">수익 시뮬레이터</span>
+    </h1>
+    <p class="text-gray-300 text-sm leading-relaxed" style="max-width:42rem">
+      모델·매출 달성률·할부·예치금을 조절하면 가입 후 24개월의 통장 흐름과 예상 수익이 바로 계산됩니다.
+      실제 정산 주기(네이버·쿠팡)와 카드 청구, 수수료 납부 일정, 세금까지 반영한 월 단위 현금흐름입니다.
+    </p>
+  </div>
+</section>
+
+<main class="sim-main">
+  <div class="sim-wrap">
+    <div class="sim-grid">
+
+      <!-- ============ 입력 패널 ============ -->
+      <div class="sim-panel sim-side">
+        <div class="font-extrabold text-lg mb-4">조건 입력</div>
+
+        <div class="sim-field">
+          <span class="sim-label">사업 모델</span>
+          <div class="flex gap-2">
+            <button type="button" class="model-btn on" id="btn-m30">Model 30</button>
+            <button type="button" class="model-btn" id="btn-m50">Model 50</button>
+          </div>
+          <div class="sim-sub mt-2" style="display:block" id="model-desc">사업자 30개 · 평균 월 매출이익 180만 원 기준</div>
+        </div>
+
+        <div class="sim-field">
+          <span class="sim-label">매출 달성률 <span class="sim-sub">평균 대비 실제 달성 수준</span></span>
+          <input type="range" class="sim-range" id="in-ach" min="50" max="150" step="5" value="100" />
+          <div class="flex justify-between text-xs text-gray-500 font-semibold"><span>50%</span><span id="ach-val" class="text-wfblack font-extrabold">100%</span><span>150%</span></div>
+        </div>
+
+        <div class="sim-field">
+          <span class="sim-label">수수료 면제 이벤트 <span class="sim-sub">면제 기간엔 매출이익 100% 점주 수취</span></span>
+          <select class="sim-select" id="in-fr">
+            <option value="0">면제 없음</option>
+            <option value="1" selected>1개월 면제</option>
+            <option value="2">2개월 면제</option>
+            <option value="3">3개월 면제</option>
+          </select>
+        </div>
+
+        <div class="sim-field">
+          <span class="sim-label">초기 비용 납부 방식</span>
+          <select class="sim-select" id="in-inst">
+            <option value="1">현금 일시불</option>
+            <option value="3" selected>카드 할부 3개월</option>
+            <option value="6">카드 할부 6개월</option>
+            <option value="12">카드 할부 12개월</option>
+          </select>
+        </div>
+
+        <div class="sim-field">
+          <span class="sim-label">통장 예치금 <span class="sim-sub">시작 시 통장에 넣어두는 돈</span></span>
+          <div class="flex items-center">
+            <input type="number" class="sim-input" id="in-dep" min="0" step="50" value="500" />
+            <span class="sim-unit">만 원</span>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button type="button" class="seg-btn" data-dep="0">0</button>
+            <button type="button" class="seg-btn on" id="dep-rec" data-dep="rec">권장액</button>
+          </div>
+        </div>
+
+        <details class="adv border-t border-gray-100 pt-4 mt-2">
+          <summary class="font-bold text-sm text-gray-600 flex items-center justify-between">
+            고급 설정 <span class="chev">▾</span>
+          </summary>
+          <div class="pt-4">
+            <div class="sim-field">
+              <span class="sim-label">가입월</span>
+              <select class="sim-select" id="in-join"></select>
+            </div>
+            <div class="sim-field">
+              <span class="sim-label">평균 월 매출이익 <span class="sim-sub">연평균 · 수수료 배분 전</span></span>
+              <div class="flex items-center">
+                <input type="number" class="sim-input" id="in-mp" min="0" step="10" value="180" />
+                <span class="sim-unit">만 원</span>
+              </div>
+            </div>
+            <div class="sim-field">
+              <span class="sim-label">네이버 : 쿠팡 판매 비중</span>
+              <input type="range" class="sim-range" id="in-nv" min="0" max="100" step="5" value="20" />
+              <div class="flex justify-between text-xs text-gray-500 font-semibold"><span>쿠팡 100%</span><span id="nv-val" class="text-wfblack font-extrabold">네이버 20 : 쿠팡 80</span><span>네이버 100%</span></div>
+            </div>
+            <div class="sim-field">
+              <span class="sim-label">과세 유형</span>
+              <div class="flex gap-2">
+                <button type="button" class="seg-btn on" id="vat-1">간이과세</button>
+                <button type="button" class="seg-btn" id="vat-2">일반과세</button>
+              </div>
+            </div>
+            <div class="sim-field">
+              <span class="sim-label">이 사업 외 연간 소득 <span class="sim-sub">종합소득세 계산용 과세표준</span></span>
+              <div class="flex items-center">
+                <input type="number" class="sim-input" id="in-other" min="0" step="100" value="4000" />
+                <span class="sim-unit">만 원</span>
+              </div>
+            </div>
+            <div class="sim-field">
+              <span class="sim-label">수수료 송금 시차 <span class="sim-sub">매출 발생 후 N개월 뒤 20일 송금</span></span>
+              <select class="sim-select" id="in-pl">
+                <option value="0">당월</option>
+                <option value="1">1개월 뒤</option>
+                <option value="2">2개월 뒤</option>
+                <option value="3" selected>3개월 뒤</option>
+              </select>
+            </div>
+          </div>
+        </details>
+
+        <button type="button" id="btn-reset" class="w-full mt-4 py-2.5 rounded-xl border-1.5 border border-gray-300 text-sm font-bold text-gray-500 hover:border-wfblack hover:text-wfblack transition-colors">기본값으로 초기화</button>
+      </div>
+
+      <!-- ============ 결과 ============ -->
+      <div>
+        <!-- 요약 카드 -->
+        <div class="cards-grid" id="cards"></div>
+
+        <!-- 차트 -->
+        <div class="sim-panel mb-6">
+          <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
+            <div class="font-extrabold text-lg">24개월 통장 잔액 흐름</div>
+            <div class="text-xs text-gray-500 font-semibold" id="chart-legend"></div>
+          </div>
+          <div class="text-xs text-gray-400 mb-3" id="chart-note"></div>
+          <canvas id="chart" style="width:100%;height:300px;"></canvas>
+        </div>
+
+        <!-- 월별 상세 -->
+        <details class="adv sim-panel mb-6" open>
+          <summary class="font-extrabold text-lg flex items-center justify-between">월별 상세 내역 <span class="chev text-gray-400">▾</span></summary>
+          <div class="text-xs text-gray-400 mt-1 mb-3">단위: 원 · 13개월차부터는 연장(2년차) 구간입니다.</div>
+          <div style="overflow-x:auto; max-height: 480px; overflow-y:auto;">
+            <table class="sim-table" id="detail-table"></table>
+          </div>
+        </details>
+
+        <!-- 세금 상세 -->
+        <details class="adv sim-panel mb-6">
+          <summary class="font-extrabold text-lg flex items-center justify-between">세금 상세 (종합소득세 · 부가가치세) <span class="chev text-gray-400">▾</span></summary>
+          <div id="tax-detail" class="pt-4"></div>
+        </details>
+
+        <!-- 면책 -->
+        <div class="disc">
+          <strong>꼭 확인해 주세요.</strong> 본 시뮬레이터의 모든 수치는 입력한 가정(평균 월 매출이익, 달성률, 판매 채널 비중 등)에 따라 계산된 <strong>추정치</strong>이며,
+          실제 수익은 상품·시장 상황·운영 성과에 따라 달라질 수 있습니다. 본 자료는 장래 수익을 보장하지 않으며, 가맹사업거래의 공정화에 관한 법률에 따른
+          예상매출액 산정서가 아닙니다. 세금은 단순화된 모형(종합소득세 누진세율, 간이/일반 부가세)에 따른 참고치로 개인별 공제·감면에 따라 달라집니다.
+          정확한 내용은 <a href="./index.html#contact" class="underline font-bold">무료 상담</a>을 통해 확인해 주세요.
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-6 rounded-3xl p-8 text-center text-white" style="background:linear-gradient(160deg,#302F2F 0%,#181818 60%,#0E0E0E 100%)">
+          <div class="text-xl font-extrabold mb-2">내 조건에 맞는 정확한 설계가 필요하신가요?</div>
+          <p class="text-sm text-gray-300 mb-5">전문 상담사가 시뮬레이션 결과를 함께 보며 조건별 수익 구조를 안내해 드립니다.</p>
+          <a href="./index.html#contact" class="inline-flex items-center gap-2 bg-white text-wfblack font-bold px-8 py-3.5 rounded-full text-sm hover:shadow-xl transition-all">무료 상담 신청
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ 푸터 ============ -->
+<footer class="bg-gray-50 border-t border-gray-200 py-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <div class="mb-4"><img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-14" /></div>
+        <p class="text-sm text-gray-600 leading-relaxed">㈜더블유에프그룹<br/>해외직구 대행업 운영대행 8년차<br/>누적 사업자 2,000개 · 상품등록 5,120만건+</p>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">바로가기</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
+          <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
+          <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
+          <li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li>
+          <li><a href="./faq.html" class="hover:text-wfblack">자주 묻는 질문</a></li>
+          <li><a href="./contract.html" class="hover:text-wfblack">계약서</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">연락처</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>이메일: <a href="mailto:wfgroupcoltd@gmail.com" class="hover:text-wfblack">wfgroupcoltd@gmail.com</a></li>
+          <li>주소: 경기도 화성시 동탄영천로 131, 코너원빌딩 530호</li>
+          <li>대표: 김예원</li>
+          <li>사업자등록번호: 228-86-03744</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 pt-6 text-center text-xs text-gray-500">© 2026 ㈜더블유에프그룹 (WF GROUP). All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="./assets/js/wf-sim-core.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var MAN = 10000;
+
+  // ---- 상태 ----
+  var state = {
+    model: "m30",
+    ach: 1.0, fr: 1, inst: 3, depMan: null,  // null = 권장(모델 기본)
+    joinMonth: 8, mpMan: null, nvShare: 0.2, vatType: 1, otherMan: 4000, pl: 3
+  };
+
+  function currentParams() {
+    var d = WFSim.DEFAULTS[state.model];
+    var p = Object.assign({}, d);
+    p.ach = state.ach;
+    p.fr = state.fr;
+    p.inst = state.inst;
+    p.dep = (state.depMan === null) ? d.dep : state.depMan * MAN;
+    p.joinMonth = state.joinMonth;
+    p.mp = (state.mpMan === null) ? d.mp : state.mpMan * MAN;
+    p.nvShare = state.nvShare;
+    p.vatType = state.vatType;
+    p.otherIncome = state.otherMan * MAN;
+    p.pl = state.pl;
+    return p;
+  }
+
+  // ---- 포맷 ----
+  function won(x) { var v = Math.round(x); if (v === 0) v = 0; return v.toLocaleString("ko-KR"); }
+  function man(x, digits) { // 원 → "1,234만 원"
+    var v = x / MAN;
+    var s = (digits === 0) ? Math.round(v).toLocaleString("ko-KR")
+                           : (Math.round(v * 10) / 10).toLocaleString("ko-KR");
+    return s + "만 원";
+  }
+  function pct(x) { return (Math.round(x * 1000) / 10) + "%"; }
+
+  // ---- 렌더 ----
+  function render() {
+    var p = currentParams();
+    var r = WFSim.simulate(p);
+
+    // 모델 설명
+    $("model-desc").textContent = "사업자 " + p.n + "개 · 평균 월 매출이익 " + man(p.mp, 0) + " 기준";
+    // 예치금 placeholder 갱신 (권장 모드일 때 값 표시)
+    if (state.depMan === null) $("in-dep").value = WFSim.DEFAULTS[state.model].dep / MAN;
+    if (state.mpMan === null) $("in-mp").value = WFSim.DEFAULTS[state.model].mp / MAN;
+
+    // ---- 요약 카드 ----
+    var recovery = (typeof r.recovery === "number") ? r.recovery + "개월차" : r.recovery;
+    var injectTxt = (r.totalInject > 0) ? man(r.totalInject, 0) : "불필요";
+    var cards = [
+      { t: "1년차 순수익 (세후)", v: man(r.y1Post, 0), s: "세전 " + man(r.y1Pre, 0) + " · ROI(세전) " + pct(r.roi1), dark: true },
+      { t: "2년차 순수익 (세후)", v: man(r.y2Post, 0), s: "세전 " + man(r.y2Pre, 0) + " · ROI(세전) " + pct(r.roi2), dark: true },
+      { t: "투자금 회수 시점", v: recovery, s: "잔액이 예치금 수준을 회복하는 달" },
+      { t: "12개월차 통장 잔액", v: man(r.bal12, 0), s: "예치금 " + man(p.dep, 0) + " 포함" },
+      { t: "추가 현금 투입", v: injectTxt, s: (r.totalInject > 0) ? "카드값이 잔액을 넘는 달의 부족분 합계" : "예치금으로 24개월 내내 잔액 유지" },
+      { t: "1년차 창업비용", v: man(r.inv1, 0), s: "비상주 " + p.n + "개 + 세팅비 + 서버 (2년차 연장 " + man(r.inv2, 0) + ")" }
+    ];
+    $("cards").innerHTML = cards.map(function (c) {
+      return '<div class="kcard' + (c.dark ? " dark" : "") + '"><div class="t">' + c.t + '</div><div class="v">' + c.v + '</div><div class="s">' + c.s + "</div></div>";
+    }).join("");
+
+    // ---- 차트 ----
+    drawChart(r, p);
+    $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; <span style="color:#b91c1c">■</span> 추가 투입 필요 &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
+    $("chart-note").textContent = "12개월차: 연장 여부 결정 · 연장 시 수수료는 동일 시차로 계속 납부, 24개월차: 계약 종료 가정 시 잔여 수수료 일시 정산 반영";
+
+    // ---- 월별 표 ----
+    var head = "<thead><tr><th>개월차</th><th>달력월</th><th>정산 유입</th><th>카드값 출금</th><th>수수료 송금</th><th>월 순현금</th><th>통장 잔액</th><th>추가 투입</th></tr></thead>";
+    var body = r.rows.map(function (row) {
+      var cls = row.m >= 13 ? ' class="y2"' : "";
+      return "<tr" + cls + "><td>" + row.m + "</td><td>" + row.cal + "월</td>" +
+        "<td>" + won(row.H) + "</td><td>" + won(row.I + row.P) + "</td><td>" + won(row.J) + "</td>" +
+        '<td class="' + (row.K < 0 ? "neg" : "") + '">' + won(row.K) + "</td>" +
+        "<td><strong>" + won(row.L) + "</strong></td>" +
+        '<td class="' + (row.S > 0 ? "inj" : "") + '">' + (row.S > 0 ? won(row.S) : "-") + "</td></tr>";
+    }).join("");
+    $("detail-table").innerHTML = head + "<tbody>" + body + "</tbody>";
+
+    // ---- 세금 상세 ----
+    var v = r.vat;
+    var vatName = p.vatType === 1 ? "간이과세" : "일반과세";
+    var taxRows = [
+      ["적용 과세유형", vatName + (p.vatType === 1 && v.y1rev < WFSim.VAT.simpleExempt ? " (연 매출 4,800만 미만 — 부가세 납부 면제)" : "")],
+      ["1년차 종합소득세+지방소득세 (사업 추가분)", man(r.tax1.total, 0) + " · 한계세율 " + pct(r.tax1.marginal)],
+      ["1년차 부가세" + (p.vatType === 2 ? "+등록면허세" : ""), man(v.vat1, 0)],
+      ["2년차 종합소득세+지방소득세 (사업 추가분)", man(r.tax2.total, 0) + " · 한계세율 " + pct(r.tax2.marginal)],
+      ["2년차 부가세" + (p.vatType === 2 ? "+등록면허세" : ""), man(v.vat2, 0)],
+      ["정상월 예상 정산 유입 (월)", "네이버 " + man(r.navMonthly, 0) + " + 쿠팡 " + man(r.cpMonthly, 0)],
+      ["정상월 예상 카드값 — 상품 매입 (월)", man(r.cardMonthly, 0)]
+    ];
+    if (p.vatType === 1 && !v.simpleKeepOk) taxRows.splice(1, 0, ["간이과세 유지 한도 체크", "연 매출이익 1억 400만 초과 — 일반과세 전환 대상"]);
+    $("tax-detail").innerHTML = taxRows.map(function (tr) {
+      return '<div class="flex justify-between items-baseline py-2 border-b border-gray-100 text-sm"><span class="text-gray-500 font-semibold" style="padding-right:1rem">' + tr[0] + '</span><span class="font-bold text-right">' + tr[1] + "</span></div>";
+    }).join("");
+  }
+
+  // ---- 캔버스 차트 ----
+  function drawChart(r, p) {
+    var cv = $("chart");
+    var dpr = window.devicePixelRatio || 1;
+    var W = cv.clientWidth, H = 300;
+    cv.width = W * dpr; cv.height = H * dpr;
+    var ctx = cv.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    var padL = 56, padR = 10, padT = 14, padB = 26;
+    var pw = W - padL - padR, ph = H - padT - padB;
+    var maxV = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { return x.L; }))) * 1.12 || 1;
+    var y = function (v) { return padT + ph - (v / maxV) * ph; };
+    var bw = pw / 24;
+
+    // 그리드 + y라벨
+    ctx.strokeStyle = "#eee"; ctx.fillStyle = "#999"; ctx.font = "10px Pretendard, sans-serif"; ctx.textAlign = "right";
+    var steps = 4;
+    for (var i = 0; i <= steps; i++) {
+      var val = maxV * i / steps, yy = y(val);
+      ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(W - padR, yy); ctx.stroke();
+      ctx.fillText(Math.round(val / MAN).toLocaleString() + "만", padL - 6, yy + 3);
+    }
+    // 예치금 기준선
+    if (p.dep > 0) {
+      ctx.strokeStyle = "#A8AAAB"; ctx.setLineDash([5, 4]);
+      ctx.beginPath(); ctx.moveTo(padL, y(p.dep)); ctx.lineTo(W - padR, y(p.dep)); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    // 막대
+    r.rows.forEach(function (row, idx) {
+      var x = padL + idx * bw + bw * 0.18, w = bw * 0.64;
+      var grd = ctx.createLinearGradient(0, y(row.L), 0, padT + ph);
+      if (idx >= 12) { grd.addColorStop(0, "#5F6169"); grd.addColorStop(1, "#302F2F"); }
+      else { grd.addColorStop(0, "#302F2F"); grd.addColorStop(1, "#181818"); }
+      ctx.fillStyle = grd;
+      ctx.fillRect(x, y(row.L), w, padT + ph - y(row.L));
+      if (row.S > 0) { // 추가투입 표시 (막대 상단 붉은 캡)
+        ctx.fillStyle = "#b91c1c";
+        ctx.fillRect(x, padT, w, 4);
+      }
+    });
+    // x라벨
+    ctx.fillStyle = "#999"; ctx.textAlign = "center";
+    [1, 4, 8, 12, 16, 20, 24].forEach(function (m) {
+      ctx.fillText(m + "개월", padL + (m - 0.5) * bw, H - 8);
+    });
+    // 회수 시점 마커
+    if (typeof r.recovery === "number") {
+      var mx = padL + (r.recovery - 0.5) * bw;
+      ctx.fillStyle = "#181818"; ctx.textAlign = "center"; ctx.font = "bold 10px Pretendard, sans-serif";
+      ctx.fillText("▼ 회수", mx, padT - 2 + 10);
+    }
+  }
+
+  // ---- 이벤트 바인딩 ----
+  function setModel(m) {
+    state.model = m;
+    document.getElementById("btn-m30").classList.toggle("on", m === "m30");
+    document.getElementById("btn-m50").classList.toggle("on", m === "m50");
+    if (state.depMan !== null && $("dep-rec").classList.contains("on")) state.depMan = null;
+    render();
+  }
+  $("btn-m30").addEventListener("click", function () { setModel("m30"); });
+  $("btn-m50").addEventListener("click", function () { setModel("m50"); });
+
+  $("in-ach").addEventListener("input", function () {
+    state.ach = this.value / 100;
+    $("ach-val").textContent = this.value + "%";
+    render();
+  });
+  $("in-fr").addEventListener("change", function () { state.fr = +this.value; render(); });
+  $("in-inst").addEventListener("change", function () { state.inst = +this.value; render(); });
+  $("in-dep").addEventListener("input", function () {
+    state.depMan = Math.max(0, +this.value || 0);
+    document.querySelectorAll("[data-dep]").forEach(function (b) { b.classList.remove("on"); });
+    render();
+  });
+  document.querySelectorAll("[data-dep]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      if (b.dataset.dep === "rec") { state.depMan = null; }
+      else { state.depMan = +b.dataset.dep; $("in-dep").value = b.dataset.dep; }
+      render();
+    });
+  });
+  var joinSel = $("in-join");
+  for (var m = 1; m <= 12; m++) {
+    var o = document.createElement("option");
+    o.value = m; o.textContent = m + "월"; if (m === 8) o.selected = true;
+    joinSel.appendChild(o);
+  }
+  joinSel.addEventListener("change", function () { state.joinMonth = +this.value; render(); });
+  $("in-mp").addEventListener("input", function () { state.mpMan = Math.max(0, +this.value || 0); render(); });
+  $("in-nv").addEventListener("input", function () {
+    state.nvShare = this.value / 100;
+    $("nv-val").textContent = "네이버 " + this.value + " : 쿠팡 " + (100 - this.value);
+    render();
+  });
+  $("vat-1").addEventListener("click", function () { state.vatType = 1; this.classList.add("on"); $("vat-2").classList.remove("on"); render(); });
+  $("vat-2").addEventListener("click", function () { state.vatType = 2; this.classList.add("on"); $("vat-1").classList.remove("on"); render(); });
+  $("in-other").addEventListener("input", function () { state.otherMan = Math.max(0, +this.value || 0); render(); });
+  $("in-pl").addEventListener("change", function () { state.pl = +this.value; render(); });
+
+  $("btn-reset").addEventListener("click", function () {
+    state = { model: state.model, ach: 1.0, fr: 1, inst: 3, depMan: null, joinMonth: 8, mpMan: null, nvShare: 0.2, vatType: 1, otherMan: 4000, pl: 3 };
+    $("in-ach").value = 100; $("ach-val").textContent = "100%";
+    $("in-fr").value = "1"; $("in-inst").value = "3";
+    document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
+    $("dep-rec").classList.add("on");
+    $("in-join").value = "8"; $("in-nv").value = 20; $("nv-val").textContent = "네이버 20 : 쿠팡 80";
+    $("vat-1").classList.add("on"); $("vat-2").classList.remove("on");
+    $("in-other").value = 4000; $("in-pl").value = "3";
+    render();
+  });
+
+  $("mobile-menu-btn").addEventListener("click", function () {
+    $("mobile-menu").classList.toggle("hidden");
+  });
+  window.addEventListener("resize", render);
+
+  render();
+})();
+</script>
+
+</body>
+</html>
