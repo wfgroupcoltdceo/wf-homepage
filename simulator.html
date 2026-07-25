@@ -104,6 +104,40 @@
   .cards-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
   @media (min-width: 1280px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
   #chart-box { position: relative; }
+  /* 투자금 회수 강조 배지 */
+  #recover-badge {
+    position: absolute; display: none; z-index: 4; transform: translateX(-50%);
+    text-align: center; pointer-events: none;
+  }
+  #recover-badge .rb-pill {
+    display: inline-block; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #302F2F 0%, #181818 100%);
+    color: #fff; font-size: .68rem; font-weight: 800; letter-spacing: .02em;
+    padding: .34rem .7rem; border-radius: 999px; white-space: nowrap;
+    box-shadow: 0 0 0 0 rgba(24,24,24,.35);
+    animation: rb-pulse 1.8s ease-out infinite;
+  }
+  #recover-badge .rb-pill::after {
+    content: ""; position: absolute; top: 0; left: -80%; width: 60%; height: 100%;
+    background: linear-gradient(105deg, transparent 0%, rgba(250,252,253,.55) 50%, transparent 100%);
+    animation: rb-shine 2.4s ease-in-out infinite;
+  }
+  #recover-badge .rb-sub {
+    margin-top: .18rem; font-size: .62rem; font-weight: 800; color: #444;
+    text-shadow: 0 1px 0 rgba(255,255,255,.8);
+  }
+  #recover-badge .rb-line {
+    width: 2px; margin: .15rem auto 0;
+    background: repeating-linear-gradient(180deg, #444 0 4px, transparent 4px 8px);
+  }
+  @keyframes rb-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(24,24,24,.45); }
+    70% { box-shadow: 0 0 0 12px rgba(24,24,24,0); }
+    100% { box-shadow: 0 0 0 0 rgba(24,24,24,0); }
+  }
+  @keyframes rb-shine {
+    0% { left: -80%; } 55% { left: 120%; } 100% { left: 120%; }
+  }
   #chart-tip {
     position: absolute; display: none; pointer-events: none; z-index: 5;
     background: #181818; color: #fff; border-radius: .6rem; padding: .55rem .7rem;
@@ -204,6 +238,14 @@
         </div>
 
         <div class="sim-field">
+          <span class="sim-label">세팅 위탁 희망여부 <span class="sim-sub">세팅비 포함 여부 결정</span></span>
+          <div class="flex gap-2">
+            <button type="button" class="seg-btn on" id="setup-1" style="flex:1">예 (세팅 위탁)</button>
+            <button type="button" class="seg-btn" id="setup-0" style="flex:1">아니오 (직접)</button>
+          </div>
+        </div>
+
+        <div class="sim-field">
           <span class="sim-label">통장 예치금 <span class="sim-sub">시작 시 통장에 넣어두는 돈</span></span>
           <div class="flex items-center">
             <input type="number" class="sim-input" id="in-dep" min="0" step="50" value="500" />
@@ -279,6 +321,11 @@
           <div class="text-xs text-gray-400 mb-3">막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다 · 13개월차부터 연장(2년차) 구간</div>
           <div id="chart-box">
             <canvas id="chart" style="width:100%;height:320px;"></canvas>
+            <div id="recover-badge">
+              <div class="rb-pill">★ 투자금 회수 완료</div>
+              <div class="rb-sub">이후 순이익 구간</div>
+              <div class="rb-line"></div>
+            </div>
             <div id="chart-tip"></div>
           </div>
         </div>
@@ -371,7 +418,7 @@
   } catch (e) {}
 
   // ---- 상태 (점주 조절: 모델·가입월·할부·예치금·사업외소득·과세유형) ----
-  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1 };
+  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
 
   function currentParams() {
     var d = WFSim.DEFAULTS[state.model];
@@ -382,6 +429,7 @@
     p.joinMonth = (state.join === "auto") ? AUTO_JOIN : +state.join;
     p.otherIncome = state.otherMan * MAN;
     p.vatType = state.vatType;
+    p.setupOn = state.setupOn;
     return p;
   }
 
@@ -436,13 +484,14 @@
     $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; <span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
 
     // ---- 월별 표 (채널별 유입·카드값 구분) ----
-    var head = "<thead><tr><th>개월차</th><th>달력월</th><th>네이버 정산</th><th>쿠팡 정산</th><th>정산 합계</th><th>카드값 (상품)</th><th>투자금 납부</th><th>수수료 송금</th><th>월 순현금</th><th>통장 잔액</th><th>추가 투입</th></tr></thead>";
+    var head = "<thead><tr><th>개월차</th><th>달력월</th><th>네이버 정산</th><th>쿠팡 정산</th><th>정산 합계</th><th>카드값 (상품)</th><th>투자금 납부</th><th>수수료 송금</th><th>면허세</th><th>월 순현금</th><th>통장 잔액</th><th>추가 투입</th></tr></thead>";
     var body = r.rows.map(function (row) {
       var cls = row.m >= 13 ? ' class="y2"' : "";
       var invest = row.R + row.P; // 카드 할부분 + 현금 일시불
       return "<tr" + cls + "><td>" + row.m + "</td><td>" + row.cal + "월</td>" +
         "<td>" + won(row.E) + "</td><td>" + won(row.F + row.G) + "</td><td><strong>" + won(row.H) + "</strong></td>" +
         "<td>" + won(row.Q) + "</td><td>" + won(invest) + "</td><td>" + won(row.J) + "</td>" +
+        "<td>" + (row.lic > 0 ? won(row.lic) : "-") + "</td>" +
         '<td class="' + (row.K < 0 ? "neg" : "") + '">' + won(row.K) + "</td>" +
         "<td><strong>" + won(row.L) + "</strong></td>" +
         '<td class="' + (row.S > 0 ? "inj" : "") + '">' + (row.S > 0 ? won(row.S) : "-") + "</td></tr>";
@@ -459,7 +508,7 @@
       ["적용 과세유형 (기준)", vatLabel],
       ["사업 외 연간 소득 가정", man(p.otherIncome, 0) + " (개인별 상이 — 상담 시 반영)"],
       ["1년차 종합소득세+지방소득세 (사업 추가분)", man(r.tax1.total, 0) + " · 한계세율 " + pct(r.tax1.marginal)],
-      ["1년차 부가세" + vatSuffix, man(v.vat1, 0)],
+      ["1년차 부가세" + vatSuffix, man(v.vat1, 0) + (p.vatType === 2 ? " (면허세 " + man(v.licY1, 0) + " 포함 — 가입 시 + 매년 1월 납부)" : "")],
       ["2년차 종합소득세+지방소득세 (사업 추가분)", man(r.tax2.total, 0) + " · 한계세율 " + pct(r.tax2.marginal)],
       ["2년차 부가세" + vatSuffix, man(v.vat2, 0)],
       ["정상월 예상 정산 유입 (월)", "네이버 " + man(r.navMonthly, 0) + " + 쿠팡 " + man(r.cpMonthly, 0)],
@@ -521,15 +570,37 @@
       ctx.beginPath(); ctx.moveTo(padL, yPos(p.dep)); ctx.lineTo(W - padR, yPos(p.dep)); ctx.stroke();
       ctx.setLineDash([]);
     }
+    // 순이익 구간 배경 음영 (회수 시점 이후)
+    var rec = (typeof r.recovery === "number") ? r.recovery : null;
+    if (rec !== null) {
+      var rx = padL + (rec - 1) * bw;
+      ctx.fillStyle = "rgba(168,170,171,0.12)";
+      ctx.fillRect(rx, padT, (W - padR) - rx, y0 - padT);
+      ctx.fillStyle = "#8A8B8E"; ctx.textAlign = "right"; ctx.font = "bold 10px Pretendard, sans-serif";
+      ctx.fillText("순이익 구간 →", W - padR - 6, padT + 12);
+    }
     // 막대
     geom = { padL: padL, bw: bw, y0: y0 };
     r.rows.forEach(function (row, idx) {
       var x = padL + idx * bw + bw * 0.18, w = bw * 0.64;
       var grd = ctx.createLinearGradient(0, yPos(row.L), 0, y0);
-      if (idx >= 12) { grd.addColorStop(0, "#5F6169"); grd.addColorStop(1, "#302F2F"); }
-      else { grd.addColorStop(0, "#302F2F"); grd.addColorStop(1, "#181818"); }
-      ctx.fillStyle = grd;
-      ctx.fillRect(x, yPos(row.L), w, Math.max(1, y0 - yPos(row.L)));
+      if (rec !== null && idx + 1 === rec) {
+        // 회수 달 강조 — 메탈 실버 그라데이션 + 글로우
+        grd.addColorStop(0, "#FAFCFD"); grd.addColorStop(0.35, "#C7C9CD");
+        grd.addColorStop(0.7, "#A8AAAB"); grd.addColorStop(1, "#5F6169");
+        ctx.save();
+        ctx.shadowColor = "rgba(168,170,171,0.9)"; ctx.shadowBlur = 12;
+        ctx.fillStyle = grd;
+        ctx.fillRect(x, yPos(row.L), w, Math.max(1, y0 - yPos(row.L)));
+        ctx.restore();
+        ctx.strokeStyle = "#5F6169"; ctx.lineWidth = 1;
+        ctx.strokeRect(x + 0.5, yPos(row.L) + 0.5, w - 1, Math.max(1, y0 - yPos(row.L)) - 1);
+      } else {
+        if (idx >= 12) { grd.addColorStop(0, "#5F6169"); grd.addColorStop(1, "#302F2F"); }
+        else { grd.addColorStop(0, "#302F2F"); grd.addColorStop(1, "#181818"); }
+        ctx.fillStyle = grd;
+        ctx.fillRect(x, yPos(row.L), w, Math.max(1, y0 - yPos(row.L)));
+      }
       if (row.S > 0) { // 추가투입: 기준선 아래 빨간 막대
         ctx.fillStyle = "#c0392b";
         ctx.fillRect(x, y0 + 1, w, Math.max(2, yNeg(row.S) - y0 - 1));
@@ -546,11 +617,20 @@
       ctx.fillStyle = "#c3c3c3";
       ctx.fillText(String(row.m), cx, H - 8);
     });
-    // 회수 시점 마커
-    if (typeof r.recovery === "number") {
-      var mx = padL + (r.recovery - 0.5) * bw;
-      ctx.fillStyle = "#181818"; ctx.textAlign = "center"; ctx.font = "bold 10px Pretendard, sans-serif";
-      ctx.fillText("▼ 회수", mx, padT + 6);
+    // 회수 시점 배지 (반짝 강조 — HTML 오버레이)
+    var badge = document.getElementById("recover-badge");
+    if (rec !== null) {
+      var recRow = r.rows[rec - 1];
+      var bx = padL + (rec - 0.5) * bw;
+      bx = Math.max(70, Math.min(W - 70, bx));
+      badge.style.display = "block";
+      badge.style.left = bx + "px";
+      badge.style.top = "0px";
+      var barTop = yPos(recRow.L);
+      var lineEl = badge.querySelector(".rb-line");
+      lineEl.style.height = Math.max(0, barTop - 52) + "px";
+    } else {
+      badge.style.display = "none";
     }
   }
 
@@ -570,6 +650,7 @@
       "수수료 송금 " + won(row.J) + "원",
       "<strong>통장 잔액 " + won(row.L) + "원</strong>"
     ];
+    if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
     if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
     tip.innerHTML = lines.join("<br>");
     tip.style.display = "block";
@@ -603,6 +684,8 @@
   $("in-other").addEventListener("input", function () { state.otherMan = Math.max(0, +this.value || 0); render(); });
   $("vat-1").addEventListener("click", function () { state.vatType = 1; this.classList.add("on"); $("vat-2").classList.remove("on"); render(); });
   $("vat-2").addEventListener("click", function () { state.vatType = 2; this.classList.add("on"); $("vat-1").classList.remove("on"); render(); });
+  $("setup-1").addEventListener("click", function () { state.setupOn = 1; this.classList.add("on"); $("setup-0").classList.remove("on"); render(); });
+  $("setup-0").addEventListener("click", function () { state.setupOn = 0; this.classList.add("on"); $("setup-1").classList.remove("on"); render(); });
   $("in-inst").addEventListener("change", function () { state.inst = +this.value; render(); });
   $("in-dep").addEventListener("input", function () {
     state.depMan = Math.max(0, +this.value || 0);
@@ -619,11 +702,12 @@
     });
   });
   $("btn-reset").addEventListener("click", function () {
-    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1 };
+    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
     $("in-join").value = "auto";
     $("in-inst").value = "3";
     $("in-other").value = 4000;
     $("vat-1").classList.add("on"); $("vat-2").classList.remove("on");
+    $("setup-1").classList.add("on"); $("setup-0").classList.remove("on");
     document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
     $("dep-rec").classList.add("on");
     render();
@@ -652,7 +736,6 @@
     ["st", "세팅 소요 개월", 1],
     ["fr", "수수료 면제 개월", 1],
     ["pl", "수수료 송금 시차 (개월)", 1],
-    ["setupOn", "세팅 위탁 (1=예/0=아니오)", 1],
     ["— 비용 단가 (만원) —"],
     ["resNew30", "비상주 신규 M30", 0.5],
     ["resNew50", "비상주 신규 M50", 0.5],

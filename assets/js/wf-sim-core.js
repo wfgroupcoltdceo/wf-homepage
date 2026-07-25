@@ -119,6 +119,10 @@
     }
     var lump24 = p.pl * app * ((1 - p.shr) + p.lossRate * p.lossShare); // 종료 시 잔여분
 
+    // 등록면허세 (일반과세): 가입 시점 + 매년 1월, 사업자당 40,500원
+    var licUnit = (p.vatType === 2) ? VAT.licenseTax * p.n : 0;
+    var licY1 = 0, licY2 = 0;
+
     var rows = [];
     var cumD = 0, cumH = 0, cumS = 0, prevL = 0, prevThr = 0;
     var recovery = null;
@@ -137,7 +141,9 @@
       }
       var I = Q + R;
       var J = Cf(m - p.pl) + (m === 24 ? lump24 : 0);
-      var K = H - I - J;
+      var LIC = (licUnit > 0 && (m === 1 || calMonth(p.joinMonth, m) === 1)) ? licUnit : 0;
+      if (m <= 12) licY1 += LIC; else licY2 += LIC;
+      var K = H - I - J - LIC;
       var P = (p.inst <= 1) ? ((m === 1 ? inv1 : 0) + (m === 13 ? inv2 : 0)) : 0;
       var flow = (m === 1) ? (K - P + p.dep) : (prevL + K - P);
       var S = Math.max(0, -flow);
@@ -157,7 +163,7 @@
 
       rows.push({
         m: m, cal: calMonth(p.joinMonth, m), C: C, D: D, E: E, F: F, G: G, H: H,
-        I: I, Q: Q, R: R, J: J, K: K, P: P, L: L, S: S, Mrecv: Mrecv, O: O
+        I: I, Q: Q, R: R, J: J, K: K, P: P, L: L, S: S, Mrecv: Mrecv, O: O, lic: LIC
       });
       prevL = L; prevThr = thr;
     }
@@ -184,14 +190,13 @@
     var y1in = -(y1fee + inv1) * 0.1 / 1.1;                     // B133
     var y1general = y1out + y1in;                               // B134
     var y1simple = (y1rev < VAT.simpleExempt) ? 0 : y1rev * VAT.simpleRate * 0.1; // B135
-    var lic = (p.vatType === 2) ? VAT.licenseTax * p.n : 0;     // B136
-    var vat1 = (p.vatType === 1 ? y1simple : y1general) + lic;  // B137
+    var vat1 = (p.vatType === 1 ? y1simple : y1general) + licY1;  // B137 — 면허세는 실제 납부 횟수 반영
     var y2rev = app * 12;
     var y2out = y2rev * 0.1 / 1.1;
     var y2in = -(y2rev * (1 - p.shr) + inv2) * 0.1 / 1.1;
     var y2general = y2out + y2in;
     var y2simple = (y2rev < VAT.simpleExempt) ? 0 : y2rev * VAT.simpleRate * 0.1;
-    var vat2 = (p.vatType === 1 ? y2simple : y2general) + lic;  // B141
+    var vat2 = (p.vatType === 1 ? y2simple : y2general) + licY2;  // B141
     var simpleKeepOk = y2rev <= VAT.simpleKeep;
 
     var y1Post = y1Pre - tax1.total - vat1;  // B76
@@ -208,7 +213,7 @@
       tax1: tax1, tax2: tax2,
       vat: {
         y1rev: y1rev, y1out: y1out, y1fee: y1fee, y1in: y1in,
-        y1general: y1general, y1simple: y1simple, lic: lic, vat1: vat1,
+        y1general: y1general, y1simple: y1simple, licY1: licY1, licY2: licY2, vat1: vat1,
         y2general: y2general, y2simple: y2simple, vat2: vat2, simpleKeepOk: simpleKeepOk
       },
       y1Post: y1Post, y2Post: y2Post,
