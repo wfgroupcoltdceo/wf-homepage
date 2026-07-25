@@ -165,8 +165,8 @@
       내 조건으로 직접 돌려보는<br /><span class="gradient-text">수익 시뮬레이터</span>
     </h1>
     <p class="text-gray-300 text-sm leading-relaxed" style="max-width:42rem">
-      모델·매출 달성률·납부 방식·예치금 네 가지만 고르면 가입 후 24개월의 통장 흐름과 예상 수익이 바로 계산됩니다.
-      수수료 면제 이벤트, 정산 주기(네이버·쿠팡), 카드 청구, 수수료 납부 일정 등 본사 제공 조건은 자동으로 적용됩니다.
+      모델·가입월·납부 방식·예치금·소득 조건만 고르면 가입 후 24개월의 통장 흐름과 예상 수익이 바로 계산됩니다.
+      매출 기준, 수수료 면제 이벤트, 정산 주기(네이버·쿠팡), 카드 청구 등 본사 제공 조건은 자동으로 적용됩니다.
     </p>
   </div>
 </section>
@@ -189,9 +189,8 @@
         </div>
 
         <div class="sim-field">
-          <span class="sim-label">매출 달성률 <span class="sim-sub">평균 대비 실제 달성 수준</span></span>
-          <input type="range" class="sim-range" id="in-ach" min="50" max="150" step="5" value="100" />
-          <div class="flex justify-between text-xs text-gray-500 font-semibold"><span>50%</span><span id="ach-val" class="text-wfblack font-extrabold">100%</span><span>150%</span></div>
+          <span class="sim-label">가입월</span>
+          <select class="sim-select" id="in-join"><option value="auto">자동 (다음 달)</option></select>
         </div>
 
         <div class="sim-field">
@@ -216,16 +215,32 @@
           </div>
         </div>
 
+        <div class="sim-field">
+          <span class="sim-label">이 사업 외 연간 소득 <span class="sim-sub">종합소득세 계산용 과세표준</span></span>
+          <div class="flex items-center">
+            <input type="number" class="sim-input" id="in-other" min="0" step="100" value="4000" />
+            <span class="sim-unit">만 원</span>
+          </div>
+        </div>
+
+        <div class="sim-field">
+          <span class="sim-label">과세 유형</span>
+          <div class="flex gap-2">
+            <button type="button" class="seg-btn on" id="vat-1" style="flex:1">간이과세</button>
+            <button type="button" class="seg-btn" id="vat-2" style="flex:1">일반과세</button>
+          </div>
+        </div>
+
         <div class="fixed-box">
           <div class="fx-title" style="display:flex;justify-content:space-between;align-items:center">
             <span>본사 제공 조건 (자동 적용)</span>
             <button type="button" id="hq-open" title="본사 설정" style="border:none;background:none;cursor:pointer;color:#b8b9bc;font-size:.72rem;font-weight:700">⚙ 본사 설정</button>
           </div>
+          <div class="fixed-row"><span class="k">적용 월 매출이익</span><span class="v" id="fx-mp">-</span></div>
+          <div class="fixed-row"><span class="k">세팅 기간</span><span class="v" id="fx-st">-</span></div>
           <div class="fixed-row"><span class="k">수수료 면제 이벤트</span><span class="v" id="fx-fr">-</span></div>
-          <div class="fixed-row"><span class="k">가입 기준월</span><span class="v" id="fx-join">-</span></div>
-          <div class="fixed-row"><span class="k">판매 채널 비중</span><span class="v" id="fx-ch">-</span></div>
           <div class="fixed-row"><span class="k">수수료 납부</span><span class="v" id="fx-pl">-</span></div>
-          <div class="fixed-row"><span class="k">과세 기준</span><span class="v" id="fx-vat">-</span></div>
+          <div class="fixed-row"><span class="k">판매 채널 비중</span><span class="v" id="fx-ch">-</span></div>
         </div>
 
         <!-- 본사 설정 (비밀번호 잠금) -->
@@ -237,40 +252,8 @@
             <div id="hq-msg" style="color:#b91c1c;font-size:.7rem;margin-top:.4rem;min-height:1em"></div>
           </div>
           <div id="hq-controls" style="display:none">
-            <div class="sim-field" style="margin-bottom:.8rem">
-              <span class="sim-label">수수료 면제 개월</span>
-              <select class="sim-select" id="hq-fr">
-                <option value="0">면제 없음</option><option value="1">1개월</option>
-                <option value="2">2개월</option><option value="3">3개월</option>
-              </select>
-            </div>
-            <div class="sim-field" style="margin-bottom:.8rem">
-              <span class="sim-label">가입 기준월</span>
-              <select class="sim-select" id="hq-join"><option value="auto">자동 (다음 달)</option></select>
-            </div>
-            <div class="sim-field" style="margin-bottom:.8rem">
-              <span class="sim-label">네이버 판매 비중 <span id="hq-nv-val" class="sim-sub">20%</span></span>
-              <input type="range" class="sim-range" id="hq-nv" min="0" max="100" step="5" value="20" />
-            </div>
-            <div class="sim-field" style="margin-bottom:.8rem">
-              <span class="sim-label">수수료 송금 시차</span>
-              <select class="sim-select" id="hq-pl">
-                <option value="1">1개월 뒤</option><option value="2">2개월 뒤</option><option value="3">3개월 뒤</option>
-              </select>
-            </div>
-            <div class="sim-field" style="margin-bottom:.8rem">
-              <span class="sim-label">평균 월 매출이익 — M30 <span class="sim-sub">만 원</span></span>
-              <input type="number" class="sim-input" id="hq-mp30" min="0" step="10" />
-            </div>
-            <div class="sim-field" style="margin-bottom:.8rem">
-              <span class="sim-label">평균 월 매출이익 — M50 <span class="sim-sub">만 원</span></span>
-              <input type="number" class="sim-input" id="hq-mp50" min="0" step="10" />
-            </div>
-            <div class="sim-field" style="margin-bottom:.8rem">
-              <span class="sim-label">과세 기준</span>
-              <select class="sim-select" id="hq-vat"><option value="1">간이과세</option><option value="2">일반과세</option></select>
-            </div>
-            <div class="flex gap-2">
+            <div id="hq-fields"></div>
+            <div class="flex gap-2" style="margin-top:.6rem">
               <button type="button" id="hq-save" class="seg-btn on" style="flex:1">저장</button>
               <button type="button" id="hq-default" class="seg-btn" style="flex:1">기본값 복원</button>
               <button type="button" id="hq-lock" class="seg-btn" style="flex:1">잠금</button>
@@ -381,40 +364,34 @@
   var AUTO_JOIN = (now.getMonth() + 1) % 12 + 1;
 
   // ---- 본사 설정 (비밀번호 잠금 · 이 브라우저에 저장) ----
-  var HQ_DEFAULT = { fr: 1, join: "auto", nvShare: 0.2, pl: 3, mp30: null, mp50: null, vatType: 1 };
-  var hqCfg = Object.assign({}, HQ_DEFAULT);
+  var hqCfg = Object.assign({}, WFSim.DEFAULT_CFG);
   try {
     var saved = JSON.parse(localStorage.getItem("wf_hq_cfg") || "null");
-    if (saved && typeof saved === "object") hqCfg = Object.assign({}, HQ_DEFAULT, saved);
+    if (saved && typeof saved === "object") hqCfg = Object.assign({}, WFSim.DEFAULT_CFG, saved);
   } catch (e) {}
-  function hqJoinMonth() { return hqCfg.join === "auto" ? AUTO_JOIN : +hqCfg.join; }
 
-  // ---- 상태 (점주 조절: 모델·달성률·할부·예치금 / 나머지는 본사 설정) ----
-  var state = { model: "m30", ach: 1.0, inst: 3, depMan: null }; // depMan null = 권장(모델 기본)
+  // ---- 상태 (점주 조절: 모델·가입월·할부·예치금·사업외소득·과세유형) ----
+  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1 };
 
   function currentParams() {
     var d = WFSim.DEFAULTS[state.model];
     var p = Object.assign({}, d);
-    p.ach = state.ach;
+    WFSim.applyCfg(p, hqCfg, state.model);
     p.inst = state.inst;
     p.dep = (state.depMan === null) ? d.dep : state.depMan * MAN;
-    p.joinMonth = hqJoinMonth();
-    p.fr = hqCfg.fr;
-    p.nvShare = hqCfg.nvShare;
-    p.pl = hqCfg.pl;
-    p.vatType = hqCfg.vatType;
-    var mpOverride = (state.model === "m30") ? hqCfg.mp30 : hqCfg.mp50;
-    if (mpOverride !== null && mpOverride > 0) p.mp = mpOverride * MAN;
+    p.joinMonth = (state.join === "auto") ? AUTO_JOIN : +state.join;
+    p.otherIncome = state.otherMan * MAN;
+    p.vatType = state.vatType;
     return p;
   }
 
-  function paintFixedBox() {
-    $("fx-fr").textContent = hqCfg.fr > 0 ? hqCfg.fr + "개월 (점주 100% 수취)" : "면제 없음";
-    $("fx-join").textContent = hqJoinMonth() + "월 가입 기준" + (hqCfg.join === "auto" ? "" : " (지정)");
-    var nv = Math.round(hqCfg.nvShare * 10);
+  function paintFixedBox(p) {
+    $("fx-mp").textContent = man(p.mp * p.ach, 0) + (hqCfg.ach !== 100 ? " (달성률 " + hqCfg.ach + "%)" : "");
+    $("fx-st").textContent = p.st + "개월 (매출 0 · 수수료 0)";
+    $("fx-fr").textContent = p.fr > 0 ? p.fr + "개월 (점주 100% 수취)" : "면제 없음";
+    $("fx-pl").textContent = "매출 발생 " + p.pl + "개월 뒤 20일";
+    var nv = Math.round(hqCfg.nvShare / 10);
     $("fx-ch").textContent = "네이버 " + nv + " : 쿠팡 " + (10 - nv) + " (평균)";
-    $("fx-pl").textContent = "매출 발생 " + hqCfg.pl + "개월 뒤 20일";
-    $("fx-vat").textContent = hqCfg.vatType === 1 ? "간이과세 사업자" : "일반과세 사업자";
   }
 
   // ---- 포맷 ----
@@ -435,7 +412,7 @@
     var r = WFSim.simulate(p);
     lastResult = r; lastParams = p;
 
-    paintFixedBox();
+    paintFixedBox(p);
     $("model-desc").textContent = "사업자 " + p.n + "개 · 평균 월 매출이익 " + man(p.mp, 0) + " 기준";
     if (state.depMan === null) $("in-dep").value = WFSim.DEFAULTS[state.model].dep / MAN;
 
@@ -614,11 +591,18 @@
   $("btn-m30").addEventListener("click", function () { setModel("m30"); });
   $("btn-m50").addEventListener("click", function () { setModel("m50"); });
 
-  $("in-ach").addEventListener("input", function () {
-    state.ach = this.value / 100;
-    $("ach-val").textContent = this.value + "%";
-    render();
-  });
+  (function initVisitorJoin() {
+    var sel = $("in-join");
+    for (var m = 1; m <= 12; m++) {
+      var o = document.createElement("option");
+      o.value = m; o.textContent = m + "월";
+      sel.appendChild(o);
+    }
+  })();
+  $("in-join").addEventListener("change", function () { state.join = this.value === "auto" ? "auto" : +this.value; render(); });
+  $("in-other").addEventListener("input", function () { state.otherMan = Math.max(0, +this.value || 0); render(); });
+  $("vat-1").addEventListener("click", function () { state.vatType = 1; this.classList.add("on"); $("vat-2").classList.remove("on"); render(); });
+  $("vat-2").addEventListener("click", function () { state.vatType = 2; this.classList.add("on"); $("vat-1").classList.remove("on"); render(); });
   $("in-inst").addEventListener("change", function () { state.inst = +this.value; render(); });
   $("in-dep").addEventListener("input", function () {
     state.depMan = Math.max(0, +this.value || 0);
@@ -635,9 +619,11 @@
     });
   });
   $("btn-reset").addEventListener("click", function () {
-    state = { model: state.model, ach: 1.0, inst: 3, depMan: null };
-    $("in-ach").value = 100; $("ach-val").textContent = "100%";
+    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1 };
+    $("in-join").value = "auto";
     $("in-inst").value = "3";
+    $("in-other").value = 4000;
+    $("vat-1").classList.add("on"); $("vat-2").classList.remove("on");
     document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
     $("dep-rec").classList.add("on");
     render();
@@ -651,33 +637,63 @@
   // ---- 본사 설정 패널 (비밀번호 잠금) ----
   var HQ_HASH = "5b0241f29b24639cb5e4e20de4e70b32190d2919e91aaed11bda06e26fc4ec46";
   var hqUnlocked = false;
-  (function initJoinSelect() {
-    var sel = $("hq-join");
-    for (var m = 1; m <= 12; m++) {
-      var o = document.createElement("option");
-      o.value = m; o.textContent = m + "월";
-      sel.appendChild(o);
-    }
+
+  // 관리자 조절 항목 정의 [key, 라벨, step]
+  var HQ_FIELDS = [
+    ["— 매출 · 배분 —"],
+    ["mp30", "평균 월 매출이익 M30 (만원)", 10],
+    ["mp50", "평균 월 매출이익 M50 (만원)", 10],
+    ["ach", "매출 달성률 (%)", 5],
+    ["shr", "점주 배분율 (%)", 5],
+    ["lossRate", "반품·재고 손실률 (%)", 1],
+    ["lossShare", "점주 손실 분담률 (%)", 5],
+    ["cm", "원가대비 이익률 (%)", 5],
+    ["— 세팅 · 수수료 —"],
+    ["st", "세팅 소요 개월", 1],
+    ["fr", "수수료 면제 개월", 1],
+    ["pl", "수수료 송금 시차 (개월)", 1],
+    ["setupOn", "세팅 위탁 (1=예/0=아니오)", 1],
+    ["— 비용 단가 (만원) —"],
+    ["resNew30", "비상주 신규 M30", 0.5],
+    ["resNew50", "비상주 신규 M50", 0.5],
+    ["resRenew30", "비상주 연장 M30", 0.5],
+    ["resRenew50", "비상주 연장 M50", 0.5],
+    ["setup30", "세팅비 M30", 10],
+    ["setup50", "세팅비 M50", 10],
+    ["server", "서버 이용비 (연)", 5],
+    ["taxAgent", "세무대행 (연)", 5],
+    ["— 정산 · 카드 —"],
+    ["nvShare", "네이버 비중 (%) · 쿠팡 자동", 5],
+    ["nvLag", "네이버 정산 시차 (개월)", 1],
+    ["cp1", "쿠팡 1차 정산 비율 (%)", 5],
+    ["cp1m1", "쿠팡 1차 중 익월 수취 (%)", 5],
+    ["cp2Lag", "쿠팡 2차 정산 시차 (개월)", 1],
+    ["cardLag", "카드값 청구 시차 (개월)", 1]
+  ];
+  (function buildHqFields() {
+    var html = "";
+    HQ_FIELDS.forEach(function (f) {
+      if (f.length === 1) {
+        html += '<div class="fx-title" style="margin-top:.7rem">' + f[0] + "</div>";
+      } else {
+        html += '<div style="margin-bottom:.55rem"><span class="sim-label" style="margin-bottom:.2rem;font-size:.72rem">' + f[1] + "</span>" +
+          '<input type="number" class="sim-input" style="padding:.4rem .6rem;font-size:.85rem" id="hqf-' + f[0] + '" step="' + f[2] + '" min="0" /></div>';
+      }
+    });
+    $("hq-fields").innerHTML = html;
   })();
   function hqPaintControls() {
-    $("hq-fr").value = String(hqCfg.fr);
-    $("hq-join").value = String(hqCfg.join);
-    $("hq-nv").value = Math.round(hqCfg.nvShare * 100);
-    $("hq-nv-val").textContent = Math.round(hqCfg.nvShare * 100) + "%";
-    $("hq-pl").value = String(hqCfg.pl);
-    $("hq-mp30").value = (hqCfg.mp30 !== null) ? hqCfg.mp30 : WFSim.DEFAULTS.m30.mp / MAN;
-    $("hq-mp50").value = (hqCfg.mp50 !== null) ? hqCfg.mp50 : WFSim.DEFAULTS.m50.mp / MAN;
-    $("hq-vat").value = String(hqCfg.vatType);
+    HQ_FIELDS.forEach(function (f) {
+      if (f.length > 1) $("hqf-" + f[0]).value = hqCfg[f[0]];
+    });
   }
   function hqReadControls() {
-    hqCfg.fr = +$("hq-fr").value;
-    hqCfg.join = $("hq-join").value === "auto" ? "auto" : +$("hq-join").value;
-    hqCfg.nvShare = (+$("hq-nv").value) / 100;
-    hqCfg.pl = +$("hq-pl").value;
-    var m30 = +$("hq-mp30").value, m50 = +$("hq-mp50").value;
-    hqCfg.mp30 = (m30 > 0 && m30 !== WFSim.DEFAULTS.m30.mp / MAN) ? m30 : null;
-    hqCfg.mp50 = (m50 > 0 && m50 !== WFSim.DEFAULTS.m50.mp / MAN) ? m50 : null;
-    hqCfg.vatType = +$("hq-vat").value;
+    HQ_FIELDS.forEach(function (f) {
+      if (f.length > 1) {
+        var v = parseFloat($("hqf-" + f[0]).value);
+        if (!isNaN(v) && v >= 0) hqCfg[f[0]] = v;
+      }
+    });
   }
   $("hq-open").addEventListener("click", function () {
     var panel = $("hq-panel");
@@ -706,7 +722,6 @@
   }
   $("hq-unlock").addEventListener("click", tryUnlock);
   $("hq-pass").addEventListener("keydown", function (e) { if (e.key === "Enter") tryUnlock(); });
-  $("hq-nv").addEventListener("input", function () { $("hq-nv-val").textContent = this.value + "%"; });
   $("hq-save").addEventListener("click", function () {
     hqReadControls();
     try { localStorage.setItem("wf_hq_cfg", JSON.stringify(hqCfg)); } catch (e) {}
@@ -716,7 +731,7 @@
     setTimeout(function () { btn.textContent = "저장"; }, 1500);
   });
   $("hq-default").addEventListener("click", function () {
-    hqCfg = Object.assign({}, HQ_DEFAULT);
+    hqCfg = Object.assign({}, WFSim.DEFAULT_CFG);
     try { localStorage.removeItem("wf_hq_cfg"); } catch (e) {}
     hqPaintControls();
     render();

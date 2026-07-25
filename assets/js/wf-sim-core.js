@@ -68,6 +68,41 @@
     return ((joinMonth + m - 2) % 12 + 12) % 12 + 1;
   }
 
+  // ---- 본사 설정(관리자 패널) 기본값 — %는 정수, 금액은 만원 단위 ----
+  var DEFAULT_CFG = {
+    mp30: 180, mp50: 250, ach: 100,
+    shr: 40, lossRate: 4, lossShare: 40, cm: 40,
+    st: 1, fr: 1, pl: 3, setupOn: 1,
+    resNew30: 12.5, resNew50: 11.5, resRenew30: 10, resRenew50: 10,
+    setup30: 100, setup50: 150, server: 25, taxAgent: 0,
+    nvShare: 20, nvLag: 1, cp1: 70, cp1m1: 50, cp2Lag: 2, cardLag: 1
+  };
+
+  /** 본사 설정(cfg, DEFAULT_CFG 단위)을 엔진 파라미터에 적용 */
+  function applyCfg(p, cfg, model) {
+    var m30 = (model === "m30");
+    p.mp = (m30 ? cfg.mp30 : cfg.mp50) * 10000;
+    p.ach = cfg.ach / 100;
+    p.shr = cfg.shr / 100;
+    p.lossRate = cfg.lossRate / 100;
+    p.lossShare = cfg.lossShare / 100;
+    p.cm = cfg.cm / 100;
+    p.st = cfg.st; p.fr = cfg.fr; p.pl = cfg.pl;
+    p.setupOn = cfg.setupOn;
+    p.resNew = (m30 ? cfg.resNew30 : cfg.resNew50) * 10000;
+    p.resRenew = (m30 ? cfg.resRenew30 : cfg.resRenew50) * 10000;
+    p.setupFee = (m30 ? cfg.setup30 : cfg.setup50) * 10000;
+    p.server = cfg.server * 10000;
+    p.taxAgent = cfg.taxAgent * 10000;
+    p.nvShare = cfg.nvShare / 100;
+    p.nvLag = cfg.nvLag;
+    p.cp1 = cfg.cp1 / 100;
+    p.cp1m1 = cfg.cp1m1 / 100;
+    p.cp2Lag = cfg.cp2Lag;
+    p.cardLag = cfg.cardLag;
+    return p;
+  }
+
   /** 점주 시뮬레이션 — 엑셀 '대리점주 수익 시뮬레이터' 시트와 동일 */
   function simulate(p) {
     var app = p.mp * p.ach;                                     // 가정 B12
@@ -189,5 +224,5 @@
     };
   }
 
-  return { DEFAULTS: DEFAULTS, VAT: VAT, TAX_BRACKETS: TAX_BRACKETS, simulate: simulate, calMonth: calMonth, incomeTax: incomeTax };
+  return { DEFAULTS: DEFAULTS, DEFAULT_CFG: DEFAULT_CFG, applyCfg: applyCfg, VAT: VAT, TAX_BRACKETS: TAX_BRACKETS, simulate: simulate, calMonth: calMonth, incomeTax: incomeTax };
 });
