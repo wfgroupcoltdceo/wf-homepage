@@ -255,6 +255,7 @@
             <button type="button" class="seg-btn" data-dep="0">0</button>
             <button type="button" class="seg-btn on" id="dep-rec" data-dep="rec">권장액</button>
           </div>
+          <div class="sim-sub" style="display:block;margin-top:.35rem" id="dep-hint"></div>
         </div>
 
         <div class="sim-field">
@@ -315,10 +316,14 @@
         <!-- 차트 -->
         <div class="sim-panel mb-6">
           <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
-            <div class="font-extrabold text-lg">24개월 통장 잔액 흐름</div>
-            <div class="text-xs text-gray-500 font-semibold" id="chart-legend"></div>
+            <div class="font-extrabold text-lg" id="chart-title">24개월 통장 잔액 흐름</div>
+            <div class="flex gap-2">
+              <button type="button" class="seg-btn on" data-cm="bal">통장 잔액</button>
+              <button type="button" class="seg-btn" data-cm="profit">누적 수익금</button>
+            </div>
           </div>
-          <div class="text-xs text-gray-400 mb-3">막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다 · 13개월차부터 연장(2년차) 구간</div>
+          <div class="text-xs text-gray-500 font-semibold mb-1" id="chart-legend"></div>
+          <div class="text-xs text-gray-400 mb-3" id="chart-note">막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다 · 13개월차부터 연장(2년차) 구간</div>
           <div id="chart-box">
             <canvas id="chart" style="width:100%;height:320px;"></canvas>
             <div id="recover-badge">
@@ -418,18 +423,23 @@
   } catch (e) {}
 
   // ---- 상태 (점주 조절: 모델·가입월·할부·예치금·사업외소득·과세유형) ----
-  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
+  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1, chartMode: "bal" };
+
+  var DEP_UNIT = 500000; // 권장액 올림 단위 (50만 원)
 
   function currentParams() {
     var d = WFSim.DEFAULTS[state.model];
     var p = Object.assign({}, d);
     WFSim.applyCfg(p, hqCfg, state.model);
     p.inst = state.inst;
-    p.dep = (state.depMan === null) ? d.dep : state.depMan * MAN;
     p.joinMonth = (state.join === "auto") ? AUTO_JOIN : +state.join;
     p.otherIncome = state.otherMan * MAN;
     p.vatType = state.vatType;
     p.setupOn = state.setupOn;
+    p.dep = 0;
+    // 권장액 = 현재 모든 변수(과세유형·면허세·할부·가입월 포함)에서 추가 투입이 0이 되는 최소 예치금
+    p.recDep = WFSim.recommendDeposit(p, DEP_UNIT);
+    p.dep = (state.depMan === null) ? p.recDep : state.depMan * MAN;
     return p;
   }
 
@@ -462,17 +472,25 @@
 
     paintFixedBox(p);
     $("model-desc").textContent = "사업자 " + p.n + "개 · 평균 월 매출이익 " + man(p.mp, 0) + " 기준";
-    if (state.depMan === null) $("in-dep").value = WFSim.DEFAULTS[state.model].dep / MAN;
+    if (state.depMan === null) $("in-dep").value = Math.round(p.dep / MAN);
+
+    // 권장액 안내 — 현재 변수 조건에서 추가 투입 0을 보장하는 최소 금액
+    $("dep-rec").textContent = "권장액 " + Math.round(p.recDep / MAN).toLocaleString("ko-KR") + "만";
+    $("dep-hint").innerHTML = (p.recDep > 0)
+      ? "권장액 <strong>" + man(p.recDep, 0) + "</strong> = 현재 조건(" + (p.vatType === 2 ? "일반과세·면허세 포함, " : "간이과세, ") +
+        (p.inst <= 1 ? "현금 일시불" : "할부 " + p.inst + "개월") + ", " + p.joinMonth + "월 가입)에서 <strong>추가 현금 투입이 0</strong>이 되는 최소 금액입니다."
+      : "현재 조건에서는 예치금 없이도 통장 잔액이 마이너스가 되지 않습니다.";
 
     // ---- 요약 카드 ----
     var recovery = (typeof r.recovery === "number") ? r.recovery + "개월차" : r.recovery;
     var injectTxt = (r.totalInject > 0) ? man(r.totalInject, 0) : "불필요";
+    var beTxt = r.breakevenPost ? r.breakevenPost + "개월차" : "24개월 내 미달";
     var cards = [
       { t: "1년차 순수익 (세후)", v: man(r.y1Post, 0), s: "세전 " + man(r.y1Pre, 0) + " · ROI(세전) " + pct(r.roi1), dark: true },
       { t: "2년차 순수익 (세후)", v: man(r.y2Post, 0), s: "세전 " + man(r.y2Pre, 0) + " · ROI(세전) " + pct(r.roi2), dark: true },
-      { t: "투자금 회수 시점", v: recovery, s: "잔액이 예치금 수준을 회복하는 달" },
-      { t: "12개월차 통장 잔액", v: man(r.bal12, 0), s: "예치금 " + man(p.dep, 0) + " 포함" },
-      { t: "추가 현금 투입", v: injectTxt, s: (r.totalInject > 0) ? "카드값이 잔액을 넘는 달의 부족분 합계" : "예치금으로 24개월 내내 잔액 유지" },
+      { t: "투자금 회수 시점", v: recovery, s: "잔액이 예치금 수준을 회복하는 달 · 손익분기 " + beTxt },
+      { t: "24개월 누적 수익금 (세후)", v: man(r.cumPost24, 0), s: "1년차 " + man(r.cumPost12, 0) + " + 2년차 " + man(r.cumPost24 - r.cumPost12, 0) + " · 12개월차 통장 잔액 " + man(r.bal12, 0) },
+      { t: "추가 현금 투입", v: injectTxt, s: (r.totalInject > 0) ? "카드값이 잔액을 넘는 달의 부족분 합계 (권장액 " + man(p.recDep, 0) + "이면 0)" : "예치금으로 24개월 내내 잔액 유지" },
       { t: "1년차 창업비용", v: man(r.inv1, 0), s: "비상주 " + p.n + "개 + 세팅비 + 서버 (2년차 연장 " + man(r.inv2, 0) + ")" }
     ];
     $("cards").innerHTML = cards.map(function (c) {
@@ -480,8 +498,17 @@
     }).join("");
 
     // ---- 차트 ----
-    drawChart(r, p);
-    $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; <span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
+    if (state.chartMode === "profit") {
+      drawProfitChart(r, p);
+      $("chart-title").textContent = "24개월 누적 수익금 흐름";
+      $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 누적 수익금 (세후) &nbsp; <span style="color:#b91c1c">■</span> 누적 손실 구간 &nbsp; <span style="color:#8A8B8E">┈</span> 세전 기준';
+      $("chart-note").textContent = "발생(회계) 기준 누적 순이익 · 12개월차에 1년차 세금, 24개월차에 2년차 세금을 반영 · 13개월차의 하락은 연장 투자금 반영분";
+    } else {
+      drawChart(r, p);
+      $("chart-title").textContent = "24개월 통장 잔액 흐름";
+      $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; <span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
+      $("chart-note").textContent = "막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다 · 13개월차부터 연장(2년차) 구간";
+    }
 
     // ---- 월별 표 (채널별 유입·카드값 구분) ----
     var head = "<thead><tr><th>개월차</th><th>달력월</th><th>네이버 정산</th><th>쿠팡 정산</th><th>정산 합계</th><th>카드값 (상품)</th><th>투자금 납부</th><th>수수료 송금</th><th>면허세</th><th>월 순현금</th><th>통장 잔액</th><th>추가 투입</th></tr></thead>";
@@ -514,6 +541,13 @@
       ["정상월 예상 정산 유입 (월)", "네이버 " + man(r.navMonthly, 0) + " + 쿠팡 " + man(r.cpMonthly, 0)],
       ["정상월 예상 카드값 — 상품 매입 (월)", man(r.cardMonthly, 0)]
     ];
+    if (p.vatType === 2) {
+      var licOne = WFSim.VAT.licenseTax * p.n;
+      var cnt1 = Math.round(v.licY1 / licOne), cnt2 = Math.round(v.licY2 / licOne);
+      taxRows.splice(4, 0, ["└ 통신판매업 등록면허세", "사업자당 " + won(WFSim.VAT.licenseTax) + "원 × " + p.n + "개 = 회당 " + man(licOne, 0) +
+        " · 1년차 " + cnt1 + "회(" + man(v.licY1, 0) + ") / 2년차 " + cnt2 + "회(" + man(v.licY2, 0) + ")" +
+        (p.joinMonth === 1 ? " — 1월 가입이라 1년차 1회" : " — 가입 시 1회 + 다음 1월 1회")]);
+    }
     if (!v.simpleKeepOk) taxRows.splice(1, 0, ["간이과세 유지 한도 체크", "연 매출이익 1억 400만 초과 — 일반과세 전환 대상"]);
     $("tax-detail").innerHTML = taxRows.map(function (tr) {
       return '<div class="flex justify-between items-baseline py-2 border-b border-gray-100 text-sm"><span class="text-gray-500 font-semibold" style="padding-right:1rem">' + tr[0] + '</span><span class="font-bold text-right">' + tr[1] + "</span></div>";
@@ -580,7 +614,7 @@
       ctx.fillText("순이익 구간 →", W - padR - 6, padT + 12);
     }
     // 막대
-    geom = { padL: padL, bw: bw, y0: y0 };
+    geom = { padL: padL, bw: bw, y0: y0, mode: "bal" };
     r.rows.forEach(function (row, idx) {
       var x = padL + idx * bw + bw * 0.18, w = bw * 0.64;
       var grd = ctx.createLinearGradient(0, yPos(row.L), 0, y0);
@@ -626,9 +660,136 @@
       badge.style.display = "block";
       badge.style.left = bx + "px";
       badge.style.top = "0px";
+      badge.querySelector(".rb-pill").textContent = "★ 투자금 회수 완료";
+      badge.querySelector(".rb-sub").textContent = "이후 순이익 구간";
       var barTop = yPos(recRow.L);
       var lineEl = badge.querySelector(".rb-line");
       lineEl.style.height = Math.max(0, barTop - 52) + "px";
+    } else {
+      badge.style.display = "none";
+    }
+  }
+
+  // ---- 누적 수익금 차트 ----
+  function drawProfitChart(r, p) {
+    var cv = $("chart");
+    var dpr = window.devicePixelRatio || 1;
+    var W = cv.clientWidth, H = 320;
+    cv.width = W * dpr; cv.height = H * dpr;
+    var ctx = cv.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    var vals = [];
+    r.rows.forEach(function (x) { vals.push(x.cumPost, x.cumPre); });
+    var hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
+    var maxPos = Math.max(hi, 0) * 1.12 || 1;
+    var maxNeg = Math.max(-lo, 0) * 1.15;
+
+    var padL = 58, padR = 10, padT = 16, padB = 32;
+    var ph = H - padT - padB;
+    var posH = maxNeg > 0 ? ph * maxPos / (maxPos + maxNeg) : ph;
+    var negH = ph - posH;
+    var y0 = padT + posH;
+    var pw = W - padL - padR;
+    var bw = pw / 24;
+    var yv = function (v) { return (v >= 0) ? y0 - (v / maxPos) * posH : y0 + (-v / (maxNeg || 1)) * negH; };
+
+    // 그리드 + y라벨
+    ctx.font = "10px Pretendard, sans-serif";
+    var i, val, yy;
+    for (i = 0; i <= 3; i++) {
+      val = maxPos * i / 3; yy = yv(val);
+      ctx.strokeStyle = "#eee";
+      ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(W - padR, yy); ctx.stroke();
+      ctx.fillStyle = "#999"; ctx.textAlign = "right";
+      ctx.fillText(Math.round(val / MAN).toLocaleString() + "만", padL - 6, yy + 3);
+    }
+    if (maxNeg > 0) {
+      for (i = 1; i <= 2; i++) {
+        val = -maxNeg * i / 2; yy = yv(val);
+        ctx.strokeStyle = "#f7dede";
+        ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(W - padR, yy); ctx.stroke();
+        ctx.fillStyle = "#c98a8a"; ctx.textAlign = "right";
+        ctx.fillText(Math.round(val / MAN).toLocaleString() + "만", padL - 6, yy + 3);
+      }
+    }
+    // 0 기준선
+    ctx.strokeStyle = "#999"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(padL, y0); ctx.lineTo(W - padR, y0); ctx.stroke();
+    ctx.lineWidth = 1;
+
+    var be = r.breakevenPost;
+    // 손익분기 이후 배경 음영
+    if (be) {
+      var bxr = padL + (be - 1) * bw;
+      ctx.fillStyle = "rgba(168,170,171,0.12)";
+      ctx.fillRect(bxr, padT, (W - padR) - bxr, y0 - padT);
+      ctx.fillStyle = "#8A8B8E"; ctx.textAlign = "right"; ctx.font = "bold 10px Pretendard, sans-serif";
+      ctx.fillText("누적 흑자 구간 →", W - padR - 6, padT + 12);
+    }
+
+    // 세후 누적 막대
+    geom = { padL: padL, bw: bw, y0: y0, mode: "profit" };
+    r.rows.forEach(function (row, idx) {
+      var x = padL + idx * bw + bw * 0.18, w = bw * 0.64;
+      var v = row.cumPost, top = yv(v);
+      if (v >= 0) {
+        var grd = ctx.createLinearGradient(0, top, 0, y0);
+        if (be && idx + 1 === be) {
+          grd.addColorStop(0, "#FAFCFD"); grd.addColorStop(0.35, "#C7C9CD");
+          grd.addColorStop(0.7, "#A8AAAB"); grd.addColorStop(1, "#5F6169");
+          ctx.save();
+          ctx.shadowColor = "rgba(168,170,171,0.9)"; ctx.shadowBlur = 12;
+          ctx.fillStyle = grd;
+          ctx.fillRect(x, top, w, Math.max(1, y0 - top));
+          ctx.restore();
+          ctx.strokeStyle = "#5F6169";
+          ctx.strokeRect(x + 0.5, top + 0.5, w - 1, Math.max(1, y0 - top) - 1);
+        } else {
+          if (idx >= 12) { grd.addColorStop(0, "#5F6169"); grd.addColorStop(1, "#302F2F"); }
+          else { grd.addColorStop(0, "#302F2F"); grd.addColorStop(1, "#181818"); }
+          ctx.fillStyle = grd;
+          ctx.fillRect(x, top, w, Math.max(1, y0 - top));
+        }
+      } else {
+        ctx.fillStyle = (idx >= 12) ? "#d9695b" : "#c0392b";
+        ctx.fillRect(x, y0 + 1, w, Math.max(2, top - y0 - 1));
+      }
+    });
+
+    // 세전 누적 라인 (점선)
+    ctx.strokeStyle = "#8A8B8E"; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    r.rows.forEach(function (row, idx) {
+      var cx = padL + (idx + 0.5) * bw, cy = yv(row.cumPre);
+      if (idx === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+    });
+    ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 1;
+
+    // x축
+    ctx.textAlign = "center"; ctx.font = "9px Pretendard, sans-serif";
+    var every = (bw < 24) ? 2 : 1;
+    r.rows.forEach(function (row, idx) {
+      if (idx % every !== 0) return;
+      var cx = padL + (idx + 0.5) * bw;
+      ctx.fillStyle = (row.m === 13 || row.m === 1) ? "#444" : "#999";
+      ctx.fillText(row.cal + "월", cx, H - 19);
+      ctx.fillStyle = "#c3c3c3";
+      ctx.fillText(String(row.m), cx, H - 8);
+    });
+
+    // 손익분기 배지 (반짝 강조)
+    var badge = document.getElementById("recover-badge");
+    if (be) {
+      var bx = padL + (be - 0.5) * bw;
+      bx = Math.max(70, Math.min(W - 70, bx));
+      badge.style.display = "block";
+      badge.style.left = bx + "px";
+      badge.style.top = "0px";
+      badge.querySelector(".rb-pill").textContent = "★ 손익분기 달성";
+      badge.querySelector(".rb-sub").textContent = "이후 누적 흑자";
+      badge.querySelector(".rb-line").style.height = Math.max(0, yv(r.rows[be - 1].cumPost) - 52) + "px";
     } else {
       badge.style.display = "none";
     }
@@ -643,15 +804,28 @@
     var idx = Math.floor((x - geom.padL) / geom.bw);
     if (idx < 0 || idx > 23) { tip.style.display = "none"; return; }
     var row = lastResult.rows[idx];
-    var lines = [
-      '<div class="tt">' + row.m + "개월차 (" + row.cal + "월" + (row.m >= 13 ? " · 2년차" : "") + ")</div>",
-      "정산 유입 " + won(row.H) + "원",
-      "카드값·투자금 " + won(row.I + row.P) + "원",
-      "수수료 송금 " + won(row.J) + "원",
-      "<strong>통장 잔액 " + won(row.L) + "원</strong>"
-    ];
-    if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
-    if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
+    var lines;
+    if (geom.mode === "profit") {
+      lines = [
+        '<div class="tt">' + row.m + "개월차 (" + row.cal + "월" + (row.m >= 13 ? " · 2년차" : "") + ")</div>",
+        "그 달 순수입 " + won(row.netM) + "원"
+      ];
+      if (row.invM > 0) lines.push("투자금(발생) " + won(row.invM) + "원");
+      if (row.m === 12) lines.push("1년차 세금 " + won(lastResult.tax1.total + lastResult.vat.vat1) + "원");
+      if (row.m === 24) lines.push("2년차 세금 " + won(lastResult.tax2.total + lastResult.vat.vat2) + "원");
+      lines.push("누적 세전 " + won(row.cumPre) + "원");
+      lines.push('<strong' + (row.cumPost < 0 ? ' class="inj"' : "") + ">누적 세후 " + won(row.cumPost) + "원</strong>");
+    } else {
+      lines = [
+        '<div class="tt">' + row.m + "개월차 (" + row.cal + "월" + (row.m >= 13 ? " · 2년차" : "") + ")</div>",
+        "정산 유입 " + won(row.H) + "원",
+        "카드값·투자금 " + won(row.I + row.P) + "원",
+        "수수료 송금 " + won(row.J) + "원",
+        "<strong>통장 잔액 " + won(row.L) + "원</strong>"
+      ];
+      if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
+      if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
+    }
     tip.innerHTML = lines.join("<br>");
     tip.style.display = "block";
     var bx = ev.clientX - rect.left + 14, by = ev.clientY - rect.top - 10;
@@ -692,6 +866,13 @@
     document.querySelectorAll("[data-dep]").forEach(function (b) { b.classList.remove("on"); });
     render();
   });
+  document.querySelectorAll("[data-cm]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      state.chartMode = b.dataset.cm;
+      document.querySelectorAll("[data-cm]").forEach(function (x) { x.classList.toggle("on", x === b); });
+      render();
+    });
+  });
   document.querySelectorAll("[data-dep]").forEach(function (b) {
     b.addEventListener("click", function () {
       document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
@@ -702,7 +883,7 @@
     });
   });
   $("btn-reset").addEventListener("click", function () {
-    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
+    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1, chartMode: state.chartMode };
     $("in-join").value = "auto";
     $("in-inst").value = "3";
     $("in-other").value = 4000;

@@ -161,9 +161,16 @@
         O = (k <= p.st) ? "-" : calMonth(p.joinMonth, k) + "월분";
       }
 
+      // 발생 기준 월 순수입 (세팅기간 0 · 면제구간 100% 수취 · 이후 배분율)
+      var netM = (m <= p.st) ? 0
+               : (m <= p.st + p.fr) ? app * (1 - p.lossRate * p.lossShare)
+               : net13;
+      var invM = (m === 1) ? inv1 : (m === 13 ? inv2 : 0);
+
       rows.push({
         m: m, cal: calMonth(p.joinMonth, m), C: C, D: D, E: E, F: F, G: G, H: H,
-        I: I, Q: Q, R: R, J: J, K: K, P: P, L: L, S: S, Mrecv: Mrecv, O: O, lic: LIC
+        I: I, Q: Q, R: R, J: J, K: K, P: P, L: L, S: S, Mrecv: Mrecv, O: O, lic: LIC,
+        netM: netM, invM: invM
       });
       prevL = L; prevThr = thr;
     }
@@ -202,6 +209,19 @@
     var y1Post = y1Pre - tax1.total - vat1;  // B76
     var y2Post = y2Pre - tax2.total - vat2;  // B84
 
+    // ---- 누적 수익금 (발생 기준) ----
+    // 12개월차에 1년차 세금(종소세+부가세+면허세), 24개월차에 2년차 세금을 반영
+    var cumPre = 0, bePre = null, bePost = null;
+    for (var t = 0; t < 24; t++) {
+      var rw = rows[t];
+      cumPre += rw.netM - rw.invM;
+      var taxCum = (rw.m >= 12 ? tax1.total + vat1 : 0) + (rw.m >= 24 ? tax2.total + vat2 : 0);
+      rw.cumPre = cumPre;
+      rw.cumPost = cumPre - taxCum;
+      if (bePre === null && rw.cumPre >= 0) bePre = rw.m;
+      if (bePost === null && rw.cumPost >= 0) bePost = rw.m;
+    }
+
     // 회수 판정 문자열 (엑셀 B87)
     var recoveryLabel;
     if (recovery !== null) recoveryLabel = recovery;
@@ -219,6 +239,8 @@
       y1Post: y1Post, y2Post: y2Post,
       roi1: y1Pre / inv1, roi2: y2Pre / inv2,
       recovery: recoveryLabel,
+      breakevenPre: bePre, breakevenPost: bePost,
+      cumPost12: rows[11].cumPost, cumPost24: rows[23].cumPost,
       bal12: rows[11].L, recv12: rows[11].Mrecv,
       totalInject: cumS,
       minBal: Math.min.apply(null, rows.map(function (r) { return r.L; })),
@@ -229,5 +251,26 @@
     };
   }
 
-  return { DEFAULTS: DEFAULTS, DEFAULT_CFG: DEFAULT_CFG, applyCfg: applyCfg, VAT: VAT, TAX_BRACKETS: TAX_BRACKETS, simulate: simulate, calMonth: calMonth, incomeTax: incomeTax };
+  /**
+   * 권장 통장 예치금 — 현재 조건에서 '추가 현금 투입'이 0이 되는 최소 금액.
+   * 예치금은 1개월차에만 유입되므로, 미보정 누적현금(K-P의 누계)의 최대 결손폭이 필요액이다.
+   * unit(기본 50만 원) 단위로 올림.
+   */
+  function recommendDeposit(p, unit) {
+    unit = unit || 500000;
+    var BIG = 1e11; // 하한(0) 클리핑이 발생하지 않을 만큼 큰 예치금
+    var q = {};
+    for (var k in p) { if (Object.prototype.hasOwnProperty.call(p, k)) q[k] = p[k]; }
+    q.dep = BIG;
+    var r = simulate(q);
+    var need = 0;
+    for (var i = 0; i < r.rows.length; i++) {
+      var run = r.rows[i].L - BIG; // = Σ(K-P) 누계 (미보정)
+      if (-run > need) need = -run;
+    }
+    if (need <= 0) return 0;
+    return Math.ceil(need / unit) * unit;
+  }
+
+  return { DEFAULTS: DEFAULTS, DEFAULT_CFG: DEFAULT_CFG, applyCfg: applyCfg, VAT: VAT, TAX_BRACKETS: TAX_BRACKETS, simulate: simulate, calMonth: calMonth, incomeTax: incomeTax, recommendDeposit: recommendDeposit };
 });

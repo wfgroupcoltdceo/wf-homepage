@@ -1,5 +1,5 @@
 # WF 홈페이지 — 배포용 .gitignore
-# 실제 사이트(HTML + assets 폴더)만 GitHub에 올리고
+# 실제 사이트(5개 HTML + assets 폴더)만 GitHub에 올리고
 # 로고 원본·명함·작업용 원본 이미지/영상 등은 제외합니다.
 
 # 1) 폴더의 모든 항목을 일단 제외
@@ -13,6 +13,7 @@
 !faq.html
 !simulator.html
 !hq-simulator.html
+!hq-revenue.html
 !assets/
 !.gitignore
 
