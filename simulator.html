@@ -67,21 +67,21 @@
   .kcard .t { font-size: .72rem; font-weight: 700; color: #8A8B8E; letter-spacing: .06em; }
   .kcard .v { font-size: 1.45rem; font-weight: 800; color: #181818; margin-top: .3rem; line-height: 1.2; }
   .kcard .s { font-size: .74rem; color: #666; margin-top: .3rem; overflow-wrap: anywhere; }
-  /* ROI 배지 — 세전·세후를 같은 비중으로 강조 */
-  .kcard .roi { display: flex; gap: .3rem; flex-wrap: wrap; margin-top: .5rem; }
-  .kcard .roi .pill {
-    display: inline-flex; align-items: baseline; gap: .25rem;
-    font-size: .66rem; font-weight: 700; letter-spacing: .02em;
-    padding: .22rem .55rem; border-radius: 999px; white-space: nowrap;
-    background: #F0F1F2; color: #555;
+  /* 금액 | ROI 2×2 배치 — 배경은 카드와 동일, 세전 숫자만 굵게 강조 */
+  .kcard .kgrid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .6rem .9rem; align-items: start; }
+  .kcard .kgrid .cell:nth-child(even) { text-align: right; }
+  .kcard .kgrid .cell:nth-child(even) .t { white-space: nowrap; }
+  .kcard .kgrid .t { font-size: .68rem; font-weight: 700; color: #8A8B8E; letter-spacing: .04em; line-height: 1.35; }
+  .kcard .kgrid .v {
+    font-size: 1.32rem; font-weight: 800; color: #181818; margin-top: .15rem; line-height: 1.15;
+    white-space: nowrap; font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1;
   }
-  .kcard .roi .pill b { font-size: .85rem; font-weight: 800; color: #181818; font-variant-numeric: tabular-nums; }
-  .kcard .roi .pill.pre { background: #181818; color: #C7C9CD; }
-  .kcard .roi .pill.pre b { color: #fff; }
-  .kcard.dark .roi .pill { background: rgba(255,255,255,.12); color: #A8AAAB; }
-  .kcard.dark .roi .pill b { color: #fff; }
-  .kcard.dark .roi .pill.pre { background: #fff; color: #666; }
-  .kcard.dark .roi .pill.pre b { color: #181818; }
+  .kcard .kgrid .t.sub { color: #A8AAAB; }
+  .kcard .kgrid .v.sub { font-size: 1rem; font-weight: 600; color: #666; }
+  .kcard.dark .kgrid .t { color: #C7C9CD; }
+  .kcard.dark .kgrid .v { color: #fff; }
+  .kcard.dark .kgrid .t.sub { color: #8A8B8E; }
+  .kcard.dark .kgrid .v.sub { color: #A8AAAB; }
   .kcard.dark {
     border: none; color: #fff;
     background: linear-gradient(160deg, #302F2F 0%, #181818 70%, #0E0E0E 100%);
@@ -180,6 +180,9 @@
   @media (max-width: 768px) {
     .sim-panel { padding: 1.2rem; }
     .kcard .v { font-size: 1.2rem; }
+    .kcard .kgrid .v { font-size: 1.14rem; }
+    .kcard .kgrid .v.sub { font-size: .92rem; }
+    .kcard .kgrid { gap: .5rem .55rem; }
   }
   @media (max-width: 420px) {
     .cards-grid { grid-template-columns: minmax(0, 1fr); }
@@ -400,15 +403,6 @@
           </div>
         </div>
 
-        <!-- 연차 요약 -->
-        <div class="sim-panel mb-6">
-          <div class="font-extrabold text-lg mb-1" id="year-title">연차별 요약</div>
-          <div class="text-xs text-gray-400 mb-3" id="year-note"></div>
-          <div style="overflow-x:auto">
-            <table class="sim-table" id="year-table"></table>
-          </div>
-        </div>
-
         <!-- 월별 상세 -->
         <details class="adv sim-panel mb-6" open>
           <summary class="font-extrabold text-lg flex items-center justify-between">월별 상세 내역 <span class="chev text-gray-400">▾</span></summary>
@@ -423,6 +417,15 @@
           <summary class="font-extrabold text-lg flex items-center justify-between">세금 상세 (종합소득세 · 부가가치세) <span class="chev text-gray-400">▾</span></summary>
           <div id="tax-detail" class="pt-4"></div>
         </details>
+
+        <!-- 연차 요약 — 세금 상세 아래, 본문 마지막에 배치 -->
+        <div class="sim-panel mb-6">
+          <div class="font-extrabold text-lg mb-1" id="year-title">연차별 요약</div>
+          <div class="text-xs text-gray-400 mb-3" id="year-note"></div>
+          <div style="overflow-x:auto">
+            <table class="sim-table" id="year-table"></table>
+          </div>
+        </div>
 
         <!-- 면책 -->
         <div class="disc">
@@ -583,34 +586,26 @@
     var recovery = (typeof r.recovery === "number") ? r.recovery + "개월차" : r.recovery;
     var injectTxt = (r.totalInject > 0) ? man(r.totalInject, 0) : "불필요";
     var beTxt = r.breakevenPre ? r.breakevenPre + "개월차" : termTxt + " 내 미달";
-    var yearSub = function (y) { return "순수익 (세후) " + man(y.post, 0); };
-    // ROI는 세전·세후를 같은 크기로 나란히 — 어느 금액 기준인지 헷갈리지 않게
-    var roiPills = function (pre, post, inv) {
-      if (!(inv > 0)) return "";
-      return '<div class="roi"><span class="pill pre">ROI 세전 <b>' + pct(pre / inv) + "</b></span>" +
-        '<span class="pill">ROI 세후 <b>' + pct(post / inv) + "</b></span></div>";
-    };
     var cards = [];
-    cards.push({
-      t: yearLabel(r.years[0]) + " 순수익 (세전)", v: man(r.years[0].pre, 0), s: yearSub(r.years[0]),
-      x: roiPills(r.years[0].pre, r.years[0].post, r.years[0].inv), dark: true
-    });
+    // 왼쪽엔 금액(세전/세후), 오른쪽엔 같은 줄의 ROI — 어느 금액 기준의 ROI인지 한눈에 보이게
+    var roiCard = function (title, pre, post, inv, postLabel, extra, dark) {
+      return {
+        t: title, v: man(pre, 0), dark: !!dark, s: extra || "",
+        roi: (inv > 0) ? { pre: pre, post: post, inv: inv, postLabel: postLabel || "순수익 (세후)" } : null,
+        postTxt: man(post, 0), postLabel: postLabel || "순수익 (세후)"
+      };
+    };
+    cards.push(roiCard(yearLabel(r.years[0]) + " 순수익 (세전)", r.years[0].pre, r.years[0].post, r.years[0].inv, null, "", true));
     if (YN >= 2) {
       var yl = r.years[1];
-      cards.push({
-        t: yearLabel(yl) + " 순수익 (세전)", v: man(yl.pre, 0), s: yearSub(yl),
-        x: roiPills(yl.pre, yl.post, yl.inv), dark: true
-      });
+      cards.push(roiCard(yearLabel(yl) + " 순수익 (세전)", yl.pre, yl.post, yl.inv, null, "", true));
     } else {
       cards.push({ t: "계약 기간", v: termTxt, s: "1년 미만 계약 — 연장 재투자 없음", dark: true });
     }
     cards.push({ t: "투자금 회수 시점", v: recovery, s: "잔액이 예치금 수준을 회복하는 달 · 손익분기 " + beTxt });
     var invAll = r.years.reduce(function (a, y) { return a + y.inv; }, 0);
-    cards.push({
-      t: termTxt + " 누적 수익금 (세전)", v: man(r.cumPreEnd, 0),
-      s: "누적 (세후) " + man(r.cumPostEnd, 0) + " · 연 평균(세전) " + man(r.cumPreEnd / (TERM / 12), 0),
-      x: roiPills(r.cumPreEnd, r.cumPostEnd, invAll)
-    });
+    cards.push(roiCard(termTxt + " 누적 수익금 (세전)", r.cumPreEnd, r.cumPostEnd, invAll, "누적 (세후)",
+      "연 평균 (세전) " + man(r.cumPreEnd / (TERM / 12), 0)));
     cards.push({
       t: "추가 현금 투입", v: injectTxt,
       s: (r.totalInject > 0) ? "카드값이 잔액을 넘는 달의 부족분 합계 (권장액 " + man(p.recDep, 0) + "이면 0)" : "예치금으로 " + termTxt + " 내내 잔액 유지"
@@ -620,9 +615,22 @@
       s: "비상주 " + p.n + "개 + 세팅비 + 서버" +
         (r.renewMonths.length ? " (연장 재투자 " + man(r.inv2, 0) + " × " + r.renewMonths.length + "회 — " + r.renewMonths.join("·") + "개월차)" : " (계약 기간 내 연장 없음)")
     });
+    var cell = function (label, val, sub) {
+      return '<div class="cell"><div class="t' + (sub ? " sub" : "") + '">' + label +
+        '</div><div class="v' + (sub ? " sub" : "") + '">' + val + "</div></div>";
+    };
     $("cards").innerHTML = cards.map(function (c) {
-      return '<div class="kcard' + (c.dark ? " dark" : "") + '"><div class="t">' + c.t + '</div><div class="v">' + c.v +
-        '</div><div class="s">' + c.s + "</div>" + (c.x || "") + "</div>";
+      var open = '<div class="kcard' + (c.dark ? " dark" : "") + '">';
+      if (c.roi) {
+        return open + '<div class="kgrid">' +
+          cell(c.t, c.v, false) +
+          cell("ROI (세전)", pct(c.roi.pre / c.roi.inv), false) +
+          cell(c.postLabel, c.postTxt, true) +
+          cell("ROI (세후)", pct(c.roi.post / c.roi.inv), true) +
+          "</div>" + (c.s ? '<div class="s">' + c.s + "</div>" : "") + "</div>";
+      }
+      return open + '<div class="t">' + c.t + '</div><div class="v">' + c.v +
+        '</div><div class="s">' + (c.s || "") + "</div></div>";
     }).join("");
 
     // ---- 차트 (누적 수익금 + 통장 잔액 동시 표시) ----
