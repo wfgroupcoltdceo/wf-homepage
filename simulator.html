@@ -105,7 +105,11 @@
   }
   .sim-table td:first-child, .sim-table td:nth-child(2) { text-align: center; color: #8A8B8E; font-weight: 600; }
   .sim-table tr.y2 td { background: #fafafa; }
+  /* 강조 열 — 순수익(세전) · ROI(세전) */
+  .sim-table th.em { font-weight: 800; }
+  .sim-table td.em { font-weight: 800; color: #181818; }
   .sim-table td.neg { color: #b91c1c; }
+  .sim-table td.em.neg { color: #b91c1c; }
   .sim-table td.inj { color: #b91c1c; font-weight: 700; }
   /* 수수료 칸의 '몇 월분' 보조 라벨 */
   .sim-table td .mm { display: block; font-size: .64rem; font-weight: 700; color: #8A8B8E; letter-spacing: 0; margin-top: .1rem; }
@@ -649,29 +653,33 @@
     $("year-title").textContent = "연차별 요약 — 계약 " + termTxt + " · 총 " + YN + "개 연차";
     $("year-note").textContent = "단위: 만 원 · 순수익(세전) = 매출이익 순수입 − 투자금 · ROI(세전) = 순수익(세전) ÷ 투자금, ROI(세후) = 순수익(세후) ÷ 투자금 · " +
       (r.years[YN - 1].months < 12 ? "마지막 연차는 " + r.years[YN - 1].months + "개월만 계산됩니다." : "모든 연차가 12개월입니다.");
-    var yhead = "<thead><tr><th>연차</th><th>개월차</th><th>순수입</th><th>투자금</th><th>순수익 (세전)</th><th>종합소득세</th><th>부가세" +
-      (p.vatType === 2 ? "+면허세" : "") + "</th><th>순수익 (세후)</th><th>ROI (세전)</th><th>ROI (세후)</th></tr></thead>";
+    // ROI (세전)을 순수익 (세전) 바로 옆에 두고, 그 두 열만 볼드로 강조
+    var yhead = '<thead><tr><th>연차</th><th>개월차</th><th>순수입</th><th>투자금</th>' +
+      '<th class="em">순수익 (세전)</th><th class="em">ROI (세전)</th><th>종합소득세</th><th>부가세' +
+      (p.vatType === 2 ? "+면허세" : "") + "</th><th>순수익 (세후)</th><th>ROI (세후)</th></tr></thead>";
     var ybody = r.years.map(function (y) {
-      return "<tr" + (y.y >= 2 ? ' class="y2"' : "") + "><td><strong>" + yearLabel(y) + "</strong></td>" +
+      return "<tr" + (y.y >= 2 ? ' class="y2"' : "") + "><td>" + yearLabel(y) + "</td>" +
         "<td>" + y.from + "~" + y.to + "</td>" +
         "<td>" + man(y.gross, 0) + "</td><td>" + man(y.inv, 0) + "</td>" +
-        '<td class="' + (y.pre < 0 ? "neg" : "") + '"><strong>' + man(y.pre, 0) + "</strong></td>" +
+        '<td class="em' + (y.pre < 0 ? " neg" : "") + '">' + man(y.pre, 0) + "</td>" +
+        '<td class="em">' + (y.roi === null ? "-" : pct(y.roi)) + "</td>" +
         "<td>" + man(y.tax.total, 0) + "</td><td>" + man(y.vat, 0) + "</td>" +
-        "<td><strong>" + man(y.post, 0) + "</strong></td>" +
-        "<td><strong>" + (y.roi === null ? "-" : pct(y.roi)) + "</strong></td>" +
-        "<td><strong>" + (y.roiPost === null ? "-" : pct(y.roiPost)) + "</strong></td></tr>";
+        "<td>" + man(y.post, 0) + "</td>" +
+        "<td>" + (y.roiPost === null ? "-" : pct(y.roiPost)) + "</td></tr>";
     }).join("");
     var totPre = r.years.reduce(function (a, y) { return a + y.pre; }, 0);
     var totInv = r.years.reduce(function (a, y) { return a + y.inv; }, 0);
     var totGross = r.years.reduce(function (a, y) { return a + y.gross; }, 0);
     var totTax = r.years.reduce(function (a, y) { return a + y.tax.total; }, 0);
     var totVat = r.years.reduce(function (a, y) { return a + y.vat; }, 0);
+    // 합계 행은 순수입까지 함께 볼드
     ybody += '<tr style="background:#f6f6f7"><td><strong>합계</strong></td><td>1~' + TERM + "</td>" +
-      "<td><strong>" + man(totGross, 0) + "</strong></td><td><strong>" + man(totInv, 0) + "</strong></td>" +
-      "<td><strong>" + man(totPre, 0) + "</strong></td><td><strong>" + man(totTax, 0) + "</strong></td>" +
-      "<td><strong>" + man(totVat, 0) + "</strong></td><td><strong>" + man(totPre - totTax - totVat, 0) + "</strong></td>" +
-      "<td><strong>" + (totInv > 0 ? pct(totPre / totInv) : "-") + "</strong></td>" +
-      "<td><strong>" + (totInv > 0 ? pct((totPre - totTax - totVat) / totInv) : "-") + "</strong></td></tr>";
+      '<td class="em">' + man(totGross, 0) + "</td><td>" + man(totInv, 0) + "</td>" +
+      '<td class="em">' + man(totPre, 0) + "</td>" +
+      '<td class="em">' + (totInv > 0 ? pct(totPre / totInv) : "-") + "</td>" +
+      "<td>" + man(totTax, 0) + "</td><td>" + man(totVat, 0) + "</td>" +
+      "<td>" + man(totPre - totTax - totVat, 0) + "</td>" +
+      "<td>" + (totInv > 0 ? pct((totPre - totTax - totVat) / totInv) : "-") + "</td></tr>";
     $("year-table").innerHTML = yhead + "<tbody>" + ybody + "</tbody>";
 
     // ---- 월별 표 (채널별 유입·카드값 구분) ----
