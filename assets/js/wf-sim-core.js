@@ -36,7 +36,7 @@
   // ---- 모델 기본값 (가정 시트 초록/파랑 섹션 — 점주 공개분) ----
   var DEFAULTS = {
     m30: {
-      n: 30, joinMonth: 8,
+      n: 30, joinMonth: 8, term: 24,
       mp: 1800000, ach: 1.0,
       shr: 0.4, lossRate: 0, lossShare: 0.4, cm: 0.4,
       st: 0, fr: 0, pl: 3,
@@ -46,7 +46,7 @@
       otherIncome: 40000000, vatType: 1
     },
     m50: {
-      n: 50, joinMonth: 8,
+      n: 50, joinMonth: 8, term: 24,
       mp: 2500000, ach: 1.0,
       shr: 0.4, lossRate: 0, lossShare: 0.4, cm: 0.4,
       st: 0, fr: 0, pl: 3,
@@ -73,6 +73,7 @@
 
   // ---- 본사 설정(관리자 패널) 기본값 — %는 정수, 금액은 만원 단위 ----
   var DEFAULT_CFG = {
+    term: 24,
     mp30: 180, mp50: 250, ach: 100,
     shr: 40, lossRate: 0, lossShare: 40, cm: 40,
     st: 0, fr: 0, pl: 3, setupOn: 1,
@@ -110,7 +111,7 @@
          otherMan 사업 외 연간 소득 (만원)
          vatType  1 = 간이과세, 2 = 일반과세
          setupOn  1 = 세팅비 포함 */
-    var simWL = { inst: 1, vatType: 1 };
+    var simWL = { inst: 1, vatType: 1, term: 1 };
     overlay(DEFAULTS.m30, SITE.sim, simWL);
     overlay(DEFAULTS.m50, SITE.sim, simWL);
     if (SITE.sim) {
@@ -191,6 +192,7 @@
     p.cm = cfg.cm / 100;
     p.st = cfg.st; p.fr = cfg.fr; p.pl = cfg.pl;
     p.setupOn = cfg.setupOn;
+    p.term = cfg.term;
     p.resNew = (m30 ? cfg.resNew30 : cfg.resNew50) * 10000;
     p.resRenew = (m30 ? cfg.resRenew30 : cfg.resRenew50) * 10000;
     p.setupFee = (m30 ? cfg.setup30 : cfg.setup50) * 10000;
@@ -205,12 +207,33 @@
     return p;
   }
 
-  /** 점주 시뮬레이션 — 엑셀 '대리점주 수익 시뮬레이터' 시트와 동일 */
+  /** 계약 개월 수 보정 — 1~60개월 (기본 24) */
+  function termOf(p) {
+    var t = Math.round(p && p.term);
+    if (!isFinite(t) || t < 1) t = 24;
+    if (t > 60) t = 60;
+    return t;
+  }
+  /** 연장(재계약) 재투자가 발생하는 개월차 목록 — 13, 25, 37 … (계약 기간 안쪽만) */
+  function renewMonthsOf(term) {
+    var out = [];
+    for (var m = 13; m <= term; m += 12) out.push(m);
+    return out;
+  }
+
+  /**
+   * 점주 시뮬레이션 — 엑셀 '대리점주 수익 시뮬레이터' 시트와 동일.
+   * p.term(계약 개월 수)만큼 계산하며, term=24면 엑셀과 완전히 일치한다.
+   */
   function simulate(p) {
+    var TERM = termOf(p);
+    var YN = Math.ceil(TERM / 12);                              // 연차 수 (마지막 해는 짧을 수 있음)
     var app = p.mp * p.ach;                                     // 가정 B12
     var inv1 = p.resNew * p.n + p.setupFee * p.setupOn + p.server + p.taxAgent; // B6
     var inv2 = p.resRenew * p.n + p.server + p.taxAgent;        // B7
-    var T = function (m) { return (m > p.st) ? app * (1 + 1 / p.cm) : 0; }; // 정산예정액(발생월 기준)
+    var RENEW = renewMonthsOf(TERM);
+    function isRenew(m) { return RENEW.indexOf(m) >= 0; }
+    var Tsched = function (m) { return (m > p.st) ? app * (1 + 1 / p.cm) : 0; }; // 정산예정액(발생월 기준)
     var cpShare = 1 - p.nvShare;
     var net13 = app * p.shr - app * p.lossRate * p.lossShare;   // 정상 월 순수입 (B13)
 
@@ -219,34 +242,38 @@
       if (x <= p.st) return 0;
       return app * ((x <= p.st + p.fr ? 0 : 1 - p.shr) + p.lossRate * p.lossShare);
     }
-    var lump24 = p.pl * app * ((1 - p.shr) + p.lossRate * p.lossShare); // 종료 시 잔여분
+    var lumpEnd = p.pl * app * ((1 - p.shr) + p.lossRate * p.lossShare); // 계약 종료 시 잔여분
 
     // 등록면허세 (일반과세): 가입 시점 + 매년 1월, 사업자당 40,500원
     var licUnit = (p.vatType === 2) ? VAT.licenseTax * p.n : 0;
-    var licY1 = 0, licY2 = 0;
+    var licY = []; for (var yz = 0; yz < YN; yz++) licY.push(0);
 
     var rows = [];
     var cumD = 0, cumH = 0, cumS = 0, prevL = 0, prevThr = 0;
     var recovery = null;
-    for (var m = 1; m <= 24; m++) {
+    for (var m = 1; m <= TERM; m++) {
+      var yi = Math.floor((m - 1) / 12);   // 0-based 연차
       var C = (m > p.st) ? app : 0;
       var D = (m > p.st) ? app * (1 + 1 / p.cm) : 0;
-      var E = T(m - p.nvLag) * p.nvShare;
-      var F = p.cp1 * cpShare * (T(m - 1) * p.cp1m1 + T(m - 2) * (1 - p.cp1m1));
-      var G = (1 - p.cp1) * cpShare * T(m - p.cp2Lag);
+      var E = Tsched(m - p.nvLag) * p.nvShare;
+      var F = p.cp1 * cpShare * (Tsched(m - 1) * p.cp1m1 + Tsched(m - 2) * (1 - p.cp1m1));
+      var G = (1 - p.cp1) * cpShare * Tsched(m - p.cp2Lag);
       var H = E + F + G;
       var Q = (m - p.cardLag > p.st) ? app / p.cm : 0;
       var R = 0;
       if (p.inst > 1) {
         if (m >= 1 + p.cardLag && m < 1 + p.cardLag + p.inst) R += inv1 / p.inst;
-        if (m >= 13 + p.cardLag && m < 13 + p.cardLag + p.inst) R += inv2 / p.inst;
+        for (var ri = 0; ri < RENEW.length; ri++) {
+          var rr = RENEW[ri];
+          if (m >= rr + p.cardLag && m < rr + p.cardLag + p.inst) R += inv2 / p.inst;
+        }
       }
       var I = Q + R;
-      var J = Cf(m - p.pl) + (m === 24 ? lump24 : 0);
+      var J = Cf(m - p.pl) + (m === TERM ? lumpEnd : 0);
       var LIC = (licUnit > 0 && (m === 1 || calMonth(p.joinMonth, m) === 1)) ? licUnit : 0;
-      if (m <= 12) licY1 += LIC; else licY2 += LIC;
+      licY[yi] += LIC;
       var K = H - I - J - LIC;
-      var P = (p.inst <= 1) ? ((m === 1 ? inv1 : 0) + (m === 13 ? inv2 : 0)) : 0;
+      var P = (p.inst <= 1) ? ((m === 1 ? inv1 : 0) + (isRenew(m) ? inv2 : 0)) : 0;
       var flow = (m === 1) ? (K - P + p.dep) : (prevL + K - P);
       var S = Math.max(0, -flow);
       var L = Math.max(0, flow);
@@ -257,7 +284,7 @@
 
       // 송금 대상 매출월 라벨
       var k = m - p.pl, O;
-      if (m === 24 && p.pl > 0) {
+      if (m === TERM && p.pl > 0) {
         O = (k > p.st ? calMonth(p.joinMonth, k) + "월분 + " : "") + "잔여 " + p.pl + "개월분 일시청구(종료 시)";
       } else {
         O = (k <= p.st) ? "-" : calMonth(p.joinMonth, k) + "월분";
@@ -267,21 +294,15 @@
       var netM = (m <= p.st) ? 0
                : (m <= p.st + p.fr) ? app * (1 - p.lossRate * p.lossShare)
                : net13;
-      var invM = (m === 1) ? inv1 : (m === 13 ? inv2 : 0);
+      var invM = (m === 1) ? inv1 : (isRenew(m) ? inv2 : 0);
 
       rows.push({
-        m: m, cal: calMonth(p.joinMonth, m), C: C, D: D, E: E, F: F, G: G, H: H,
+        m: m, y: yi + 1, cal: calMonth(p.joinMonth, m), C: C, D: D, E: E, F: F, G: G, H: H,
         I: I, Q: Q, R: R, J: J, K: K, P: P, L: L, S: S, Mrecv: Mrecv, O: O, lic: LIC,
         netM: netM, invM: invM
       });
       prevL = L; prevThr = thr;
     }
-
-    // ---- 연차 요약 (발생 기준) ----
-    var y1Gross = app * p.fr * (1 - p.lossRate * p.lossShare) + net13 * (12 - p.st - p.fr); // B71
-    var y1Pre = y1Gross - inv1;   // B73 세전
-    var y2Gross = net13 * 12;     // B79
-    var y2Pre = y2Gross - inv2;   // B81
 
     // ---- 종합소득세 (엑셀 6번) ----
     var baseTax = incomeTax(p.otherIncome);
@@ -290,34 +311,50 @@
       var add = incomeTax(tb) - baseTax;
       return { income: add, local: add * 0.1, total: add * 1.1, marginal: bracketOf(tb).rate, base: tb };
     }
-    var tax1 = addedTax(y1Pre), tax2 = addedTax(y2Pre);
 
-    // ---- 부가세 (엑셀 7번) ----
-    var y1rev = app * (12 - p.st);                              // B130
-    var y1out = y1rev * 0.1 / 1.1;                              // B131
-    var y1fee = (y1rev - app * p.fr) * (1 - p.shr);             // B132
-    var y1in = -(y1fee + inv1) * 0.1 / 1.1;                     // B133
-    var y1general = y1out + y1in;                               // B134
-    var y1simple = (y1rev < VAT.simpleExempt) ? 0 : y1rev * VAT.simpleRate * 0.1; // B135
-    var vat1 = (p.vatType === 1 ? y1simple : y1general) + licY1;  // B137 — 면허세는 실제 납부 횟수 반영
-    var y2rev = app * 12;
-    var y2out = y2rev * 0.1 / 1.1;
-    var y2in = -(y2rev * (1 - p.shr) + inv2) * 0.1 / 1.1;
-    var y2general = y2out + y2in;
-    var y2simple = (y2rev < VAT.simpleExempt) ? 0 : y2rev * VAT.simpleRate * 0.1;
-    var vat2 = (p.vatType === 1 ? y2simple : y2general) + licY2;  // B141
-    var simpleKeepOk = y2rev <= VAT.simpleKeep;
+    /* ---- 연차별 요약 (발생 기준) ----
+       마지막 해가 12개월이 안 될 수 있으므로 모든 값을 실제 해당 개월에서 집계한다.
+       term=24면 기존 1년차/2년차 계산식과 완전히 동일한 값이 나온다. */
+    var years = [];
+    for (var y = 0; y < YN; y++) {
+      var from = y * 12 + 1, to = Math.min(TERM, (y + 1) * 12);
+      var gross = 0, invY = 0, revMon = 0, feeMon = 0;
+      for (var t = from - 1; t < to; t++) {
+        gross += rows[t].netM;
+        invY += rows[t].invM;
+        if (rows[t].m > p.st) revMon++;                 // 매출이 발생하는 달
+        if (rows[t].m > p.st + p.fr) feeMon++;          // 수수료를 내는 달
+      }
+      var pre = gross - invY;
+      var tax = addedTax(pre);
+      // 부가세
+      var rev = app * revMon;
+      var out = rev * 0.1 / 1.1;
+      var fee = app * feeMon * (1 - p.shr);
+      var inn = -(fee + invY) * 0.1 / 1.1;
+      var general = out + inn;
+      var simple = (rev < VAT.simpleExempt) ? 0 : rev * VAT.simpleRate * 0.1;
+      var vatY = (p.vatType === 1 ? simple : general) + licY[y];
+      years.push({
+        y: y + 1, from: from, to: to, months: to - from + 1,
+        gross: gross, inv: invY, pre: pre, tax: tax,
+        rev: rev, out: out, fee: fee, "in": inn, general: general, simple: simple,
+        lic: licY[y], vat: vatY, post: pre - tax.total - vatY,
+        roi: invY > 0 ? pre / invY : null,
+        roiPost: invY > 0 ? (pre - tax.total - vatY) / invY : null
+      });
+    }
+    var simpleKeepOk = (years.length > 1 ? years[1].rev : years[0].rev) <= VAT.simpleKeep;
 
-    var y1Post = y1Pre - tax1.total - vat1;  // B76
-    var y2Post = y2Pre - tax2.total - vat2;  // B84
-
-    // ---- 누적 수익금 (발생 기준) ----
-    // 12개월차에 1년차 세금(종소세+부가세+면허세), 24개월차에 2년차 세금을 반영
+    // ---- 누적 수익금 (발생 기준) — 각 연차 마지막 달에 그 해 세금(종소세+부가세+면허세) 반영 ----
     var cumPre = 0, bePre = null, bePost = null;
-    for (var t = 0; t < 24; t++) {
-      var rw = rows[t];
+    for (var t2 = 0; t2 < TERM; t2++) {
+      var rw = rows[t2];
       cumPre += rw.netM - rw.invM;
-      var taxCum = (rw.m >= 12 ? tax1.total + vat1 : 0) + (rw.m >= 24 ? tax2.total + vat2 : 0);
+      var taxCum = 0;
+      for (var yy = 0; yy < years.length; yy++) {
+        if (rw.m >= years[yy].to) taxCum += years[yy].tax.total + years[yy].vat;
+      }
       rw.cumPre = cumPre;
       rw.cumPost = cumPre - taxCum;
       if (bePre === null && rw.cumPre >= 0) bePre = rw.m;
@@ -327,24 +364,34 @@
     // 회수 판정 문자열 (엑셀 B87)
     var recoveryLabel;
     if (recovery !== null) recoveryLabel = recovery;
-    else recoveryLabel = (rows[0].L >= p.dep + rows[0].S) ? "음수 구간 없음" : "24개월 내 미회수";
+    else recoveryLabel = (rows[0].L >= p.dep + rows[0].S) ? "음수 구간 없음" : (TERM + "개월 내 미회수");
+
+    var Y1 = years[0], Y2 = years[1] || null;
+    var last = rows[TERM - 1];
+    var mid = rows[Math.min(11, TERM - 1)];   // 12개월차 (계약이 더 짧으면 마지막 달)
 
     return {
-      params: p, app: app, inv1: inv1, inv2: inv2, net13: net13, rows: rows,
-      y1Gross: y1Gross, y1Pre: y1Pre, y2Gross: y2Gross, y2Pre: y2Pre,
-      tax1: tax1, tax2: tax2,
+      params: p, term: TERM, yearCount: YN, years: years,
+      app: app, inv1: inv1, inv2: inv2, net13: net13, rows: rows,
+      renewMonths: RENEW,
+      // --- 하위 호환 필드 (기존 화면 코드가 쓰던 이름) ---
+      y1Gross: Y1.gross, y1Pre: Y1.pre, y2Gross: Y2 ? Y2.gross : 0, y2Pre: Y2 ? Y2.pre : 0,
+      tax1: Y1.tax, tax2: Y2 ? Y2.tax : addedTax(0),
       vat: {
-        y1rev: y1rev, y1out: y1out, y1fee: y1fee, y1in: y1in,
-        y1general: y1general, y1simple: y1simple, licY1: licY1, licY2: licY2, vat1: vat1,
-        y2general: y2general, y2simple: y2simple, vat2: vat2, simpleKeepOk: simpleKeepOk
+        y1rev: Y1.rev, y1out: Y1.out, y1fee: Y1.fee, y1in: Y1["in"],
+        y1general: Y1.general, y1simple: Y1.simple, licY1: Y1.lic, licY2: Y2 ? Y2.lic : 0,
+        vat1: Y1.vat, y2general: Y2 ? Y2.general : 0, y2simple: Y2 ? Y2.simple : 0,
+        vat2: Y2 ? Y2.vat : 0, simpleKeepOk: simpleKeepOk
       },
-      y1Post: y1Post, y2Post: y2Post,
-      roi1: y1Pre / inv1, roi2: y2Pre / inv2,
+      y1Post: Y1.post, y2Post: Y2 ? Y2.post : 0,
+      roi1: Y1.roi, roi2: Y2 ? Y2.roi : null,
+      roiPost1: Y1.roiPost, roiPost2: Y2 ? Y2.roiPost : null,
       recovery: recoveryLabel,
       breakevenPre: bePre, breakevenPost: bePost,
-      cumPost12: rows[11].cumPost, cumPost24: rows[23].cumPost,
-      cumPre12: rows[11].cumPre, cumPre24: rows[23].cumPre,
-      bal12: rows[11].L, recv12: rows[11].Mrecv,
+      cumPreEnd: last.cumPre, cumPostEnd: last.cumPost,
+      cumPost12: mid.cumPost, cumPost24: last.cumPost,
+      cumPre12: mid.cumPre, cumPre24: last.cumPre,
+      bal12: mid.L, recv12: mid.Mrecv,
       totalInject: cumS,
       minBal: Math.min.apply(null, rows.map(function (r) { return r.L; })),
       // 정상월 정산 참고치 (B90~93)

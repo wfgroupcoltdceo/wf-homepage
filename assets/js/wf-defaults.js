@@ -16,6 +16,7 @@
 window.WF_DEFAULTS = {
   /* 본사 설정 패널 항목 (점주 시뮬레이터 · 1건당 상세 · 본사 수익 공통) */
   "cfg": {
+    "term": 24,
     "mp30": 180,
     "mp50": 250,
     "ach": 100,
@@ -45,6 +46,7 @@ window.WF_DEFAULTS = {
   /* 점주 시뮬레이터 화면의 첫 화면 값
      join 0 = 자동(다음 달) · 1~12 = 해당 월 고정 / otherMan 단위 = 만원 */
   "sim": {
+    "term": 24,
     "join": 0,
     "inst": 3,
     "otherMan": 4000,
