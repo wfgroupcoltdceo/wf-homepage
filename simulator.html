@@ -301,7 +301,11 @@
               <button type="button" id="hq-default" class="seg-btn" style="flex:1">기본값 복원</button>
               <button type="button" id="hq-lock" class="seg-btn" style="flex:1">잠금</button>
             </div>
-            <div class="sim-sub" style="display:block;margin-top:.5rem">저장하면 이 브라우저에서 계속 유지됩니다 (다른 방문자에게는 영향 없음 — 전체 기본값 변경은 별도 배포 필요).</div>
+            <button type="button" id="hq-export" class="seg-btn" style="width:100%;margin-top:.4rem">기본값으로 저장 (파일)</button>
+            <div class="sim-sub" style="display:block;margin-top:.5rem"><strong>저장</strong>은 이 브라우저에서만 유지됩니다 (다른 방문자에게는 영향 없음).<br>
+              <strong>기본값으로 저장 (파일)</strong>을 누르면 위 설정값 + 지금 화면의 가입월·할부·사업 외 소득·과세유형이 담긴
+              <code>wf-defaults.js</code> 파일이 내려받아집니다. 그 파일을 사이트 폴더의 <code>assets/js/wf-defaults.js</code> 자리에
+              덮어쓰고 GitHub에 푸시하면 <strong>모든 방문자</strong>의 기본값이 바뀝니다.</div>
           </div>
         </div>
 
@@ -414,6 +418,7 @@
   </div>
 </footer>
 
+<script src="./assets/js/wf-defaults.js"></script>
 <script src="./assets/js/wf-sim-core.js"></script>
 <script>
 (function () {
@@ -433,7 +438,25 @@
   } catch (e) {}
 
   // ---- 상태 (점주 조절: 모델·가입월·할부·예치금·사업외소득·과세유형) ----
-  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
+  // 첫 화면 값은 사이트 기본값 파일(assets/js/wf-defaults.js)의 sim 그룹으로 덮어쓸 수 있다
+  var SIM_SITE = (WFSim.SITE_DEFAULTS && WFSim.SITE_DEFAULTS.sim) || {};
+  function numOr(v, dflt, lo, hi) {
+    if (typeof v !== "number" || !isFinite(v)) return dflt;
+    if (v < lo || v > hi) return dflt;
+    return v;
+  }
+  function baseState(model) {
+    return {
+      model: model || "m30",
+      join: numOr(SIM_SITE.join, 0, 1, 12) || "auto",
+      inst: numOr(SIM_SITE.inst, 3, 0, 24),
+      depMan: null,
+      otherMan: numOr(SIM_SITE.otherMan, 4000, 0, 1e7),
+      vatType: numOr(SIM_SITE.vatType, 1, 1, 2),
+      setupOn: numOr(SIM_SITE.setupOn, 1, 0, 1)
+    };
+  }
+  var state = baseState("m30");
 
   var DEP_UNIT = 500000; // 권장액 올림 단위 (50만 원)
 
@@ -887,15 +910,20 @@
       render();
     });
   });
-  $("btn-reset").addEventListener("click", function () {
-    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
-    $("in-join").value = "auto";
-    $("in-inst").value = "3";
-    $("in-other").value = 4000;
-    $("vat-1").classList.add("on"); $("vat-2").classList.remove("on");
-    $("setup-1").classList.add("on"); $("setup-0").classList.remove("on");
+  function paintStateControls() {
+    $("in-join").value = String(state.join);
+    $("in-inst").value = String(state.inst);
+    $("in-other").value = state.otherMan;
+    $("vat-" + state.vatType).classList.add("on");
+    $("vat-" + (state.vatType === 1 ? 2 : 1)).classList.remove("on");
+    $("setup-" + state.setupOn).classList.add("on");
+    $("setup-" + (state.setupOn ? 0 : 1)).classList.remove("on");
     document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
     $("dep-rec").classList.add("on");
+  }
+  $("btn-reset").addEventListener("click", function () {
+    state = baseState(state.model);
+    paintStateControls();
     render();
   });
 
@@ -1005,6 +1033,22 @@
     hqPaintControls();
     render();
   });
+  $("hq-export").addEventListener("click", function () {
+    hqReadControls();
+    var ok = WFSim.exportDefaults({
+      cfg: hqCfg,
+      sim: {
+        join: (state.join === "auto" ? 0 : state.join),
+        inst: state.inst,
+        otherMan: state.otherMan,
+        vatType: state.vatType,
+        setupOn: state.setupOn
+      }
+    });
+    var btn = this;
+    btn.textContent = ok ? "내려받았습니다 ✓" : "실패 — 다운로드 차단?";
+    setTimeout(function () { btn.textContent = "기본값으로 저장 (파일)"; }, 1800);
+  });
   $("hq-lock").addEventListener("click", function () {
     hqUnlocked = false;
     $("hq-pass").value = "";
@@ -1013,6 +1057,7 @@
     $("hq-panel").style.display = "none";
   });
 
+  paintStateControls();
   render();
 })();
 </script>

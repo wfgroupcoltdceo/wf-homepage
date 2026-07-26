@@ -67,6 +67,9 @@
   function calMonth(joinMonth, m) { // 개월차 → 달력 월
     return ((joinMonth + m - 2) % 12 + 12) % 12 + 1;
   }
+  function calYearOffset(joinMonth, m) { // 개월차 → 시작 연도 대비 몇 해 뒤인지
+    return Math.floor((joinMonth - 1 + m - 1) / 12);
+  }
 
   // ---- 본사 설정(관리자 패널) 기본값 — %는 정수, 금액은 만원 단위 ----
   var DEFAULT_CFG = {
@@ -77,6 +80,105 @@
     setup30: 100, setup50: 150, server: 25, taxAgent: 0,
     nvShare: 20, nvLag: 1, cp1: 70, cp1m1: 50, cp2Lag: 2, cardLag: 1
   };
+
+  /* ---------------------------------------------------------------
+   * 사이트 기본값 오버라이드 (assets/js/wf-defaults.js)
+   * 각 시뮬레이터의 "기본값으로 저장"이 만들어 주는 파일.
+   * 이 파일이 먼저 로드되어 window.WF_DEFAULTS 를 정의해 두면
+   * 아래에서 출고 기본값 위에 덮어써진다 → 모든 방문자에게 적용.
+   * 우선순위: 코드 출고값 < wf-defaults.js < 브라우저 localStorage
+   * --------------------------------------------------------------- */
+  var GLOBAL = (typeof self !== "undefined") ? self : null;
+  var SITE = (GLOBAL && GLOBAL.WF_DEFAULTS && typeof GLOBAL.WF_DEFAULTS === "object") ? GLOBAL.WF_DEFAULTS : null;
+
+  function overlay(target, patch, whitelist) {
+    if (!patch || typeof patch !== "object") return target;
+    for (var k in patch) {
+      if (!Object.prototype.hasOwnProperty.call(patch, k)) continue;
+      if (whitelist && !Object.prototype.hasOwnProperty.call(whitelist, k)) continue;
+      if (typeof patch[k] === "number" && isFinite(patch[k])) target[k] = patch[k];
+    }
+    return target;
+  }
+
+  if (SITE) {
+    overlay(DEFAULT_CFG, SITE.cfg, DEFAULT_CFG);
+    /* 점주 시뮬레이터 전용 기본값 (본사 설정 패널에 없는 항목)
+       sim 그룹은 시뮬레이터 화면의 입력 단위 그대로 쓴다:
+         join     0 = 자동(다음 달), 1~12 = 해당 월 고정
+         inst     할부 개월
+         otherMan 사업 외 연간 소득 (만원)
+         vatType  1 = 간이과세, 2 = 일반과세
+         setupOn  1 = 세팅비 포함 */
+    var simWL = { inst: 1, vatType: 1 };
+    overlay(DEFAULTS.m30, SITE.sim, simWL);
+    overlay(DEFAULTS.m50, SITE.sim, simWL);
+    if (SITE.sim) {
+      var om = SITE.sim.otherMan;
+      if (typeof om === "number" && isFinite(om) && om >= 0) {
+        DEFAULTS.m30.otherIncome = DEFAULTS.m50.otherIncome = om * 10000;
+      }
+      var jm = SITE.sim.join;
+      if (typeof jm === "number" && jm >= 1 && jm <= 12) {
+        DEFAULTS.m30.joinMonth = DEFAULTS.m50.joinMonth = jm;
+      }
+    }
+  }
+
+  /* 공개 파일에 담아도 되는 그룹만 허용한다.
+     본사 내부 변수(hqi: 비상주 원가·본사 수수료율·소개보상·부가세율·을 배분율)는
+     암호화된 본사 전용 페이지 안에만 존재해야 하므로 절대 내보내지 않는다. */
+  var PUBLIC_GROUPS = { cfg: 1, sim: 1, rev: 1 };
+
+  /**
+   * 현재 화면 값을 wf-defaults.js 파일로 내려받는다.
+   * patch = { cfg:{...}, sim:{...}, rev:{...} } — 넘긴 그룹만 갱신하고
+   * 다른 페이지가 저장해 둔 그룹은 그대로 보존한다.
+   * hqi 등 비공개 그룹은 넘겨도 조용히 무시된다.
+   */
+  function exportDefaults(patch) {
+    var base = {};
+    if (SITE) { try { base = JSON.parse(JSON.stringify(SITE)); } catch (e) { base = {}; } }
+    for (var gg in base) {
+      if (!Object.prototype.hasOwnProperty.call(PUBLIC_GROUPS, gg)) delete base[gg];
+    }
+    for (var g in patch) {
+      if (!Object.prototype.hasOwnProperty.call(patch, g)) continue;
+      if (!Object.prototype.hasOwnProperty.call(PUBLIC_GROUPS, g)) continue;
+      base[g] = Object.assign(base[g] || {}, patch[g]);
+    }
+    var d = new Date();
+    function p2(x) { return (x < 10 ? "0" : "") + x; }
+    var stamp = d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) +
+      " " + p2(d.getHours()) + ":" + p2(d.getMinutes());
+    var txt =
+      "/* =====================================================================\n" +
+      " * WF GROUP 시뮬레이터 — 사이트 기본값\n" +
+      " * 시뮬레이터 화면의 [기본값으로 저장] 버튼이 자동 생성한 파일입니다.\n" +
+      " * 생성 시각: " + stamp + "\n" +
+      " *\n" +
+      " * 사용법: 이 파일을  assets/js/wf-defaults.js  자리에 덮어쓰고\n" +
+      " *         GitHub에 푸시하면 모든 방문자의 기본값이 바뀝니다.\n" +
+      " *         (직접 손으로 고쳐도 됩니다)\n" +
+      " *\n" +
+      " * ※ 본사 내부 변수(비상주 원가·본사 수수료율·소개보상·부가세율·을 배분율)는\n" +
+      " *   공개 파일에 노출되면 안 되므로 여기에 저장되지 않습니다.\n" +
+      " *   해당 값은 본사 전용 페이지의 브라우저에만 저장됩니다.\n" +
+      " * ===================================================================== */\n" +
+      "window.WF_DEFAULTS = " + JSON.stringify(base, null, 2) + ";\n";
+    try {
+      var blob = new Blob([txt], { type: "application/javascript;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = "wf-defaults.js";
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 0);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  /** 사이트 기본값 파일이 실제로 적용 중인지 (UI 안내용) */
+  function siteDefaultsActive() { return !!SITE; }
 
   /** 본사 설정(cfg, DEFAULT_CFG 단위)을 엔진 파라미터에 적용 */
   function applyCfg(p, cfg, model) {
@@ -273,5 +375,11 @@
     return Math.ceil(need / unit) * unit;
   }
 
-  return { DEFAULTS: DEFAULTS, DEFAULT_CFG: DEFAULT_CFG, applyCfg: applyCfg, VAT: VAT, TAX_BRACKETS: TAX_BRACKETS, simulate: simulate, calMonth: calMonth, incomeTax: incomeTax, recommendDeposit: recommendDeposit };
+  return {
+    DEFAULTS: DEFAULTS, DEFAULT_CFG: DEFAULT_CFG, applyCfg: applyCfg, VAT: VAT,
+    TAX_BRACKETS: TAX_BRACKETS, simulate: simulate, calMonth: calMonth,
+    calYearOffset: calYearOffset, incomeTax: incomeTax, recommendDeposit: recommendDeposit,
+    exportDefaults: exportDefaults, siteDefaultsActive: siteDefaultsActive,
+    SITE_DEFAULTS: SITE
+  };
 });
