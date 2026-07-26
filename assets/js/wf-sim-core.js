@@ -38,8 +38,8 @@
     m30: {
       n: 30, joinMonth: 8,
       mp: 1800000, ach: 1.0,
-      shr: 0.4, lossRate: 0.04, lossShare: 0.4, cm: 0.4,
-      st: 1, fr: 1, pl: 3,
+      shr: 0.4, lossRate: 0, lossShare: 0.4, cm: 0.4,
+      st: 0, fr: 1, pl: 3,
       resNew: 125000, resRenew: 100000, setupFee: 1000000, setupOn: 1,
       server: 250000, taxAgent: 0, inst: 3, dep: 5000000,
       nvShare: 0.2, nvLag: 1, cp1: 0.7, cp1m1: 0.5, cp2Lag: 2, cardLag: 1,
@@ -48,8 +48,8 @@
     m50: {
       n: 50, joinMonth: 8,
       mp: 2500000, ach: 1.0,
-      shr: 0.4, lossRate: 0.04, lossShare: 0.4, cm: 0.4,
-      st: 1, fr: 1, pl: 3,
+      shr: 0.4, lossRate: 0, lossShare: 0.4, cm: 0.4,
+      st: 0, fr: 1, pl: 3,
       resNew: 115000, resRenew: 100000, setupFee: 1500000, setupOn: 1,
       server: 250000, taxAgent: 0, inst: 3, dep: 7500000,
       nvShare: 0.2, nvLag: 1, cp1: 0.7, cp1m1: 0.5, cp2Lag: 2, cardLag: 1,
@@ -71,8 +71,8 @@
   // ---- 본사 설정(관리자 패널) 기본값 — %는 정수, 금액은 만원 단위 ----
   var DEFAULT_CFG = {
     mp30: 180, mp50: 250, ach: 100,
-    shr: 40, lossRate: 4, lossShare: 40, cm: 40,
-    st: 1, fr: 1, pl: 3, setupOn: 1,
+    shr: 40, lossRate: 0, lossShare: 40, cm: 40,
+    st: 0, fr: 1, pl: 3, setupOn: 1,
     resNew30: 12.5, resNew50: 11.5, resRenew30: 10, resRenew50: 10,
     setup30: 100, setup50: 150, server: 25, taxAgent: 0,
     nvShare: 20, nvLag: 1, cp1: 70, cp1m1: 50, cp2Lag: 2, cardLag: 1
@@ -241,6 +241,7 @@
       recovery: recoveryLabel,
       breakevenPre: bePre, breakevenPost: bePost,
       cumPost12: rows[11].cumPost, cumPost24: rows[23].cumPost,
+      cumPre12: rows[11].cumPre, cumPre24: rows[23].cumPre,
       bal12: rows[11].L, recv12: rows[11].Mrecv,
       totalInject: cumS,
       minBal: Math.min.apply(null, rows.map(function (r) { return r.L; })),

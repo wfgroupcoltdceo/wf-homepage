@@ -103,13 +103,13 @@
   }
   .cards-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
   @media (min-width: 1280px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
-  #chart-box { position: relative; }
+  .chart-box { position: relative; }
   /* 투자금 회수 강조 배지 */
-  #recover-badge {
+  .rb-badge {
     position: absolute; display: none; z-index: 4; transform: translateX(-50%);
     text-align: center; pointer-events: none;
   }
-  #recover-badge .rb-pill {
+  .rb-badge .rb-pill {
     display: inline-block; position: relative; overflow: hidden;
     background: linear-gradient(135deg, #302F2F 0%, #181818 100%);
     color: #fff; font-size: .68rem; font-weight: 800; letter-spacing: .02em;
@@ -117,16 +117,16 @@
     box-shadow: 0 0 0 0 rgba(24,24,24,.35);
     animation: rb-pulse 1.8s ease-out infinite;
   }
-  #recover-badge .rb-pill::after {
+  .rb-badge .rb-pill::after {
     content: ""; position: absolute; top: 0; left: -80%; width: 60%; height: 100%;
     background: linear-gradient(105deg, transparent 0%, rgba(250,252,253,.55) 50%, transparent 100%);
     animation: rb-shine 2.4s ease-in-out infinite;
   }
-  #recover-badge .rb-sub {
+  .rb-badge .rb-sub {
     margin-top: .18rem; font-size: .62rem; font-weight: 800; color: #444;
     text-shadow: 0 1px 0 rgba(255,255,255,.8);
   }
-  #recover-badge .rb-line {
+  .rb-badge .rb-line {
     width: 2px; margin: .15rem auto 0;
     background: repeating-linear-gradient(180deg, #444 0 4px, transparent 4px 8px);
   }
@@ -138,13 +138,13 @@
   @keyframes rb-shine {
     0% { left: -80%; } 55% { left: 120%; } 100% { left: 120%; }
   }
-  #chart-tip {
+  .chart-tip {
     position: absolute; display: none; pointer-events: none; z-index: 5;
     background: #181818; color: #fff; border-radius: .6rem; padding: .55rem .7rem;
     font-size: .7rem; line-height: 1.55; box-shadow: 0 8px 24px rgba(0,0,0,.25); white-space: nowrap;
   }
-  #chart-tip .tt { font-weight: 800; font-size: .74rem; margin-bottom: .15rem; }
-  #chart-tip .inj { color: #ff9d9d; font-weight: 700; }
+  .chart-tip .tt { font-weight: 800; font-size: .74rem; margin-bottom: .15rem; }
+  .chart-tip .inj { color: #ff9d9d; font-weight: 700; }
   @media (max-width: 768px) {
     .sim-panel { padding: 1.2rem; }
     .kcard .v { font-size: 1.2rem; }
@@ -313,25 +313,35 @@
         <!-- 요약 카드 -->
         <div class="cards-grid" id="cards"></div>
 
-        <!-- 차트 -->
+        <!-- 차트 1 — 누적 수익금 -->
         <div class="sim-panel mb-6">
-          <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
-            <div class="font-extrabold text-lg" id="chart-title">24개월 통장 잔액 흐름</div>
-            <div class="flex gap-2">
-              <button type="button" class="seg-btn on" data-cm="bal">통장 잔액</button>
-              <button type="button" class="seg-btn" data-cm="profit">누적 수익금</button>
+          <div class="font-extrabold text-lg mb-1">24개월 누적 수익금 흐름</div>
+          <div class="text-xs text-gray-500 font-semibold mb-1" id="chart2-legend"></div>
+          <div class="text-xs text-gray-400 mb-3" id="chart2-note"></div>
+          <div class="chart-box">
+            <canvas id="chart2" style="width:100%;height:320px;"></canvas>
+            <div class="rb-badge" id="be-badge">
+              <div class="rb-pill">★ 손익분기 달성</div>
+              <div class="rb-sub">이후 누적 흑자</div>
+              <div class="rb-line"></div>
             </div>
+            <div class="chart-tip" id="chart-tip2"></div>
           </div>
+        </div>
+
+        <!-- 차트 2 — 통장 잔액 -->
+        <div class="sim-panel mb-6">
+          <div class="font-extrabold text-lg mb-1">24개월 통장 잔액 흐름</div>
           <div class="text-xs text-gray-500 font-semibold mb-1" id="chart-legend"></div>
           <div class="text-xs text-gray-400 mb-3" id="chart-note">막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다 · 13개월차부터 연장(2년차) 구간</div>
-          <div id="chart-box">
+          <div class="chart-box">
             <canvas id="chart" style="width:100%;height:320px;"></canvas>
-            <div id="recover-badge">
+            <div class="rb-badge" id="recover-badge">
               <div class="rb-pill">★ 투자금 회수 완료</div>
               <div class="rb-sub">이후 순이익 구간</div>
               <div class="rb-line"></div>
             </div>
-            <div id="chart-tip"></div>
+            <div class="chart-tip" id="chart-tip"></div>
           </div>
         </div>
 
@@ -423,7 +433,7 @@
   } catch (e) {}
 
   // ---- 상태 (점주 조절: 모델·가입월·할부·예치금·사업외소득·과세유형) ----
-  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1, chartMode: "bal" };
+  var state = { model: "m30", join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
 
   var DEP_UNIT = 500000; // 권장액 올림 단위 (50만 원)
 
@@ -445,7 +455,7 @@
 
   function paintFixedBox(p) {
     $("fx-mp").textContent = man(p.mp * p.ach, 0) + (hqCfg.ach !== 100 ? " (달성률 " + hqCfg.ach + "%)" : "");
-    $("fx-st").textContent = p.st + "개월 (매출 0 · 수수료 0)";
+    $("fx-st").textContent = p.st > 0 ? p.st + "개월 (매출 0 · 수수료 0)" : "없음 (가입 첫 달부터 매출 발생)";
     $("fx-fr").textContent = p.fr > 0 ? p.fr + "개월 (점주 100% 수취)" : "면제 없음";
     $("fx-pl").textContent = "매출 발생 " + p.pl + "개월 뒤 20일";
     var nv = Math.round(hqCfg.nvShare / 10);
@@ -484,12 +494,12 @@
     // ---- 요약 카드 ----
     var recovery = (typeof r.recovery === "number") ? r.recovery + "개월차" : r.recovery;
     var injectTxt = (r.totalInject > 0) ? man(r.totalInject, 0) : "불필요";
-    var beTxt = r.breakevenPost ? r.breakevenPost + "개월차" : "24개월 내 미달";
+    var beTxt = r.breakevenPre ? r.breakevenPre + "개월차" : "24개월 내 미달";
     var cards = [
-      { t: "1년차 순수익 (세후)", v: man(r.y1Post, 0), s: "세전 " + man(r.y1Pre, 0) + " · ROI(세전) " + pct(r.roi1), dark: true },
-      { t: "2년차 순수익 (세후)", v: man(r.y2Post, 0), s: "세전 " + man(r.y2Pre, 0) + " · ROI(세전) " + pct(r.roi2), dark: true },
+      { t: "1년차 순수익 (세전)", v: man(r.y1Pre, 0), s: "세후 " + man(r.y1Post, 0) + " · ROI(세전) " + pct(r.roi1), dark: true },
+      { t: "2년차 순수익 (세전)", v: man(r.y2Pre, 0), s: "세후 " + man(r.y2Post, 0) + " · ROI(세전) " + pct(r.roi2), dark: true },
       { t: "투자금 회수 시점", v: recovery, s: "잔액이 예치금 수준을 회복하는 달 · 손익분기 " + beTxt },
-      { t: "24개월 누적 수익금 (세후)", v: man(r.cumPost24, 0), s: "1년차 " + man(r.cumPost12, 0) + " + 2년차 " + man(r.cumPost24 - r.cumPost12, 0) + " · 12개월차 통장 잔액 " + man(r.bal12, 0) },
+      { t: "24개월 누적 수익금 (세전)", v: man(r.cumPre24, 0), s: "세후 " + man(r.cumPost24, 0) + " · 1년차 " + man(r.cumPre12, 0) + " + 2년차 " + man(r.cumPre24 - r.cumPre12, 0) },
       { t: "추가 현금 투입", v: injectTxt, s: (r.totalInject > 0) ? "카드값이 잔액을 넘는 달의 부족분 합계 (권장액 " + man(p.recDep, 0) + "이면 0)" : "예치금으로 24개월 내내 잔액 유지" },
       { t: "1년차 창업비용", v: man(r.inv1, 0), s: "비상주 " + p.n + "개 + 세팅비 + 서버 (2년차 연장 " + man(r.inv2, 0) + ")" }
     ];
@@ -497,18 +507,13 @@
       return '<div class="kcard' + (c.dark ? " dark" : "") + '"><div class="t">' + c.t + '</div><div class="v">' + c.v + '</div><div class="s">' + c.s + "</div></div>";
     }).join("");
 
-    // ---- 차트 ----
-    if (state.chartMode === "profit") {
-      drawProfitChart(r, p);
-      $("chart-title").textContent = "24개월 누적 수익금 흐름";
-      $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 누적 수익금 (세후) &nbsp; <span style="color:#b91c1c">■</span> 누적 손실 구간 &nbsp; <span style="color:#8A8B8E">┈</span> 세전 기준';
-      $("chart-note").textContent = "발생(회계) 기준 누적 순이익 · 12개월차에 1년차 세금, 24개월차에 2년차 세금을 반영 · 13개월차의 하락은 연장 투자금 반영분";
-    } else {
-      drawChart(r, p);
-      $("chart-title").textContent = "24개월 통장 잔액 흐름";
-      $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; <span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
-      $("chart-note").textContent = "막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다 · 13개월차부터 연장(2년차) 구간";
-    }
+    // ---- 차트 (누적 수익금 + 통장 잔액 동시 표시) ----
+    drawProfitChart(r, p);
+    $("chart2-legend").innerHTML = '<span style="color:#181818">■</span> 누적 수익금 (세전) &nbsp; <span style="color:#b91c1c">■</span> 누적 손실 구간 &nbsp; <span style="color:#8A8B8E">┈</span> 세후 기준';
+    $("chart2-note").textContent = "발생(회계) 기준 누적 순이익 · 막대는 세전, 점선은 세금까지 뺀 세후 · 13개월차의 하락은 연장 투자금 반영분";
+    drawChart(r, p);
+    $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; <span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
+    $("chart-note").textContent = "실제 입금·카드 결제 시점 기준 현금 흐름 · 막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다";
 
     // ---- 월별 표 (채널별 유입·카드값 구분) ----
     var head = "<thead><tr><th>개월차</th><th>달력월</th><th>네이버 정산</th><th>쿠팡 정산</th><th>정산 합계</th><th>카드값 (상품)</th><th>투자금 납부</th><th>수수료 송금</th><th>면허세</th><th>월 순현금</th><th>통장 잔액</th><th>추가 투입</th></tr></thead>";
@@ -555,7 +560,7 @@
   }
 
   // ---- 캔버스 차트 ----
-  var geom = null; // 툴팁용 좌표 캐시
+  var geomBal = null, geomProfit = null; // 툴팁용 좌표 캐시
   function drawChart(r, p) {
     var cv = $("chart");
     var dpr = window.devicePixelRatio || 1;
@@ -614,7 +619,7 @@
       ctx.fillText("순이익 구간 →", W - padR - 6, padT + 12);
     }
     // 막대
-    geom = { padL: padL, bw: bw, y0: y0, mode: "bal" };
+    geomBal = { padL: padL, bw: bw };
     r.rows.forEach(function (row, idx) {
       var x = padL + idx * bw + bw * 0.18, w = bw * 0.64;
       var grd = ctx.createLinearGradient(0, yPos(row.L), 0, y0);
@@ -672,7 +677,7 @@
 
   // ---- 누적 수익금 차트 ----
   function drawProfitChart(r, p) {
-    var cv = $("chart");
+    var cv = $("chart2");
     var dpr = window.devicePixelRatio || 1;
     var W = cv.clientWidth, H = 320;
     cv.width = W * dpr; cv.height = H * dpr;
@@ -719,7 +724,7 @@
     ctx.beginPath(); ctx.moveTo(padL, y0); ctx.lineTo(W - padR, y0); ctx.stroke();
     ctx.lineWidth = 1;
 
-    var be = r.breakevenPost;
+    var be = r.breakevenPre;
     // 손익분기 이후 배경 음영
     if (be) {
       var bxr = padL + (be - 1) * bw;
@@ -729,11 +734,11 @@
       ctx.fillText("누적 흑자 구간 →", W - padR - 6, padT + 12);
     }
 
-    // 세후 누적 막대
-    geom = { padL: padL, bw: bw, y0: y0, mode: "profit" };
+    // 세전 누적 막대 (메인)
+    geomProfit = { padL: padL, bw: bw };
     r.rows.forEach(function (row, idx) {
       var x = padL + idx * bw + bw * 0.18, w = bw * 0.64;
-      var v = row.cumPost, top = yv(v);
+      var v = row.cumPre, top = yv(v);
       if (v >= 0) {
         var grd = ctx.createLinearGradient(0, top, 0, y0);
         if (be && idx + 1 === be) {
@@ -758,11 +763,11 @@
       }
     });
 
-    // 세전 누적 라인 (점선)
+    // 세후 누적 라인 (점선)
     ctx.strokeStyle = "#8A8B8E"; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
     ctx.beginPath();
     r.rows.forEach(function (row, idx) {
-      var cx = padL + (idx + 0.5) * bw, cy = yv(row.cumPre);
+      var cx = padL + (idx + 0.5) * bw, cy = yv(row.cumPost);
       if (idx === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
     });
     ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 1;
@@ -780,7 +785,7 @@
     });
 
     // 손익분기 배지 (반짝 강조)
-    var badge = document.getElementById("recover-badge");
+    var badge = document.getElementById("be-badge");
     if (be) {
       var bx = padL + (be - 0.5) * bw;
       bx = Math.max(70, Math.min(W - 70, bx));
@@ -789,51 +794,58 @@
       badge.style.top = "0px";
       badge.querySelector(".rb-pill").textContent = "★ 손익분기 달성";
       badge.querySelector(".rb-sub").textContent = "이후 누적 흑자";
-      badge.querySelector(".rb-line").style.height = Math.max(0, yv(r.rows[be - 1].cumPost) - 52) + "px";
+      badge.querySelector(".rb-line").style.height = Math.max(0, yv(r.rows[be - 1].cumPre) - 52) + "px";
     } else {
       badge.style.display = "none";
     }
   }
 
   // ---- 차트 툴팁 ----
-  var tip = $("chart-tip");
-  $("chart").addEventListener("mousemove", function (ev) {
-    if (!geom || !lastResult) { return; }
-    var rect = this.getBoundingClientRect();
-    var x = ev.clientX - rect.left;
-    var idx = Math.floor((x - geom.padL) / geom.bw);
-    if (idx < 0 || idx > 23) { tip.style.display = "none"; return; }
-    var row = lastResult.rows[idx];
-    var lines;
-    if (geom.mode === "profit") {
-      lines = [
-        '<div class="tt">' + row.m + "개월차 (" + row.cal + "월" + (row.m >= 13 ? " · 2년차" : "") + ")</div>",
-        "그 달 순수입 " + won(row.netM) + "원"
-      ];
-      if (row.invM > 0) lines.push("투자금(발생) " + won(row.invM) + "원");
-      if (row.m === 12) lines.push("1년차 세금 " + won(lastResult.tax1.total + lastResult.vat.vat1) + "원");
-      if (row.m === 24) lines.push("2년차 세금 " + won(lastResult.tax2.total + lastResult.vat.vat2) + "원");
-      lines.push("누적 세전 " + won(row.cumPre) + "원");
-      lines.push('<strong' + (row.cumPost < 0 ? ' class="inj"' : "") + ">누적 세후 " + won(row.cumPost) + "원</strong>");
-    } else {
-      lines = [
-        '<div class="tt">' + row.m + "개월차 (" + row.cal + "월" + (row.m >= 13 ? " · 2년차" : "") + ")</div>",
-        "정산 유입 " + won(row.H) + "원",
-        "카드값·투자금 " + won(row.I + row.P) + "원",
-        "수수료 송금 " + won(row.J) + "원",
-        "<strong>통장 잔액 " + won(row.L) + "원</strong>"
-      ];
-      if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
-      if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
-    }
-    tip.innerHTML = lines.join("<br>");
-    tip.style.display = "block";
-    var bx = ev.clientX - rect.left + 14, by = ev.clientY - rect.top - 10;
-    var boxW = tip.offsetWidth;
-    if (bx + boxW > rect.width) bx = bx - boxW - 28;
-    tip.style.left = bx + "px"; tip.style.top = by + "px";
+  function bindTip(canvasId, tipId, geomGet, build) {
+    var cv = $(canvasId), tip = $(tipId);
+    cv.addEventListener("mousemove", function (ev) {
+      var g = geomGet();
+      if (!g || !lastResult) { return; }
+      var rect = this.getBoundingClientRect();
+      var x = ev.clientX - rect.left;
+      var idx = Math.floor((x - g.padL) / g.bw);
+      if (idx < 0 || idx > 23) { tip.style.display = "none"; return; }
+      tip.innerHTML = build(lastResult.rows[idx]).join("<br>");
+      tip.style.display = "block";
+      var bx = ev.clientX - rect.left + 14, by = ev.clientY - rect.top - 10;
+      var boxW = tip.offsetWidth;
+      if (bx + boxW > rect.width) bx = bx - boxW - 28;
+      tip.style.left = bx + "px"; tip.style.top = by + "px";
+    });
+    cv.addEventListener("mouseleave", function () { tip.style.display = "none"; });
+  }
+
+  function head(row) {
+    return '<div class="tt">' + row.m + "개월차 (" + row.cal + "월" + (row.m >= 13 ? " · 2년차" : "") + ")</div>";
+  }
+
+  bindTip("chart2", "chart-tip2", function () { return geomProfit; }, function (row) {
+    var lines = [head(row), "그 달 순수입 " + won(row.netM) + "원"];
+    if (row.invM > 0) lines.push("투자금(발생) " + won(row.invM) + "원");
+    if (row.m === 12) lines.push("1년차 세금 " + won(lastResult.tax1.total + lastResult.vat.vat1) + "원");
+    if (row.m === 24) lines.push("2년차 세금 " + won(lastResult.tax2.total + lastResult.vat.vat2) + "원");
+    lines.push('<strong' + (row.cumPre < 0 ? ' class="inj"' : "") + ">누적 세전 " + won(row.cumPre) + "원</strong>");
+    lines.push("누적 세후 " + won(row.cumPost) + "원");
+    return lines;
   });
-  $("chart").addEventListener("mouseleave", function () { tip.style.display = "none"; });
+
+  bindTip("chart", "chart-tip", function () { return geomBal; }, function (row) {
+    var lines = [
+      head(row),
+      "정산 유입 " + won(row.H) + "원",
+      "카드값·투자금 " + won(row.I + row.P) + "원",
+      "수수료 송금 " + won(row.J) + "원",
+      "<strong>통장 잔액 " + won(row.L) + "원</strong>"
+    ];
+    if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
+    if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
+    return lines;
+  });
 
   // ---- 이벤트 바인딩 ----
   function setModel(m) {
@@ -866,13 +878,6 @@
     document.querySelectorAll("[data-dep]").forEach(function (b) { b.classList.remove("on"); });
     render();
   });
-  document.querySelectorAll("[data-cm]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      state.chartMode = b.dataset.cm;
-      document.querySelectorAll("[data-cm]").forEach(function (x) { x.classList.toggle("on", x === b); });
-      render();
-    });
-  });
   document.querySelectorAll("[data-dep]").forEach(function (b) {
     b.addEventListener("click", function () {
       document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
@@ -883,7 +888,7 @@
     });
   });
   $("btn-reset").addEventListener("click", function () {
-    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1, chartMode: state.chartMode };
+    state = { model: state.model, join: "auto", inst: 3, depMan: null, otherMan: 4000, vatType: 1, setupOn: 1 };
     $("in-join").value = "auto";
     $("in-inst").value = "3";
     $("in-other").value = 4000;
