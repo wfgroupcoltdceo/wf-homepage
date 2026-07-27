@@ -61,9 +61,6 @@ window.WF_DEFAULTS = {
     "renew": 70,
     "horizon": 36,
     "fix": 1000,
-    "refShare": 50,
-    "refOpt": 1,
-    "eulOwn": 0,
     "startMonth": 8
   }
 };

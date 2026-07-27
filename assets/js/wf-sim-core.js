@@ -130,6 +130,21 @@
      본사 내부 변수(hqi: 비상주 원가·본사 수수료율·소개보상·부가세율·을 배분율)는
      암호화된 본사 전용 페이지 안에만 존재해야 하므로 절대 내보내지 않는다. */
   var PUBLIC_GROUPS = { cfg: 1, sim: 1, rev: 1 };
+  /* 본사 내부 변수 — 어떤 그룹에 섞여 들어와도 공개 파일에서 제거한다.
+     (예전 wf-defaults.js 의 rev 그룹에 남아 있던 refShare·refOpt·eulOwn 포함) */
+  var SECRET_KEYS = {
+    resCost: 1, hqRate: 1, eulRate: 1, opt1: 1, opt2: 1,
+    refShare: 1, refOpt: 1, eulOwn: 1, vat: 1
+  };
+  function scrubSecrets(o) {
+    for (var g in o) {
+      if (!Object.prototype.hasOwnProperty.call(o, g)) continue;
+      var grp = o[g];
+      if (!grp || typeof grp !== "object") continue;
+      for (var k in SECRET_KEYS) if (Object.prototype.hasOwnProperty.call(grp, k)) delete grp[k];
+    }
+    return o;
+  }
 
   /**
    * 현재 화면 값을 wf-defaults.js 파일로 내려받는다.
@@ -148,6 +163,7 @@
       if (!Object.prototype.hasOwnProperty.call(PUBLIC_GROUPS, g)) continue;
       base[g] = Object.assign(base[g] || {}, patch[g]);
     }
+    scrubSecrets(base);
     var d = new Date();
     function p2(x) { return (x < 10 ? "0" : "") + x; }
     var stamp = d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) +
