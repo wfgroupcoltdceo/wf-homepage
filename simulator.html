@@ -128,12 +128,61 @@
   .sim-main { padding: 2.5rem 0 1rem; }
   .sim-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
   .sim-grid > * { min-width: 0; }
+  /* ===== 데스크톱 2분할: 조건 입력 / 결과 각각 독립 스크롤 ===== */
   @media (min-width: 1024px) {
-    .sim-grid { grid-template-columns: 340px minmax(0, 1fr); }
-    .sim-side { position: sticky; top: 5.5rem; }
+    .sim-hero { padding: 6.5rem 0 2.5rem; }
+    .sim-main { padding: 1.5rem 0 0; }
+    /* 두 패널이 화면에 고정돼 있는 동안 페이지가 굴러갈 여유 */
+    .sim-main .sim-wrap::after { content: ""; display: block; height: 55vh; }
+    .sim-grid {
+      grid-template-columns: 340px minmax(0, 1fr);
+      /* 헤더(4rem) 아래에 붙어서 화면을 꽉 채운다 */
+      position: sticky;
+      top: 4.75rem;
+      height: calc(100vh - 5.75rem);
+      min-height: 560px;
+      align-items: stretch;
+    }
+    .sim-side, .sim-result {
+      height: 100%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+    .sim-side { padding-right: 1.15rem; padding-top: 0; }
+    .sim-result { padding-right: .4rem; }
+    /* 마지막 요소 아래 여백 — 스크롤 끝이 잘려 보이지 않도록 */
+    .sim-side > :last-child, .sim-result > :last-child { margin-bottom: .25rem; }
+    .sim-side::-webkit-scrollbar,
+    .sim-result::-webkit-scrollbar { width: 8px; }
+    .sim-side::-webkit-scrollbar-thumb,
+    .sim-result::-webkit-scrollbar-thumb { background: #d6d7d9; border-radius: 4px; }
+    .sim-side::-webkit-scrollbar-thumb:hover,
+    .sim-result::-webkit-scrollbar-thumb:hover { background: #b8b9bc; }
+    .sim-side::-webkit-scrollbar-track,
+    .sim-result::-webkit-scrollbar-track { background: transparent; }
+    .sim-side, .sim-result { scrollbar-width: thin; scrollbar-color: #d6d7d9 transparent; }
+    /* 입력 패널 제목은 스크롤해도 위에 고정 */
+    .sim-side .side-head {
+      position: sticky; top: 0; z-index: 3;
+      background: #fff;
+      margin: 0 -1.15rem .9rem -1.75rem;
+      padding: 1.55rem 1.15rem .7rem 1.75rem;
+      border-bottom: 1px solid #f0f1f2;
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
   }
   .cards-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
   @media (min-width: 1280px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
+  /* 차트 옵션 토글 (초기투자금 제외 잔액) */
+  .ghost-toggle {
+    display: inline-flex; align-items: center; gap: .4rem; flex: none;
+    font-size: .74rem; font-weight: 700; color: #6b7280; cursor: pointer;
+    border: 1px solid #e5e7eb; border-radius: 999px; padding: .3rem .65rem;
+    background: #fff; white-space: nowrap; user-select: none;
+  }
+  .ghost-toggle:hover { border-color: #d1d5db; color: #374151; }
+  .ghost-toggle input { accent-color: #5F6169; width: .85rem; height: .85rem; margin: 0; }
   .chart-box { position: relative; }
   .chart-scroll { overflow-x: auto; overflow-y: hidden; }
   .chart-scroll > .chart-box { display: inline-block; min-width: 100%; vertical-align: top; }
@@ -250,7 +299,7 @@
 
       <!-- ============ 입력 패널 ============ -->
       <div class="sim-panel sim-side">
-        <div class="font-extrabold text-lg mb-4">조건 입력</div>
+        <div class="side-head font-extrabold text-lg mb-4">조건 입력</div>
 
         <div class="sim-field">
           <span class="sim-label">사업 모델</span>
@@ -367,7 +416,7 @@
       </div>
 
       <!-- ============ 결과 ============ -->
-      <div>
+      <div class="sim-result">
         <!-- 요약 카드 -->
         <div class="cards-grid" id="cards"></div>
 
@@ -391,7 +440,13 @@
 
         <!-- 차트 2 — 통장 잔액 -->
         <div class="sim-panel mb-6">
-          <div class="font-extrabold text-lg mb-1" id="chart-title">통장 잔액 흐름</div>
+          <div class="flex items-center justify-between gap-3 mb-1" style="flex-wrap:wrap">
+            <div class="font-extrabold text-lg" id="chart-title">통장 잔액 흐름</div>
+            <label class="ghost-toggle" for="ghost-on">
+              <input type="checkbox" id="ghost-on" checked />
+              <span>투자금 제외 잔액 함께 보기</span>
+            </label>
+          </div>
           <div class="text-xs text-gray-500 font-semibold mb-1" id="chart-legend"></div>
           <div class="text-xs text-gray-400 mb-3" id="chart-note">막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다</div>
           <div class="chart-scroll" id="chart-scroll">
@@ -519,6 +574,7 @@
       join: numOr(SIM_SITE.join, 0, 1, 12) || "auto",
       inst: numOr(SIM_SITE.inst, 3, 0, 24),
       depMan: null,
+      ghost: true,                 // 잔액 차트에 '초기투자금 제외 잔액' 함께 표시
       otherMan: numOr(SIM_SITE.otherMan, 4000, 0, 1e7),
       vatType: numOr(SIM_SITE.vatType, 1, 1, 2),
       setupOn: numOr(SIM_SITE.setupOn, 1, 0, 1)
@@ -540,7 +596,9 @@
     p.setupOn = state.setupOn;
     p.dep = 0;
     // 권장액 = 현재 모든 변수(과세유형·면허세·할부·가입월 포함)에서 추가 투입이 0이 되는 최소 예치금
-    p.recDep = WFSim.recommendDeposit(p, DEP_UNIT);
+    // 그 안에서 '초기투자금 결제 몫'과 '운영 여유자금 몫'을 나눠 둔다 (일시불↔할부 차이의 원인)
+    p.depBreak = WFSim.depositBreakdown(p, DEP_UNIT);
+    p.recDep = p.depBreak.total;
     p.dep = (state.depMan === null) ? p.recDep : state.depMan * MAN;
     return p;
   }
@@ -580,9 +638,16 @@
 
     // 권장액 안내 — 현재 변수 조건에서 추가 투입 0을 보장하는 최소 금액
     $("dep-rec").textContent = "권장액 " + Math.round(p.recDep / MAN).toLocaleString("ko-KR") + "만";
+    var bk = p.depBreak;
     $("dep-hint").innerHTML = (p.recDep > 0)
       ? "권장액 <strong>" + man(p.recDep, 0) + "</strong> = 현재 조건(" + (p.vatType === 2 ? "일반과세·면허세 포함, " : "간이과세, ") +
-        (p.inst <= 1 ? "현금 일시불" : "할부 " + p.inst + "개월") + ", " + p.joinMonth + "월 가입)에서 <strong>추가 현금 투입이 0</strong>이 되는 최소 금액입니다."
+        (p.inst <= 1 ? "현금 일시불" : "할부 " + p.inst + "개월") + ", " + p.joinMonth + "월 가입)에서 <strong>추가 현금 투입이 0</strong>이 되는 최소 금액입니다." +
+        '<span style="display:block;margin-top:.3rem">└ 초기투자금 결제 몫 <strong>' + man(bk.invest, 0) +
+        "</strong> + 운영 여유자금 몫 <strong>" + man(bk.ops, 0) + "</strong>" +
+        (bk.invest > 0
+          ? " — 앞쪽 금액은 할부 개월을 늘리면 줄어듭니다."
+          : " — 초기투자금이 매출 유입에 맞춰 나뉘어 빠지므로 투자금 몫이 0입니다.") +
+        "</span>"
       : "현재 조건에서는 예치금 없이도 통장 잔액이 마이너스가 되지 않습니다.";
 
     // ---- 요약 카드 ----
@@ -644,9 +709,14 @@
     drawProfitChart(r, p);
     $("chart2-legend").innerHTML = '<span style="color:#181818">■</span> 누적 수익금 (세전) &nbsp; <span style="color:#b91c1c">■</span> 누적 손실 구간 &nbsp; <span style="color:#8A8B8E">┈</span> 세후 기준';
     $("chart2-note").textContent = "발생(회계) 기준 누적 순이익 · 막대는 세전, 점선은 세금까지 뺀 세후" + renewTxt;
+    $("ghost-on").checked = !!state.ghost;
     drawChart(r, p);
-    $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; <span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
+    var ghostOn = state.ghost && ghostCum.length && ghostCum[ghostCum.length - 1] > 0;
+    $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; ' +
+      (ghostOn ? '<span style="color:#C7C9CD">■</span> 투자금 결제 누계 (제외 시 잔액) &nbsp; ' : "") +
+      '<span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
     $("chart-note").textContent = "실제 입금·카드 결제 시점 기준 현금 흐름 · 막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다" +
+      (ghostOn ? " · 옅은 윗칸은 창업비용·연장 재투자로 통장에서 이미 빠져나간 누계 — 이를 빼면 순수 운영 잔액이 됩니다" : "") +
       (TERM > 24 ? " · 가로로 스크롤하면 뒷 기간이 보입니다" : "");
 
     // ---- 연차별 요약 ----
@@ -744,6 +814,7 @@
 
   // ---- 캔버스 차트 ----
   var geomBal = null, geomProfit = null; // 툴팁용 좌표 캐시
+  var ghostCum = [];                     // 달별 '초기투자금 결제 누계' (차트·툴팁 공용)
   var MIN_BW = 22;   // 막대 하나에 최소로 확보할 폭 (px) — 넘치면 가로 스크롤
   /** 개월 수에 맞춰 캔버스 실제 폭을 정한다 (좁으면 스크롤) */
   function fitCanvas(cv, scrollId, n) {
@@ -766,7 +837,13 @@
     ctx.clearRect(0, 0, W, H);
 
     var hasInject = r.rows.some(function (x) { return x.S > 0; });
-    var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { return x.L; }))) * 1.1 || 1;
+    /* 초기투자금(창업비용·연장 재투자) 결제로 통장에서 빠져나간 누계.
+       이 몫을 잔액 막대 위에 얹으면 "투자금을 통장에서 내지 않았다면 잔액이 어떻게 흘렀을지"가 그대로 보인다. */
+    var invAcc = 0;
+    ghostCum = r.rows.map(function (x) { invAcc += x.P + x.R; return invAcc; });
+    var showGhost = state.ghost && ghostCum[ghostCum.length - 1] > 0;
+    var topOf = function (idx) { return r.rows[idx].L + (showGhost ? ghostCum[idx] : 0); };
+    var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x, i) { return topOf(i); }))) * 1.1 || 1;
     var maxNeg = hasInject ? Math.max.apply(null, r.rows.map(function (x) { return x.S; })) * 1.15 : 0;
 
     var padL = 58, padR = 10, padT = 16, padB = 32;
@@ -835,6 +912,14 @@
         ctx.fillStyle = grd;
         ctx.fillRect(x, yPos(row.L), w, Math.max(1, y0 - yPos(row.L)));
       }
+      if (showGhost && ghostCum[idx] > 0) { // 투자금 결제 누계 — 실제 잔액 위에 옅게 얹는다
+        var gTop = yPos(topOf(idx)), gBot = yPos(row.L);
+        ctx.fillStyle = "rgba(168,170,171,0.28)";
+        ctx.fillRect(x, gTop, w, Math.max(1, gBot - gTop));
+        ctx.strokeStyle = "#B9BBBE"; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(x, gTop + 0.5); ctx.lineTo(x + w, gTop + 0.5); ctx.stroke();
+        ctx.setLineDash([]);
+      }
       if (row.S > 0) { // 추가투입: 기준선 아래 빨간 막대
         ctx.fillStyle = "#c0392b";
         ctx.fillRect(x, y0 + 1, w, Math.max(2, yNeg(row.S) - y0 - 1));
@@ -862,7 +947,7 @@
       badge.style.top = "0px";
       badge.querySelector(".rb-pill").textContent = "★ 투자금 회수 완료";
       badge.querySelector(".rb-sub").textContent = "이후 순이익 구간";
-      var barTop = yPos(recRow.L);
+      var barTop = yPos(topOf(rec - 1));
       var lineEl = badge.querySelector(".rb-line");
       lineEl.style.height = Math.max(0, barTop - 52) + "px";
     } else {
@@ -1039,6 +1124,11 @@
       "<strong>통장 잔액 " + won(row.L) + "원</strong>"
     ];
     if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
+    var gc = ghostCum[row.m - 1] || 0;
+    if (state.ghost && gc > 0) {
+      lines.push('<span style="color:#9CA3AF">투자금 결제 누계 ' + won(gc) + "원</span>");
+      lines.push('<span style="color:#9CA3AF">└ 제외 시 잔액 ' + won(row.L + gc) + "원</span>");
+    }
     if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
     return lines;
   });
@@ -1098,6 +1188,7 @@
   $("setup-1").addEventListener("click", function () { state.setupOn = 1; this.classList.add("on"); $("setup-0").classList.remove("on"); render(); });
   $("setup-0").addEventListener("click", function () { state.setupOn = 0; this.classList.add("on"); $("setup-1").classList.remove("on"); render(); });
   $("in-inst").addEventListener("change", function () { state.inst = +this.value; render(); });
+  $("ghost-on").addEventListener("change", function () { state.ghost = this.checked; render(); });
   $("in-dep").addEventListener("input", function () {
     state.depMan = Math.max(0, +this.value || 0);
     document.querySelectorAll("[data-dep]").forEach(function (b) { b.classList.remove("on"); });

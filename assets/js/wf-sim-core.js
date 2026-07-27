@@ -438,10 +438,44 @@
     return Math.ceil(need / unit) * unit;
   }
 
+  /**
+   * 권장 예치금의 성격 분해.
+   *   total  = 권장 통장 예치금 (recommendDeposit 과 동일)
+   *   invest = 그중 '초기투자금(창업비용·연장 재투자) 결제' 때문에 필요한 몫
+   *   ops    = 그중 '운영 시차(정산 유입이 늦게 들어오는 기간)' 때문에 필요한 몫
+   *
+   * 일시불이 할부보다 예치금이 큰 이유가 여기서 그대로 드러난다.
+   * 운영 몫은 납부 방식과 무관하게 같고, 투자금 몫만 납부 방식에 따라 달라진다.
+   */
+  function depositBreakdown(p, unit) {
+    unit = unit || 500000;
+    var BIG = 1e11;
+    var q = {};
+    for (var k in p) { if (Object.prototype.hasOwnProperty.call(p, k)) q[k] = p[k]; }
+    q.dep = BIG;
+    var r = simulate(q);
+
+    var needAll = 0, needOps = 0, invCum = 0, invTotal = 0;
+    for (var i = 0; i < r.rows.length; i++) {
+      var row = r.rows[i];
+      invCum += row.P + row.R;          // 투자금 결제로 통장에서 빠져나간 누계
+      invTotal += row.P + row.R;
+      var run = row.L - BIG;            // 미보정 누적현금 = Σ(K-P)
+      if (-run > needAll) needAll = -run;
+      var runOps = run + invCum;        // 투자금 결제를 통장에서 빼지 않았다고 가정한 누계
+      if (-runOps > needOps) needOps = -runOps;
+    }
+    var total = (needAll <= 0) ? 0 : Math.ceil(needAll / unit) * unit;
+    var ops = (needOps <= 0) ? 0 : Math.ceil(needOps / unit) * unit;
+    if (ops > total) ops = total;
+    return { total: total, ops: ops, invest: Math.max(0, total - ops), invTotal: invTotal };
+  }
+
   return {
     DEFAULTS: DEFAULTS, DEFAULT_CFG: DEFAULT_CFG, applyCfg: applyCfg, VAT: VAT,
     TAX_BRACKETS: TAX_BRACKETS, simulate: simulate, calMonth: calMonth,
     calYearOffset: calYearOffset, incomeTax: incomeTax, recommendDeposit: recommendDeposit,
+    depositBreakdown: depositBreakdown,
     exportDefaults: exportDefaults, siteDefaultsActive: siteDefaultsActive,
     SITE_DEFAULTS: SITE
   };
