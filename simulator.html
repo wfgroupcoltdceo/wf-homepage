@@ -174,6 +174,13 @@
   }
   .cards-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
   @media (min-width: 1280px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
+  /* 계약 종료 후 '정산 마무리' 구간 행 */
+  .sim-table tbody tr.tailrow > td { background: #f7f8f9; color: #6b7280; }
+  .sim-table tbody tr.tailrow > td strong { color: #4b5563; }
+  .sim-table tbody tr.tailsep > td {
+    background: #eceef0; color: #4b5563; font-weight: 800; font-size: .74rem;
+    text-align: center; padding: .35rem .5rem; letter-spacing: -0.01em;
+  }
   /* 차트 옵션 토글 (초기투자금 제외 잔액) */
   .ghost-toggle {
     display: inline-flex; align-items: center; gap: .4rem; flex: none;
@@ -583,6 +590,7 @@
   var state = baseState("m30");
 
   var DEP_UNIT = 500000; // 권장액 올림 단위 (50만 원)
+  var TAIL_MONTHS = 4;   // 계약 종료 후 정산 잔여분을 보여줄 개월 수
 
   function currentParams() {
     var d = WFSim.DEFAULTS[state.model];
@@ -594,6 +602,7 @@
     p.otherIncome = state.otherMan * MAN;
     p.vatType = state.vatType;
     p.setupOn = state.setupOn;
+    p.tail = TAIL_MONTHS;         // 계약 종료 후 정산이 마무리되는 구간까지 함께 표시
     p.dep = 0;
     // 권장액 = 현재 모든 변수(과세유형·면허세·할부·가입월 포함)에서 추가 투입이 0이 되는 최소 예치금
     // 그 안에서 '초기투자금 결제 몫'과 '운영 여유자금 몫'을 나눠 둔다 (일시불↔할부 차이의 원인)
@@ -705,7 +714,7 @@
     // ---- 차트 (누적 수익금 + 통장 잔액 동시 표시) ----
     var renewTxt = r.renewMonths.length ? " · " + r.renewMonths.join("·") + "개월차의 하락은 연장 재투자 반영분" : "";
     $("chart2-title").textContent = termTxt + " 누적 수익금 흐름";
-    $("chart-title").textContent = termTxt + " 통장 잔액 흐름";
+    $("chart-title").textContent = termTxt + " 통장 잔액 흐름" + (r.tail > 0 ? " (+ 종료 후 " + r.tail + "개월)" : "");
     drawProfitChart(r, p);
     $("chart2-legend").innerHTML = '<span style="color:#181818">■</span> 누적 수익금 (세전) &nbsp; <span style="color:#b91c1c">■</span> 누적 손실 구간 &nbsp; <span style="color:#8A8B8E">┈</span> 세후 기준';
     $("chart2-note").textContent = "발생(회계) 기준 누적 순이익 · 막대는 세전, 점선은 세금까지 뺀 세후" + renewTxt;
@@ -713,11 +722,13 @@
     drawChart(r, p);
     var ghostOn = state.ghost && ghostCum.length && ghostCum[ghostCum.length - 1] > 0;
     $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; ' +
+      (r.tail > 0 ? '<span style="color:#8C9099">■</span> 계약 종료 후 정산 &nbsp; ' : "") +
       (ghostOn ? '<span style="color:#C7C9CD">■</span> 투자금 결제 누계 (제외 시 잔액) &nbsp; ' : "") +
       '<span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
     $("chart-note").textContent = "실제 입금·카드 결제 시점 기준 현금 흐름 · 막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다" +
+      (r.tail > 0 ? " · " + (TERM + 1) + "~" + r.lastMonth + "개월차는 계약 종료 후 남은 정산금이 들어오는 구간입니다" : "") +
       (ghostOn ? " · 옅은 윗칸은 창업비용·연장 재투자로 통장에서 이미 빠져나간 누계 — 이를 빼면 순수 운영 잔액이 됩니다" : "") +
-      (TERM > 24 ? " · 가로로 스크롤하면 뒷 기간이 보입니다" : "");
+      (r.lastMonth > 24 ? " · 가로로 스크롤하면 뒷 기간이 보입니다" : "");
 
     // ---- 연차별 요약 ----
     $("year-title").textContent = "연차별 요약 — 계약 " + termTxt + " · 총 " + YN + "개 연차";
@@ -764,16 +775,24 @@
       return base;
     };
     $("detail-note").textContent = "단위: 원 · 정산 유입은 실제 입금 시점 기준 · 계약 " + termTxt +
+      (r.tail > 0 ? " (표에는 종료 후 " + r.tail + "개월치 정산 마무리 구간을 회색으로 덧붙였습니다)" : "") +
       " · 수수료는 " + (p.pl > 0 ? "매출 발생 후 " + p.pl + "개월 뒤에 송금되므로 칸 아래에 몇 월 매출분인지 표시했습니다" : "매출 발생 당월에 송금됩니다") +
       (r.renewMonths.length ? " · " + r.renewMonths.join("·") + "개월차에 연장 재투자가 발생합니다." : ".");
+    var sepDone = false;
     var body = r.rows.map(function (row) {
-      var cls = row.y >= 2 ? ' class="y2"' : "";
+      var cls = row.after ? ' class="tailrow"' : (row.y >= 2 ? ' class="y2"' : "");
+      var sep = "";
+      if (row.after && !sepDone) {
+        sepDone = true;
+        sep = '<tr class="tailsep"><td colspan="12">계약 종료 — 아래 ' + r.tail +
+          "개월은 이미 발생한 매출의 정산금이 들어오는 구간입니다 (신규 매출·수수료 없음)</td></tr>";
+      }
       var invest = row.R + row.P; // 카드 할부분 + 현금 일시불
       var fsrc = feeSrcLabel(row.m);
       var feeCell = (row.J > 0)
         ? won(row.J) + (fsrc ? '<span class="mm">' + fsrc + "</span>" : "")
-        : '-<span class="mm">' + (row.m <= p.st + p.pl ? "발생 전" : "면제") + "</span>";
-      return "<tr" + cls + "><td>" + row.m + "</td><td>" + row.cal + "월</td>" +
+        : '-<span class="mm">' + (row.after ? "정산 완료" : row.m <= p.st + p.pl ? "발생 전" : "면제") + "</span>";
+      return sep + "<tr" + cls + "><td>" + row.m + (row.after ? '<span class="mm">종료+' + (row.m - TERM) + "</span>" : "") + "</td><td>" + row.cal + "월</td>" +
         "<td>" + won(row.E) + "</td><td>" + won(row.F + row.G) + "</td><td><strong>" + won(row.H) + "</strong></td>" +
         "<td>" + won(row.Q) + "</td><td>" + won(invest) + "</td><td>" + feeCell + "</td>" +
         "<td>" + (row.lic > 0 ? won(row.lic) : "-") + "</td>" +
@@ -883,12 +902,30 @@
     }
     // 순이익 구간 배경 음영 (회수 시점 이후)
     var rec = (typeof r.recovery === "number") ? r.recovery : null;
+    var profitLabelLeft = Infinity;           // 아래 '계약 종료' 라벨과 겹치는지 판단용
     if (rec !== null) {
       var rx = padL + (rec - 1) * bw;
       ctx.fillStyle = "rgba(168,170,171,0.12)";
       ctx.fillRect(rx, padT, (W - padR) - rx, y0 - padT);
       ctx.fillStyle = "#8A8B8E"; ctx.textAlign = "right"; ctx.font = "bold 10px Pretendard, sans-serif";
       ctx.fillText("순이익 구간 →", W - padR - 6, padT + 12);
+      profitLabelLeft = (W - padR - 6) - ctx.measureText("순이익 구간 →").width;
+    }
+    // 계약 종료 후 '정산 마무리' 구간 표시
+    var tailFrom = r.term;                    // 0-based 인덱스 = 꼬리 첫 달
+    if (r.rows.length > tailFrom) {
+      var tx = padL + tailFrom * bw;
+      ctx.fillStyle = "rgba(96,101,110,0.06)";
+      ctx.fillRect(tx, padT, (W - padR) - tx, (hasInject ? yNeg(maxNeg) : y0) - padT);
+      ctx.strokeStyle = "#9CA3AF"; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.moveTo(tx, padT); ctx.lineTo(tx, hasInject ? yNeg(maxNeg) : y0); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#6B7280"; ctx.textAlign = "left"; ctx.font = "bold 10px Pretendard, sans-serif";
+      // '순이익 구간 →' 라벨과 가로로 겹치면 한 줄 아래에 그린다
+      var tTxt = "계약 종료 →", tW = ctx.measureText(tTxt).width;
+      var tLx = Math.min(tx + 5, W - padR - 6 - tW);
+      var tLy = (tLx + tW + 8 > profitLabelLeft) ? padT + 26 : padT + 12;
+      ctx.fillText(tTxt, tLx, tLy);
     }
     // 막대
     geomBal = { padL: padL, bw: bw };
@@ -906,6 +943,11 @@
         ctx.restore();
         ctx.strokeStyle = "#5F6169"; ctx.lineWidth = 1;
         ctx.strokeRect(x + 0.5, yPos(row.L) + 0.5, w - 1, Math.max(1, y0 - yPos(row.L)) - 1);
+      } else if (row.after) {
+        // 계약 종료 후 — 이미 발생한 매출의 정산금만 들어오는 구간
+        grd.addColorStop(0, "#A3A7AE"); grd.addColorStop(1, "#7C818A");
+        ctx.fillStyle = grd;
+        ctx.fillRect(x, yPos(row.L), w, Math.max(1, y0 - yPos(row.L)));
       } else {
         if (row.y >= 2) { grd.addColorStop(0, "#5F6169"); grd.addColorStop(1, "#302F2F"); }
         else { grd.addColorStop(0, "#302F2F"); grd.addColorStop(1, "#181818"); }
@@ -929,11 +971,13 @@
     ctx.textAlign = "center"; ctx.font = "9px Pretendard, sans-serif";
     var every = labelEvery(bw);
     r.rows.forEach(function (row, idx) {
-      if (idx % every !== 0) return;
+      if (idx % every !== 0 && !row.after) return;
+      if (row.after && (row.m - r.term) % every !== 0 && every > 1 && row.m !== r.lastMonth) return;
       var cx = padL + (idx + 0.5) * bw;
-      ctx.fillStyle = (row.m === 1 || r.renewMonths.indexOf(row.m) >= 0) ? "#444" : "#999";
+      ctx.fillStyle = row.after ? "#9CA3AF"
+        : (row.m === 1 || r.renewMonths.indexOf(row.m) >= 0) ? "#444" : "#999";
       ctx.fillText(row.cal + "월", cx, H - 19);
-      ctx.fillStyle = "#c3c3c3";
+      ctx.fillStyle = row.after ? "#cfd2d6" : "#c3c3c3";
       ctx.fillText(String(row.m), cx, H - 8);
     });
     // 회수 시점 배지 (반짝 강조 — HTML 오버레이)
@@ -958,15 +1002,17 @@
   // ---- 누적 수익금 차트 ----
   function drawProfitChart(r, p) {
     var cv = $("chart2");
+    // 누적 수익금은 발생(회계) 기준이라 계약 기간까지만 그린다 (꼬리 정산 구간 제외)
+    var prows = r.rows.slice(0, r.term);
     var dpr = window.devicePixelRatio || 1;
-    var W = fitCanvas(cv, "chart2-scroll", r.rows.length), H = 320;
+    var W = fitCanvas(cv, "chart2-scroll", prows.length), H = 320;
     cv.width = W * dpr; cv.height = H * dpr;
     var ctx = cv.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
 
     var vals = [];
-    r.rows.forEach(function (x) { vals.push(x.cumPost, x.cumPre); });
+    prows.forEach(function (x) { vals.push(x.cumPost, x.cumPre); });
     var hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
     var maxPos = Math.max(hi, 0) * 1.12 || 1;
     var maxNeg = Math.max(-lo, 0) * 1.15;
@@ -977,7 +1023,7 @@
     var negH = ph - posH;
     var y0 = padT + posH;
     var pw = W - padL - padR;
-    var bw = pw / r.rows.length;
+    var bw = pw / prows.length;
     var yv = function (v) { return (v >= 0) ? y0 - (v / maxPos) * posH : y0 + (-v / (maxNeg || 1)) * negH; };
 
     // 그리드 + y라벨
@@ -1016,7 +1062,7 @@
 
     // 세전 누적 막대 (메인)
     geomProfit = { padL: padL, bw: bw };
-    r.rows.forEach(function (row, idx) {
+    prows.forEach(function (row, idx) {
       var x = padL + idx * bw + bw * 0.18, w = bw * 0.64;
       var v = row.cumPre, top = yv(v);
       if (v >= 0) {
@@ -1046,7 +1092,7 @@
     // 세후 누적 라인 (점선)
     ctx.strokeStyle = "#8A8B8E"; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
     ctx.beginPath();
-    r.rows.forEach(function (row, idx) {
+    prows.forEach(function (row, idx) {
       var cx = padL + (idx + 0.5) * bw, cy = yv(row.cumPost);
       if (idx === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
     });
@@ -1055,7 +1101,7 @@
     // x축
     ctx.textAlign = "center"; ctx.font = "9px Pretendard, sans-serif";
     var every = labelEvery(bw);
-    r.rows.forEach(function (row, idx) {
+    prows.forEach(function (row, idx) {
       if (idx % every !== 0) return;
       var cx = padL + (idx + 0.5) * bw;
       ctx.fillStyle = (row.m === 1 || r.renewMonths.indexOf(row.m) >= 0) ? "#444" : "#999";
@@ -1074,7 +1120,7 @@
       badge.style.top = "0px";
       badge.querySelector(".rb-pill").textContent = "★ 손익분기 달성";
       badge.querySelector(".rb-sub").textContent = "이후 누적 흑자";
-      badge.querySelector(".rb-line").style.height = Math.max(0, yv(r.rows[be - 1].cumPre) - 52) + "px";
+      badge.querySelector(".rb-line").style.height = Math.max(0, yv(prows[be - 1].cumPre) - 52) + "px";
     } else {
       badge.style.display = "none";
     }

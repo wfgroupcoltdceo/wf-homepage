@@ -243,13 +243,20 @@
    */
   function simulate(p) {
     var TERM = termOf(p);
+    /* 계약 종료 후에도 정산금은 시차만큼 더 들어온다.
+       p.tail(개월)만큼 행을 더 만들어 그 '꼬리 정산'까지 보여준다.
+       꼬리 구간에는 새 매출·수수료·면허세가 없고, 이미 발생한 매출의 정산 유입과
+       남은 카드 할부금만 반영되므로 계약 기간(1~TERM)의 계산 결과는 전혀 달라지지 않는다. */
+    var TAIL = Math.max(0, Math.min(24, Math.round(p.tail || 0)));
+    var LAST = TERM + TAIL;
     var YN = Math.ceil(TERM / 12);                              // 연차 수 (마지막 해는 짧을 수 있음)
     var app = p.mp * p.ach;                                     // 가정 B12
     var inv1 = p.resNew * p.n + p.setupFee * p.setupOn + p.server + p.taxAgent; // B6
     var inv2 = p.resRenew * p.n + p.server + p.taxAgent;        // B7
     var RENEW = renewMonthsOf(TERM);
     function isRenew(m) { return RENEW.indexOf(m) >= 0; }
-    var Tsched = function (m) { return (m > p.st) ? app * (1 + 1 / p.cm) : 0; }; // 정산예정액(발생월 기준)
+    // 정산예정액(발생월 기준) — 매출은 계약 기간 안에서만 발생하므로 TERM 이후는 0
+    var Tsched = function (m) { return (m > p.st && m <= TERM) ? app * (1 + 1 / p.cm) : 0; };
     var cpShare = 1 - p.nvShare;
     var net13 = app * p.shr - app * p.lossRate * p.lossShare;   // 정상 월 순수입 (B13)
 
@@ -267,15 +274,16 @@
     var rows = [];
     var cumD = 0, cumH = 0, cumS = 0, prevL = 0, prevThr = 0;
     var recovery = null;
-    for (var m = 1; m <= TERM; m++) {
-      var yi = Math.floor((m - 1) / 12);   // 0-based 연차
-      var C = (m > p.st) ? app : 0;
-      var D = (m > p.st) ? app * (1 + 1 / p.cm) : 0;
+    for (var m = 1; m <= LAST; m++) {
+      var after = (m > TERM);              // 계약 종료 후 '꼬리 정산' 구간
+      var yi = Math.min(YN - 1, Math.floor((m - 1) / 12));   // 0-based 연차
+      var C = (!after && m > p.st) ? app : 0;
+      var D = Tsched(m);
       var E = Tsched(m - p.nvLag) * p.nvShare;
       var F = p.cp1 * cpShare * (Tsched(m - 1) * p.cp1m1 + Tsched(m - 2) * (1 - p.cp1m1));
       var G = (1 - p.cp1) * cpShare * Tsched(m - p.cp2Lag);
       var H = E + F + G;
-      var Q = (m - p.cardLag > p.st) ? app / p.cm : 0;
+      var Q = (m - p.cardLag > p.st && m - p.cardLag <= TERM) ? app / p.cm : 0;
       var R = 0;
       if (p.inst > 1) {
         if (m >= 1 + p.cardLag && m < 1 + p.cardLag + p.inst) R += inv1 / p.inst;
@@ -285,8 +293,9 @@
         }
       }
       var I = Q + R;
-      var J = Cf(m - p.pl) + (m === TERM ? lumpEnd : 0);
-      var LIC = (licUnit > 0 && (m === 1 || calMonth(p.joinMonth, m) === 1)) ? licUnit : 0;
+      // 잔여 수수료는 TERM 달에 일시 청구되므로 꼬리 구간의 수수료·면허세는 0
+      var J = after ? 0 : (Cf(m - p.pl) + (m === TERM ? lumpEnd : 0));
+      var LIC = (!after && licUnit > 0 && (m === 1 || calMonth(p.joinMonth, m) === 1)) ? licUnit : 0;
       licY[yi] += LIC;
       var K = H - I - J - LIC;
       var P = (p.inst <= 1) ? ((m === 1 ? inv1 : 0) + (isRenew(m) ? inv2 : 0)) : 0;
@@ -307,13 +316,13 @@
       }
 
       // 발생 기준 월 순수입 (세팅기간 0 · 면제구간 100% 수취 · 이후 배분율)
-      var netM = (m <= p.st) ? 0
+      var netM = (after || m <= p.st) ? 0
                : (m <= p.st + p.fr) ? app * (1 - p.lossRate * p.lossShare)
                : net13;
       var invM = (m === 1) ? inv1 : (isRenew(m) ? inv2 : 0);
 
       rows.push({
-        m: m, y: yi + 1, cal: calMonth(p.joinMonth, m), C: C, D: D, E: E, F: F, G: G, H: H,
+        m: m, y: yi + 1, after: after, cal: calMonth(p.joinMonth, m), C: C, D: D, E: E, F: F, G: G, H: H,
         I: I, Q: Q, R: R, J: J, K: K, P: P, L: L, S: S, Mrecv: Mrecv, O: O, lic: LIC,
         netM: netM, invM: invM
       });
@@ -364,7 +373,7 @@
 
     // ---- 누적 수익금 (발생 기준) — 각 연차 마지막 달에 그 해 세금(종소세+부가세+면허세) 반영 ----
     var cumPre = 0, bePre = null, bePost = null;
-    for (var t2 = 0; t2 < TERM; t2++) {
+    for (var t2 = 0; t2 < rows.length; t2++) {
       var rw = rows[t2];
       cumPre += rw.netM - rw.invM;
       var taxCum = 0;
@@ -387,7 +396,7 @@
     var mid = rows[Math.min(11, TERM - 1)];   // 12개월차 (계약이 더 짧으면 마지막 달)
 
     return {
-      params: p, term: TERM, yearCount: YN, years: years,
+      params: p, term: TERM, tail: TAIL, lastMonth: LAST, yearCount: YN, years: years,
       app: app, inv1: inv1, inv2: inv2, net13: net13, rows: rows,
       renewMonths: RENEW,
       // --- 하위 호환 필드 (기존 화면 코드가 쓰던 이름) ---
