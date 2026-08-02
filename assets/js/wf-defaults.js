@@ -24,7 +24,7 @@ window.WF_DEFAULTS = {
     "lossRate": 0,
     "lossShare": 40,
     "cm": 40,
-    "st": 0,
+    "st": 1,
     "fr": 0,
     "pl": 3,
     "setupOn": 1,
