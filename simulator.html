@@ -1195,6 +1195,12 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
     if (row.R > 0) lines.splice(3, 0, "초기 투자금 (할부) " + won(row.R) + "원");
     if (row.P > 0) lines.splice(2, 0, '<span style="color:#9CA3AF">초기 투자금 (일시불) ' + won(row.P) + "원 — 통장 외 직접 결제</span>");
     if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
+    if (row.lossM > 0) {
+      var refPct = Math.round(row.refundM / row.lossM * 100);
+      lines.splice(lines.length - 1, 0,
+        '<span class="inj">반품·재고 손해 −' + won(row.lossM) + "원</span>",
+        "본사·위탁사 환불 +" + won(row.refundM) + "원 (손해의 " + refPct + "%)");
+    }
     if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
     return lines;
   });
@@ -1319,8 +1325,8 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
     ["mp50", "평균 월 매출이익 M50 (만원)", 10],
     ["ach", "매출 달성률 (%)", 5],
     ["shr", "점주 배분율 (%)", 5],
-    ["lossRate", "반품·재고 손실률 (%)", 1],
-    ["lossShare", "점주 손실 분담률 (%)", 5],
+    ["lossRate", "반품·재고 손실률 (매출이익 대비 %)", 1],
+    ["lossShare", "점주 손실 분담률 (%) · 나머지는 본사·위탁사 환불", 5],
     ["cm", "원가대비 이익률 (%)", 5],
     ["— 세팅 · 수수료 —"],
     ["st", "세팅 소요 개월", 1],

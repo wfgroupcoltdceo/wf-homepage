@@ -260,12 +260,12 @@
     var cpShare = 1 - p.nvShare;
     var net13 = app * p.shr - app * p.lossRate * p.lossShare;   // 정상 월 순수입 (B13)
 
-    // 수수료·손실 송금액 — 매출발생 x개월차분
+    // 수수료 송금액 — 매출발생 x개월차분 (손실 분담금은 송금이 아니라 환불 구조라 여기서 제외)
     function Cf(x) {
       if (x <= p.st) return 0;
-      return app * ((x <= p.st + p.fr ? 0 : 1 - p.shr) + p.lossRate * p.lossShare);
+      return app * (x <= p.st + p.fr ? 0 : 1 - p.shr);
     }
-    var lumpEnd = p.pl * app * ((1 - p.shr) + p.lossRate * p.lossShare); // 계약 종료 시 잔여분
+    var lumpEnd = p.pl * app * (1 - p.shr); // 계약 종료 시 잔여분
 
     // 등록면허세 (일반과세): 가입 시점 + 매년 1월, 사업자당 40,500원
     var licUnit = (p.vatType === 2) ? VAT.licenseTax * p.n : 0;
@@ -297,7 +297,13 @@
       var J = after ? 0 : (Cf(m - p.pl) + (m === TERM ? lumpEnd : 0));
       var LIC = (!after && licUnit > 0 && (m === 1 || calMonth(p.joinMonth, m) === 1)) ? licUnit : 0;
       licY[yi] += LIC;
-      var K = H - I - J - LIC;
+      /* 반품·재고 손해: 점주가 물품구매비를 먼저 전액 결제하는 구조라
+         손해액(매출이익 × 손실률)은 일단 점주에게 전액 실현되고,
+         본사(40%)·위탁사(20%)가 그중 (1 − 점주 분담률) = 60%를 점주에게 환불한다.
+         → 점주 순부담 = 손해액 × 점주 분담률(40%) */
+      var lossM = (!after && m > p.st) ? app * p.lossRate : 0;
+      var refundM = lossM * (1 - p.lossShare);
+      var K = H - I - J - LIC - lossM + refundM;
       /* 일시불(현금) 투자금은 통장을 거치지 않고 직접 결제하는 것으로 보아
          통장 잔액 흐름에서 제외한다 → 잔액이 예치금·정산 흐름만으로 0원부터 시작.
          (할부는 카드값 R로 통장에서 매달 빠져나가므로 기존과 동일) */
@@ -328,7 +334,7 @@
       rows.push({
         m: m, y: yi + 1, after: after, cal: calMonth(p.joinMonth, m), C: C, D: D, E: E, F: F, G: G, H: H,
         I: I, Q: Q, R: R, J: J, K: K, P: P, L: L, S: S, Mrecv: Mrecv, O: O, lic: LIC,
-        netM: netM, invM: invM
+        lossM: lossM, refundM: refundM, netM: netM, invM: invM
       });
       prevL = L; prevThr = thr;
     }
