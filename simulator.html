@@ -195,15 +195,6 @@
   .ct-row { margin-bottom: .55rem; }
   .ct-row .sim-label { margin-bottom: .2rem; font-size: .74rem; }
   .ct-row .sim-input { padding: .45rem .65rem; font-size: .85rem; }
-  /* 차트 옵션 토글 (초기투자금 제외 잔액) */
-  .ghost-toggle {
-    display: inline-flex; align-items: center; gap: .4rem; flex: none;
-    font-size: .74rem; font-weight: 700; color: #6b7280; cursor: pointer;
-    border: 1px solid #e5e7eb; border-radius: 999px; padding: .3rem .65rem;
-    background: #fff; white-space: nowrap; user-select: none;
-  }
-  .ghost-toggle:hover { border-color: #d1d5db; color: #374151; }
-  .ghost-toggle input { accent-color: #5F6169; width: .85rem; height: .85rem; margin: 0; }
   .chart-box { position: relative; }
   .chart-scroll { overflow-x: auto; overflow-y: hidden; }
   .chart-scroll > .chart-box { display: inline-block; min-width: 100%; vertical-align: top; }
@@ -463,13 +454,7 @@
 
         <!-- 차트 2 — 통장 잔액 -->
         <div class="sim-panel mb-6">
-          <div class="flex items-center justify-between gap-3 mb-1" style="flex-wrap:wrap">
-            <div class="font-extrabold text-lg" id="chart-title">통장 잔액 흐름</div>
-            <label class="ghost-toggle" for="ghost-on">
-              <input type="checkbox" id="ghost-on" checked />
-              <span>투자금 제외 잔액 함께 보기</span>
-            </label>
-          </div>
+          <div class="font-extrabold text-lg mb-1" id="chart-title">통장 잔액 흐름</div>
           <div class="text-xs text-gray-500 font-semibold mb-1" id="chart-legend"></div>
           <div class="text-xs text-gray-400 mb-3" id="chart-note">막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다</div>
           <div class="chart-scroll" id="chart-scroll">
@@ -634,7 +619,6 @@
       join: numOr(SIM_SITE.join, 0, 1, 12) || "auto",
       inst: numOr(SIM_SITE.inst, 3, 0, 24),
       depMan: null,
-      ghost: true,                 // 잔액 차트에 '초기투자금 제외 잔액' 함께 표시
       otherMan: numOr(SIM_SITE.otherMan, 4000, 0, 1e7),
       vatType: numOr(SIM_SITE.vatType, 1, 1, 2),
       setupOn: numOr(SIM_SITE.setupOn, 1, 0, 1)
@@ -708,7 +692,9 @@
         "</strong> + 운영 여유자금 몫 <strong>" + man(bk.ops, 0) + "</strong>" +
         (bk.invest > 0
           ? " — 앞쪽 금액은 할부 개월을 늘리면 줄어듭니다."
-          : " — 초기투자금이 매출 유입에 맞춰 나뉘어 빠지므로 투자금 몫이 0입니다.") +
+          : (p.inst <= 1
+            ? " — 일시불 투자금은 통장 외부에서 직접 결제되어 통장 흐름에 포함되지 않습니다 (잔액은 예치금부터 시작)."
+            : " — 초기투자금이 매출 유입에 맞춰 나뉘어 빠지므로 투자금 몫이 0입니다.")) +
         "</span>"
       : "현재 조건에서는 예치금 없이도 통장 잔액이 마이너스가 되지 않습니다.";
 
@@ -771,16 +757,12 @@
     drawProfitChart(r, p);
     $("chart2-legend").innerHTML = '<span style="color:#181818">■</span> 누적 수익금 (세전) &nbsp; <span style="color:#b91c1c">■</span> 누적 손실 구간 &nbsp; <span style="color:#8A8B8E">┈</span> 세후 기준';
     $("chart2-note").textContent = "발생(회계) 기준 누적 순이익 · 막대는 세전, 점선은 세금까지 뺀 세후" + renewTxt;
-    $("ghost-on").checked = !!state.ghost;
     drawChart(r, p);
-    var ghostOn = state.ghost && ghostCum.length && ghostCum[ghostCum.length - 1] > 0;
     $("chart-legend").innerHTML = '<span style="color:#181818">■</span> 통장 잔액 &nbsp; ' +
       (r.tail > 0 ? '<span style="color:#8C9099">■</span> 계약 종료 후 정산 &nbsp; ' : "") +
-      (ghostOn ? '<span style="color:#C7C9CD">■</span> 투자금 결제 누계 (제외 시 잔액) &nbsp; ' : "") +
       '<span style="color:#b91c1c">■</span> 추가 현금 투입 (아래 방향) &nbsp; <span style="color:#A8AAAB">─</span> 예치금 수준';
     $("chart-note").textContent = "실제 입금·카드 결제 시점 기준 현금 흐름 · 막대에 마우스를 올리면 그 달의 상세 내역이 표시됩니다" +
       (r.tail > 0 ? " · " + (TERM + 1) + "~" + r.lastMonth + "개월차는 계약 종료 후 남은 정산금이 들어오는 구간입니다" : "") +
-      (ghostOn ? " · 옅은 윗칸은 창업비용·연장 재투자로 통장에서 이미 빠져나간 누계 — 이를 빼면 순수 운영 잔액이 됩니다" : "") +
       (r.lastMonth > 24 ? " · 가로로 스크롤하면 뒷 기간이 보입니다" : "");
 
     // ---- 연차별 요약 ----
@@ -840,14 +822,17 @@
         sep = '<tr class="tailsep"><td colspan="12">계약 종료 — 아래 ' + r.tail +
           "개월은 이미 발생한 매출의 정산금이 들어오는 구간입니다 (신규 매출·수수료 없음)</td></tr>";
       }
-      var invest = row.R + row.P; // 카드 할부분 + 현금 일시불
+      // 투자금 납부 칸: 할부는 통장에서 나가는 카드값, 일시불은 통장 외 직접 결제로 표기
+      var invest = row.P > 0
+        ? won(row.P) + '<span class="mm">통장 외 결제</span>'
+        : won(row.R);
       var fsrc = feeSrcLabel(row.m);
       var feeCell = (row.J > 0)
         ? won(row.J) + (fsrc ? '<span class="mm">' + fsrc + "</span>" : "")
         : '-<span class="mm">' + (row.after ? "정산 완료" : row.m <= p.st + p.pl ? "발생 전" : "면제") + "</span>";
       return sep + "<tr" + cls + "><td>" + row.m + (row.after ? '<span class="mm">종료+' + (row.m - TERM) + "</span>" : "") + "</td><td>" + row.cal + "월</td>" +
         "<td>" + won(row.E) + "</td><td>" + won(row.F + row.G) + "</td><td><strong>" + won(row.H) + "</strong></td>" +
-        "<td>" + won(row.Q) + "</td><td>" + won(invest) + "</td><td>" + feeCell + "</td>" +
+        "<td>" + won(row.Q) + "</td><td>" + invest + "</td><td>" + feeCell + "</td>" +
         "<td>" + (row.lic > 0 ? won(row.lic) : "-") + "</td>" +
         '<td class="' + (row.K < 0 ? "neg" : "") + '">' + won(row.K) + "</td>" +
         "<td><strong>" + won(row.L) + "</strong></td>" +
@@ -886,7 +871,6 @@
 
   // ---- 캔버스 차트 ----
   var geomBal = null, geomProfit = null; // 툴팁용 좌표 캐시
-  var ghostCum = [];                     // 달별 '초기투자금 결제 누계' (차트·툴팁 공용)
   var MIN_BW = 22;   // 막대 하나에 최소로 확보할 폭 (px) — 넘치면 가로 스크롤
   /** 개월 수에 맞춰 캔버스 실제 폭을 정한다 (좁으면 스크롤) */
   function fitCanvas(cv, scrollId, n) {
@@ -909,13 +893,7 @@
     ctx.clearRect(0, 0, W, H);
 
     var hasInject = r.rows.some(function (x) { return x.S > 0; });
-    /* 초기투자금(창업비용·연장 재투자) 결제로 통장에서 빠져나간 누계.
-       이 몫을 잔액 막대 위에 얹으면 "투자금을 통장에서 내지 않았다면 잔액이 어떻게 흘렀을지"가 그대로 보인다. */
-    var invAcc = 0;
-    ghostCum = r.rows.map(function (x) { invAcc += x.P + x.R; return invAcc; });
-    var showGhost = state.ghost && ghostCum[ghostCum.length - 1] > 0;
-    var topOf = function (idx) { return r.rows[idx].L + (showGhost ? ghostCum[idx] : 0); };
-    var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x, i) { return topOf(i); }))) * 1.1 || 1;
+var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { return x.L; }))) * 1.1 || 1;
     var maxNeg = hasInject ? Math.max.apply(null, r.rows.map(function (x) { return x.S; })) * 1.15 : 0;
 
     var padL = 58, padR = 10, padT = 16, padB = 32;
@@ -1007,14 +985,6 @@
         ctx.fillStyle = grd;
         ctx.fillRect(x, yPos(row.L), w, Math.max(1, y0 - yPos(row.L)));
       }
-      if (showGhost && ghostCum[idx] > 0) { // 투자금 결제 누계 — 실제 잔액 위에 옅게 얹는다
-        var gTop = yPos(topOf(idx)), gBot = yPos(row.L);
-        ctx.fillStyle = "rgba(168,170,171,0.28)";
-        ctx.fillRect(x, gTop, w, Math.max(1, gBot - gTop));
-        ctx.strokeStyle = "#B9BBBE"; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-        ctx.beginPath(); ctx.moveTo(x, gTop + 0.5); ctx.lineTo(x + w, gTop + 0.5); ctx.stroke();
-        ctx.setLineDash([]);
-      }
       if (row.S > 0) { // 추가투입: 기준선 아래 빨간 막대
         ctx.fillStyle = "#c0392b";
         ctx.fillRect(x, y0 + 1, w, Math.max(2, yNeg(row.S) - y0 - 1));
@@ -1044,7 +1014,7 @@
       badge.style.top = "0px";
       badge.querySelector(".rb-pill").textContent = "★ 투자금 회수 완료";
       badge.querySelector(".rb-sub").textContent = "이후 순이익 구간";
-      var barTop = yPos(topOf(rec - 1));
+      var barTop = yPos(r.rows[rec - 1].L);
       var lineEl = badge.querySelector(".rb-line");
       lineEl.style.height = Math.max(0, barTop - 52) + "px";
     } else {
@@ -1218,16 +1188,13 @@
     var lines = [
       head(row),
       "정산 유입 " + won(row.H) + "원",
-      "카드값·투자금 " + won(row.I + row.P) + "원",
+      "물품구매비 (카드값) " + won(row.Q) + "원",
       "수수료 송금 " + won(row.J) + "원" + (row.J > 0 && row.O && row.O !== "-" ? " (" + row.O + ")" : ""),
       "<strong>통장 잔액 " + won(row.L) + "원</strong>"
     ];
+    if (row.R > 0) lines.splice(3, 0, "초기 투자금 (할부) " + won(row.R) + "원");
+    if (row.P > 0) lines.splice(2, 0, '<span style="color:#9CA3AF">초기 투자금 (일시불) ' + won(row.P) + "원 — 통장 외 직접 결제</span>");
     if (row.lic > 0) lines.splice(4, 0, "등록면허세 " + won(row.lic) + "원");
-    var gc = ghostCum[row.m - 1] || 0;
-    if (state.ghost && gc > 0) {
-      lines.push('<span style="color:#9CA3AF">투자금 결제 누계 ' + won(gc) + "원</span>");
-      lines.push('<span style="color:#9CA3AF">└ 제외 시 잔액 ' + won(row.L + gc) + "원</span>");
-    }
     if (row.S > 0) lines.push('<span class="inj">추가 투입 필요 ' + won(row.S) + "원</span>");
     return lines;
   });
@@ -1286,8 +1253,20 @@
   $("vat-2").addEventListener("click", function () { state.vatType = 2; this.classList.add("on"); $("vat-1").classList.remove("on"); render(); });
   $("setup-1").addEventListener("click", function () { state.setupOn = 1; this.classList.add("on"); $("setup-0").classList.remove("on"); render(); });
   $("setup-0").addEventListener("click", function () { state.setupOn = 0; this.classList.add("on"); $("setup-1").classList.remove("on"); render(); });
-  $("in-inst").addEventListener("change", function () { state.inst = +this.value; render(); });
-  $("ghost-on").addEventListener("change", function () { state.ghost = this.checked; render(); });
+  $("in-inst").addEventListener("change", function () {
+    state.inst = +this.value;
+    // 일시불: 투자금이 통장 외 결제라 예치금 없이 잔액 0원부터 시작하는 모습을 기본으로 보여준다
+    document.querySelectorAll("[data-dep]").forEach(function (x) { x.classList.remove("on"); });
+    if (state.inst <= 1) {
+      state.depMan = 0;
+      $("in-dep").value = 0;
+      var z = document.querySelector('[data-dep="0"]'); if (z) z.classList.add("on");
+    } else {
+      state.depMan = null;
+      $("dep-rec").classList.add("on");
+    }
+    render();
+  });
   $("in-dep").addEventListener("input", function () {
     state.depMan = Math.max(0, +this.value || 0);
     document.querySelectorAll("[data-dep]").forEach(function (b) { b.classList.remove("on"); });

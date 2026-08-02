@@ -272,7 +272,7 @@
     var licY = []; for (var yz = 0; yz < YN; yz++) licY.push(0);
 
     var rows = [];
-    var cumD = 0, cumH = 0, cumS = 0, prevL = 0, prevThr = 0;
+    var cumD = 0, cumH = 0, cumS = 0, cumP = 0, prevL = 0, prevThr = 0;
     var recovery = null;
     for (var m = 1; m <= LAST; m++) {
       var after = (m > TERM);              // 계약 종료 후 '꼬리 정산' 구간
@@ -298,13 +298,17 @@
       var LIC = (!after && licUnit > 0 && (m === 1 || calMonth(p.joinMonth, m) === 1)) ? licUnit : 0;
       licY[yi] += LIC;
       var K = H - I - J - LIC;
+      /* 일시불(현금) 투자금은 통장을 거치지 않고 직접 결제하는 것으로 보아
+         통장 잔액 흐름에서 제외한다 → 잔액이 예치금·정산 흐름만으로 0원부터 시작.
+         (할부는 카드값 R로 통장에서 매달 빠져나가므로 기존과 동일) */
       var P = (p.inst <= 1) ? ((m === 1 ? inv1 : 0) + (isRenew(m) ? inv2 : 0)) : 0;
-      var flow = (m === 1) ? (K - P + p.dep) : (prevL + K - P);
+      var flow = (m === 1) ? (K + p.dep) : (prevL + K);
       var S = Math.max(0, -flow);
       var L = Math.max(0, flow);
-      cumD += D; cumH += H; cumS += S;
+      cumD += D; cumH += H; cumS += S; cumP += P;
       var Mrecv = cumD - cumH; // 미수 정산금 잔액
-      var thr = p.dep + cumS;
+      // 회수 기준: 예치금 + 추가 투입 + (통장 외로 직접 낸 일시불 투자금)까지 잔액이 회복된 시점
+      var thr = p.dep + cumS + cumP;
       if (recovery === null && m >= 2 && L >= thr && prevL < prevThr) recovery = m;
 
       // 송금 대상 매출월 라벨
@@ -453,8 +457,8 @@
    *   invest = 그중 '초기투자금(창업비용·연장 재투자) 결제' 때문에 필요한 몫
    *   ops    = 그중 '운영 시차(정산 유입이 늦게 들어오는 기간)' 때문에 필요한 몫
    *
-   * 일시불이 할부보다 예치금이 큰 이유가 여기서 그대로 드러난다.
-   * 운영 몫은 납부 방식과 무관하게 같고, 투자금 몫만 납부 방식에 따라 달라진다.
+   * 일시불 투자금은 통장 외부에서 직접 결제되므로 통장 흐름에 없다 → 투자금 몫 0.
+   * 할부는 카드값(R)으로 통장에서 빠져나가므로 그만큼 투자금 몫이 잡힌다.
    */
   function depositBreakdown(p, unit) {
     unit = unit || 500000;
@@ -467,9 +471,9 @@
     var needAll = 0, needOps = 0, invCum = 0, invTotal = 0;
     for (var i = 0; i < r.rows.length; i++) {
       var row = r.rows[i];
-      invCum += row.P + row.R;          // 투자금 결제로 통장에서 빠져나간 누계
-      invTotal += row.P + row.R;
-      var run = row.L - BIG;            // 미보정 누적현금 = Σ(K-P)
+      invCum += row.R;                  // 투자금 결제로 '통장에서' 빠져나간 누계 (일시불 P는 통장 외부)
+      invTotal += row.R;
+      var run = row.L - BIG;            // 미보정 누적현금 = ΣK
       if (-run > needAll) needAll = -run;
       var runOps = run + invCum;        // 투자금 결제를 통장에서 빼지 않았다고 가정한 누계
       if (-runOps > needOps) needOps = -runOps;
