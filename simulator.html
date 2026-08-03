@@ -1499,7 +1499,7 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
       h.push('<style>');
       h.push('@page WordSection1 { size: 595.3pt 841.9pt; margin: 62pt 57pt 62pt 57pt; }');
       h.push('div.WordSection1 { page: WordSection1; }');
-      h.push('body { font-family: "맑은 고딕", "Malgun Gothic", sans-serif; font-size: 9pt; line-height: 1.6; color: #111; }');
+      h.push('body { font-family: "맑은 고딕", "Malgun Gothic", sans-serif; font-size: 9pt; line-height: 1.6; color: #111; word-break: keep-all; }');
       h.push('.sm { font-size: 8.5pt; }');
       h.push('h1.cover { text-align: center; font-size: 20pt; margin: 90pt 0 60pt; }');
       h.push('.cover-date { text-align: center; font-size: 12.5pt; margin-bottom: 70pt; }');
@@ -1513,7 +1513,7 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
     } else {
       h.push('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>온라인 해외직구 구매대행 사업 계약서</title><style>');
       h.push('@page { size: A4; margin: 22mm 20mm; }');
-      h.push('body { font-family: "Malgun Gothic", "맑은 고딕", Pretendard, sans-serif; font-size: 9pt; line-height: 1.65; color: #111; margin: 0; }');
+      h.push('body { font-family: "Malgun Gothic", "맑은 고딕", Pretendard, sans-serif; font-size: 9pt; line-height: 1.65; color: #111; margin: 0; word-break: keep-all; overflow-wrap: break-word; }');
       h.push('.sm { font-size: 8.5pt; }');
       h.push('.sheet { max-width: 175mm; margin: 0 auto; padding: 20px 14px 60px; }');
       h.push('h1.cover { text-align: center; font-size: 20pt; margin: 100px 0 70px; }');
