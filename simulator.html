@@ -579,8 +579,9 @@
         <input type="text" id="ct-bname" class="sim-input" placeholder="예: 홍길동" autocomplete="off" /></div>
       <div class="ct-row"><span class="sim-label">대리점주(병) 주소 <span class="sim-sub">서명란에 기재 (비우면 공란)</span></span>
         <input type="text" id="ct-baddr" class="sim-input" placeholder="예: 경기도 화성시 ○○로 12, 101호" autocomplete="off" /></div>
-      <button type="button" id="ct-print" class="seg-btn on" style="width:100%;margin-top:.4rem;padding:.6rem">계약서 열기 (인쇄 창)</button>
-      <div class="sim-sub" style="display:block;margin-top:.5rem">새 창에서 인쇄 미리보기가 열립니다. 브라우저 인쇄 화면에서 PDF 저장도 가능합니다. 본사 도장은 “갑”의 (인) 위치에 자동으로 날인되어 나옵니다.</div>
+      <button type="button" id="ct-print" class="seg-btn on" style="width:100%;margin-top:.4rem;padding:.6rem">계약서 열기 (인쇄 / PDF)</button>
+      <button type="button" id="ct-word" class="seg-btn" style="width:100%;margin-top:.35rem;padding:.6rem">워드(.doc)로 다운로드 — 문구·서식 수정용</button>
+      <div class="sim-sub" style="display:block;margin-top:.5rem">인쇄 창에서는 도장이 자동 날인된 상태로 인쇄·PDF 저장이 가능합니다. 워드 파일은 문구·문단을 자유롭게 수정할 수 있도록 도장 없이 생성됩니다.</div>
     </div>
   </div>
 </div>
@@ -1475,11 +1476,11 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
     var frClause = fr > 0
       ? "3. (수수료 면제 이벤트) 제2항에 더하여, 계약 체결월의 익월부터 " + fr + "개월간 발생한 매출에 대한 수수료를 추가로 면제한다. 면제된 기간의 매출 이익금은 전액 “병”에게 귀속된다."
       : "3. (수수료 면제 이벤트) 본 계약에는 적용하지 아니한다.";
-    // 날인 — 도장이 복호화되어 있으면 (인) 위에 자동 표시
-    var sealGap = o.stamp
+    // 날인 — 도장이 복호화되어 있으면 (인) 위에 자동 표시 (워드 버전은 편집용이라 도장 제외)
+    var sealGap = (!o.word && o.stamp)
       ? '<span class="seal">(인)<img src="' + o.stamp + '" alt=""></span>'
       : '(인)';
-    var sealEul = o.stamp2
+    var sealEul = (!o.word && o.stamp2)
       ? '<span class="seal">(인)<img class="sq" src="' + o.stamp2 + '" alt=""></span>'
       : '(인)';
     // “병” 정보
@@ -1488,26 +1489,46 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
     var signRow = '<p class="party">주식회사 더블유에프그룹<br>사업자등록번호 : 228-86-03744<br>주소 : 경기도 화성시 동탄영천로 131, 코너원 스마트타워 530-더블유에프001호<br>대표이사 : 김 예 원 &nbsp;&nbsp;&nbsp;&nbsp;' + sealGap + '</p>';
 
     var h = [];
-    h.push('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>온라인 해외직구 구매대행 사업 계약서</title><style>');
-    h.push('@page { size: A4; margin: 22mm 20mm; }');
-    h.push('body { font-family: "Malgun Gothic", "맑은 고딕", Pretendard, sans-serif; font-size: 9pt; line-height: 1.65; color: #111; margin: 0; }');
-    h.push('.sm { font-size: 8.5pt; }');
-    h.push('.sheet { max-width: 175mm; margin: 0 auto; padding: 20px 14px 60px; }');
-    h.push('h1.cover { text-align: center; font-size: 20pt; margin: 100px 0 70px; }');
-    h.push('.cover-date { text-align: center; font-size: 12.5pt; margin-bottom: 90px; }');
-    h.push('.cover-party { font-size: 12pt; margin: 0 0 30px; }');
-    h.push('.pagebreak { page-break-before: always; }');
-    h.push('h2.doc { text-align: center; font-size: 16pt; letter-spacing: .55em; text-indent: .55em; margin: 6px 0 22px; }');
-    h.push('h3 { font-size: 9.5pt; margin: 14px 0 4px; }');
-    h.push('p { margin: 0 0 6px; } p.cl { margin: 0 0 6px 14px; } p.cl2 { margin: 0 0 6px 28px; }');
-    h.push('.center { text-align: center; } .party { margin: 14px 0 20px; }');
-    h.push('.noprint { position: fixed; top: 12px; right: 12px; z-index: 5; }');
-    h.push('.noprint button { padding: 9px 18px; font-weight: 700; border: none; border-radius: 8px; background: #181818; color: #fff; cursor: pointer; font-size: 13px; }');
-    h.push('.seal { position: relative; display: inline-block; }');
-    h.push('.seal img { position: absolute; height: 7.5mm; left: 50%; top: 50%; transform: translate(-45%, -50%); opacity: .92; }');
-    h.push('.seal img.sq { height: 8.5mm; }');
-    h.push('@media print { .noprint { display: none; } .seal img { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }');
-    h.push('</style></head><body><div class="noprint"><button onclick="window.print()">인쇄 / PDF 저장</button></div><div class="sheet">');
+    if (o.word) {
+      // 워드(.doc)용 — MS Word가 여는 HTML 형식. 문구·문단·서식을 자유롭게 수정할 수 있다.
+      h.push('<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>온라인 해외직구 구매대행 사업 계약서</title>');
+      h.push('<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->');
+      h.push('<style>');
+      h.push('@page WordSection1 { size: 595.3pt 841.9pt; margin: 62pt 57pt 62pt 57pt; }');
+      h.push('div.WordSection1 { page: WordSection1; }');
+      h.push('body { font-family: "맑은 고딕", "Malgun Gothic", sans-serif; font-size: 9pt; line-height: 1.6; color: #111; }');
+      h.push('.sm { font-size: 8.5pt; }');
+      h.push('h1.cover { text-align: center; font-size: 20pt; margin: 90pt 0 60pt; }');
+      h.push('.cover-date { text-align: center; font-size: 12.5pt; margin-bottom: 70pt; }');
+      h.push('.cover-party { font-size: 12pt; margin: 0 0 22pt; }');
+      h.push('.pagebreak { page-break-before: always; }');
+      h.push('h2.doc { text-align: center; font-size: 16pt; letter-spacing: 8pt; margin: 4pt 0 16pt; }');
+      h.push('h3 { font-size: 9.5pt; margin: 10pt 0 3pt; }');
+      h.push('p { margin: 0 0 4pt; } p.cl { margin: 0 0 4pt 11pt; } p.cl2 { margin: 0 0 4pt 22pt; }');
+      h.push('.center { text-align: center; } .party { margin: 10pt 0 14pt; }');
+      h.push('</style></head><body><div class="WordSection1">');
+    } else {
+      h.push('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>온라인 해외직구 구매대행 사업 계약서</title><style>');
+      h.push('@page { size: A4; margin: 22mm 20mm; }');
+      h.push('body { font-family: "Malgun Gothic", "맑은 고딕", Pretendard, sans-serif; font-size: 9pt; line-height: 1.65; color: #111; margin: 0; }');
+      h.push('.sm { font-size: 8.5pt; }');
+      h.push('.sheet { max-width: 175mm; margin: 0 auto; padding: 20px 14px 60px; }');
+      h.push('h1.cover { text-align: center; font-size: 20pt; margin: 100px 0 70px; }');
+      h.push('.cover-date { text-align: center; font-size: 12.5pt; margin-bottom: 90px; }');
+      h.push('.cover-party { font-size: 12pt; margin: 0 0 30px; }');
+      h.push('.pagebreak { page-break-before: always; }');
+      h.push('h2.doc { text-align: center; font-size: 16pt; letter-spacing: .55em; text-indent: .55em; margin: 6px 0 22px; }');
+      h.push('h3 { font-size: 9.5pt; margin: 14px 0 4px; }');
+      h.push('p { margin: 0 0 6px; } p.cl { margin: 0 0 6px 14px; } p.cl2 { margin: 0 0 6px 28px; }');
+      h.push('.center { text-align: center; } .party { margin: 14px 0 20px; }');
+      h.push('.noprint { position: fixed; top: 12px; right: 12px; z-index: 5; }');
+      h.push('.noprint button { padding: 9px 18px; font-weight: 700; border: none; border-radius: 8px; background: #181818; color: #fff; cursor: pointer; font-size: 13px; }');
+      h.push('.seal { position: relative; display: inline-block; }');
+      h.push('.seal img { position: absolute; height: 7.5mm; left: 50%; top: 50%; transform: translate(-45%, -50%); opacity: .92; }');
+      h.push('.seal img.sq { height: 8.5mm; }');
+      h.push('@media print { .noprint { display: none; } .seal img { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }');
+      h.push('</style></head><body><div class="noprint"><button onclick="window.print()">인쇄 / PDF 저장</button></div><div class="sheet">');
+    }
 
     // ---- 표지 ----
     h.push('<h1 class="cover">온라인 해외직구 구매대행 사업 계약서</h1>');
@@ -1679,11 +1700,12 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
   }
   $("ct-unlock").addEventListener("click", ctTryUnlock);
   $("ct-pass").addEventListener("keydown", function (e) { if (e.key === "Enter") ctTryUnlock(); });
-  $("ct-print").addEventListener("click", function () {
+  function ctReadOpts() {
     var clamp = function (v, lo, hi, dft) { v = Math.round(parseFloat(v)); return isNaN(v) ? dft : Math.max(lo, Math.min(hi, v)); };
     var dv = $("ct-date").value;
-    var o = {
+    return {
       date: dv ? new Date(dv + "T00:00:00") : null,
+      dateStr: dv,
       term: clamp($("ct-term").value, 1, 60, 24),
       join: clamp($("ct-join").value, 1, 12, new Date().getMonth() + 1),
       st: clamp($("ct-st").value, 1, 6, 1),
@@ -1692,6 +1714,9 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
       baddr: $("ct-baddr").value.trim(),
       stamp: null, stamp2: null
     };
+  }
+  $("ct-print").addEventListener("click", function () {
+    var o = ctReadOpts();
     // 팝업 차단을 피하려고 창은 클릭 시점에 먼저 열고, 도장 복호화가 끝나면 내용을 쓴다
     var w = window.open("", "_blank");
     if (!w) { $("ct-msg").textContent = "팝업이 차단되었습니다. 이 사이트의 팝업을 허용해 주세요."; return; }
@@ -1701,6 +1726,20 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
       w.document.write(buildContractHTML(o));
       w.document.close();
     });
+  });
+  $("ct-word").addEventListener("click", function () {
+    // 편집 가능한 워드(.doc) 파일 — MS Word가 여는 HTML 형식 (도장 제외, 문구·서식 수정용)
+    var o = ctReadOpts();
+    o.word = true;
+    var html = buildContractHTML(o);
+    var blob = new Blob(["﻿", html], { type: "application/msword" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    // 일부 브라우저가 비ASCII 파일명을 무시하므로 영문 파일명 사용
+    a.download = "WF_Contract" + (o.dateStr ? "_" + o.dateStr : "") + ".doc";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
   });
   $("hq-save").addEventListener("click", function () {
     hqReadControls();
