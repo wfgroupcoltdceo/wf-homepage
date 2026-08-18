@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>채용 · WF GROUP</title>
+<meta name="description" content="WF GROUP 채용 — 운영 매니저(CS·주문·정산), 개발자(사내 자동화·AI). 반복을 시스템으로 바꾸는 팀에 합류하세요." />
+<link rel="icon" type="image/png" href="./assets/images/wf-symbol.png" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: { sans: ['Pretendard Variable', 'Pretendard', 'sans-serif'] },
+      colors: {
+        wfblack: { DEFAULT: '#181818', light: '#3A3A3A', dark: '#0E0E0E', darker: '#000000' },
+        wfsilver: { DEFAULT: '#9CA0A4', light: '#C9CCCF', dark: '#5C5F66' },
+      },
+    } },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Pretendard Variable', Pretendard, sans-serif; word-break: keep-all; }
+  /* ── 그리드 패턴 ── */
+  .grid-dark { background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 48px 48px; }
+  .grid-light { background-image: linear-gradient(rgba(24,24,24,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(24,24,24,.04) 1px, transparent 1px); background-size: 48px 48px; }
+  /* ── 그라데이션 타이포 ── */
+  .txt-grad { background: linear-gradient(180deg, #fff 30%, #8b8f94 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .txt-grad-dark { background: linear-gradient(180deg, #181818 40%, #6b6f74 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  /* ── 그라데이션 보더 카드 ── */
+  .gcard { position: relative; border-radius: 1.25rem; padding: 1px; background: linear-gradient(160deg, #e5e7eb, #f3f4f6 60%, #e5e7eb); transition: background .4s, transform .3s, box-shadow .3s; }
+  .gcard:hover { background: linear-gradient(160deg, #181818, #9CA0A4 55%, #d1d5db); transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgba(0,0,0,.25); }
+  .gcard > .gcard-in { border-radius: calc(1.25rem - 1px); background: #fff; height: 100%; }
+  .gcard-dark { position: relative; border-radius: 1rem; padding: 1px; background: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.05)); transition: background .4s, transform .3s, box-shadow .3s; }
+  .gcard-dark:hover { background: linear-gradient(160deg, rgba(255,255,255,.55), rgba(255,255,255,.08)); transform: translateY(-4px); box-shadow: 0 18px 40px -14px rgba(0,0,0,.6); }
+  .gcard-dark > .gcard-in { border-radius: calc(1rem - 1px); background: #131313; height: 100%; }
+  /* ── 히어로 글로우 ── */
+  .hero-glow { background: radial-gradient(600px 280px at 50% 0%, rgba(255,255,255,.10), transparent 70%), radial-gradient(900px 420px at 80% 120%, rgba(156,160,164,.10), transparent 70%); }
+  /* ── 버튼 시머 ── */
+  .btn-sheen { position: relative; overflow: hidden; }
+  .btn-sheen::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.25) 50%, transparent 70%); transform: translateX(-120%); transition: transform .6s; }
+  .btn-sheen:hover::after { transform: translateX(120%); }
+  /* ── 언더라인 슬라이드 ── */
+  .nav-link { position: relative; }
+  .nav-link::after { content:''; position:absolute; left:0; bottom:-4px; height:1.5px; width:0; background:#181818; transition:width .25s; }
+  .nav-link:hover::after { width:100%; }
+</style>
+</head>
+
+<body class="bg-white text-gray-900">
+
+<!-- 헤더 -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="./index.html" class="flex items-center gap-3 group">
+      <img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-10 transition-transform duration-300 group-hover:scale-105" />
+      <div class="hidden sm:flex flex-col leading-tight">
+        <span class="text-[10px] text-gray-500 font-medium tracking-wider">WF GROUP</span>
+        <span class="font-bold text-wfblack-dark text-sm">주식회사 더블유에프그룹</span>
+      </div>
+    </a>
+    <ul class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="nav-link hover:text-wfblack">홈</a></li>
+      <li><a href="./business.html" class="nav-link hover:text-wfblack">About WF Business</a></li>
+      <li><a href="./strengths.html" class="nav-link hover:text-wfblack">Why WF</a></li>
+      <li><a href="./simulator.html" class="nav-link hover:text-wfblack">수익 시뮬레이터</a></li>
+      <li><a href="./faq.html" class="nav-link hover:text-wfblack">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="nav-link hover:text-wfblack">계약서</a></li>
+      <li><a href="./careers.html" class="text-wfblack font-semibold">채용</a></li>
+    </ul>
+    <a href="#apply" class="btn-sheen hidden md:inline-flex items-center gap-2 bg-wfblack hover:bg-wfblack-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">지원하기</a>
+    <button class="md:hidden text-wfblack-dark" id="mobile-menu-btn"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+    <ul class="px-6 py-4 space-y-3 text-sm font-medium text-gray-700">
+      <li><a href="./index.html" class="block py-2">홈</a></li>
+      <li><a href="./business.html" class="block py-2">About WF Business</a></li>
+      <li><a href="./strengths.html" class="block py-2">Why WF</a></li>
+      <li><a href="./simulator.html" class="block py-2">수익 시뮬레이터</a></li>
+      <li><a href="./faq.html" class="block py-2">자주 묻는 질문</a></li>
+      <li><a href="./contract.html" class="block py-2">계약서</a></li>
+      <li><a href="./careers.html" class="block py-2 text-wfblack font-semibold">채용</a></li>
+      <li><a href="#apply" class="block py-2 text-wfblack font-semibold">지원하기 →</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- 히어로 -->
+<section class="relative pt-32 pb-16 bg-wfblack-darker text-white overflow-hidden">
+  <div class="absolute inset-0 grid-dark"></div>
+  <div class="absolute inset-0 hero-glow"></div>
+  <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-[16rem] lg:text-[22rem] font-black tracking-tighter text-white/[0.03] select-none pointer-events-none leading-none">WF</div>
+  <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-wfsilver-light font-semibold text-xs tracking-[0.25em] px-4 py-1.5 rounded-full mb-6">CAREERS</div>
+    <h1 class="text-5xl lg:text-7xl font-black tracking-tighter mb-4 txt-grad">반복을 시스템으로.</h1>
+    <p class="text-gray-300 text-base lg:text-lg">해외직구 운영대행 8년차, WF GROUP이 동료를 찾습니다.</p>
+    <p class="text-gray-500 text-sm mt-4 max-w-xl mx-auto leading-relaxed">
+      자동화와 AI가 반복을 처리하고, 사람은 판단·개선·신뢰에 집중합니다.
+      그 시스템을 함께 돌리고, 함께 만들 두 사람을 기다립니다.
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px mt-12 bg-white/10 rounded-2xl overflow-hidden border border-white/10">
+      <div class="bg-wfblack-darker/90 p-5 group hover:bg-wfblack transition-colors duration-300"><div class="text-3xl font-black tracking-tight text-white group-hover:scale-105 transition-transform duration-300">8년</div><div class="text-[11px] tracking-widest text-gray-500 mt-1.5 font-semibold">해외직구 대행 운영</div></div>
+      <div class="bg-wfblack-darker/90 p-5 group hover:bg-wfblack transition-colors duration-300"><div class="text-3xl font-black tracking-tight text-white group-hover:scale-105 transition-transform duration-300">2,000</div><div class="text-[11px] tracking-widest text-gray-500 mt-1.5 font-semibold">누적 운영 사업자</div></div>
+      <div class="bg-wfblack-darker/90 p-5 group hover:bg-wfblack transition-colors duration-300"><div class="text-3xl font-black tracking-tight text-white group-hover:scale-105 transition-transform duration-300">5,120만+</div><div class="text-[11px] tracking-widest text-gray-500 mt-1.5 font-semibold">누적 상품 등록</div></div>
+      <div class="bg-wfblack-darker/90 p-5 group hover:bg-wfblack transition-colors duration-300"><div class="text-3xl font-black tracking-tight text-white group-hover:scale-105 transition-transform duration-300">2</div><div class="text-[11px] tracking-widest text-gray-500 mt-1.5 font-semibold">열려 있는 자리</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 방향성 & 가치 -->
+<section class="relative py-16 lg:py-20 bg-white overflow-hidden">
+  <div class="absolute inset-0 grid-light [mask-image:linear-gradient(to_bottom,black,transparent_70%)]"></div>
+  <div class="relative max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center gap-4 mb-3">
+      <span class="text-[11px] font-bold tracking-[0.3em] text-gray-400">OUR DIRECTION</span>
+      <span class="h-px flex-1 bg-gradient-to-r from-gray-300 to-transparent"></span>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-8 lg:gap-14 items-start mb-12">
+      <h2 class="text-3xl lg:text-5xl font-black tracking-tighter text-wfblack-dark leading-[1.15]">우리가 가는 방향</h2>
+      <p class="text-gray-600 leading-relaxed text-[15px]">
+        WF의 미션은 <strong class="text-wfblack-dark">"쇼핑몰 운영의 모든 반복을 시스템으로 바꾸는 것"</strong>입니다.
+        사람이 밤새 상품을 올리고 주문을 옮겨 적는 시대는 끝났습니다. 자동화와 AI가 반복을 처리하고,
+        사람은 판단·개선·신뢰에 집중하는 운영 회사 — 그것이 우리가 만들어 가는 모습입니다.
+      </p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="gcard group"><div class="gcard-in p-6 relative overflow-hidden">
+        <div class="absolute -right-2 -top-6 text-7xl font-black text-gray-100 group-hover:text-gray-200 transition-colors select-none">01</div>
+        <div class="relative"><div class="font-extrabold text-wfblack-dark text-lg tracking-tight mb-2 mt-8">신뢰가 전부다</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">우리의 운영은 수십 개 사업자 점주님들의 생계와 직결됩니다. 정확한 정산과 투명한 보고가 회사의 존재 이유입니다.</p></div>
+      </div></div>
+      <div class="gcard group"><div class="gcard-in p-6 relative overflow-hidden">
+        <div class="absolute -right-2 -top-6 text-7xl font-black text-gray-100 group-hover:text-gray-200 transition-colors select-none">02</div>
+        <div class="relative"><div class="font-extrabold text-wfblack-dark text-lg tracking-tight mb-2 mt-8">반복은 시스템에</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">같은 일을 사람이 반복하고 있다면 그것은 개선 대상입니다. 자동화·AI로 시스템에 맡기고, 사람은 더 높은 판단에 씁니다.</p></div>
+      </div></div>
+      <div class="gcard group"><div class="gcard-in p-6 relative overflow-hidden">
+        <div class="absolute -right-2 -top-6 text-7xl font-black text-gray-100 group-hover:text-gray-200 transition-colors select-none">03</div>
+        <div class="relative"><div class="font-extrabold text-wfblack-dark text-lg tracking-tight mb-2 mt-8">데이터로 판단한다</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">감이 아니라 숫자로 결정합니다. 매출·정산·반품 데이터를 읽고, 이상 신호를 먼저 발견하는 조직이 이깁니다.</p></div>
+      </div></div>
+      <div class="gcard group"><div class="gcard-in p-6 relative overflow-hidden">
+        <div class="absolute -right-2 -top-6 text-7xl font-black text-gray-100 group-hover:text-gray-200 transition-colors select-none">04</div>
+        <div class="relative"><div class="font-extrabold text-wfblack-dark text-lg tracking-tight mb-2 mt-8">빠르게 실행하고 고친다</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">완벽한 계획보다 오늘의 실행이 낫습니다. 작게 시도하고, 결과를 보고, 빠르게 수정합니다.</p></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 인재상 -->
+<section class="py-16 lg:py-20 bg-gray-50 border-y border-gray-100">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center gap-4 mb-3">
+      <span class="text-[11px] font-bold tracking-[0.3em] text-gray-400">WHO WE LOOK FOR</span>
+      <span class="h-px flex-1 bg-gradient-to-r from-gray-300 to-transparent"></span>
+    </div>
+    <h2 class="text-3xl lg:text-5xl font-black tracking-tighter text-wfblack-dark mb-10">이런 사람과 함께합니다</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="group bg-white rounded-2xl border border-gray-200 p-6 transition-all duration-300 hover:border-wfblack hover:shadow-[0_16px_40px_-16px_rgba(0,0,0,.2)] hover:-translate-y-1">
+        <div class="w-11 h-11 rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-wfblack group-hover:text-white group-hover:rotate-3"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+        <div class="font-extrabold text-wfblack-dark tracking-tight mb-1.5">일단 해보는 사람</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">완벽한 계획보다 빠른 실행과 수정을 믿습니다. 모르는 건 물어보고, 막히면 방법을 찾는 분.</p>
+      </div>
+      <div class="group bg-white rounded-2xl border border-gray-200 p-6 transition-all duration-300 hover:border-wfblack hover:shadow-[0_16px_40px_-16px_rgba(0,0,0,.2)] hover:-translate-y-1">
+        <div class="w-11 h-11 rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-wfblack group-hover:text-white group-hover:rotate-3"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 20h18M7 16v-5m5 5V8m5 8v-8"/></svg></div>
+        <div class="font-extrabold text-wfblack-dark tracking-tight mb-1.5">숫자로 말하는 사람</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">주문·정산·매출은 전부 숫자입니다. 감이 아니라 데이터로 확인하고, 한 일은 기록으로 남기는 분.</p>
+      </div>
+      <div class="group bg-white rounded-2xl border border-gray-200 p-6 transition-all duration-300 hover:border-wfblack hover:shadow-[0_16px_40px_-16px_rgba(0,0,0,.2)] hover:-translate-y-1">
+        <div class="w-11 h-11 rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-wfblack group-hover:text-white group-hover:rotate-3"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <div class="font-extrabold text-wfblack-dark tracking-tight mb-1.5">반복을 싫어하는 사람</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">같은 일을 세 번 하면 "이거 자동화 안 되나?"부터 생각하는 분. AI 툴은 회사가 지원합니다.</p>
+      </div>
+      <div class="group bg-white rounded-2xl border border-gray-200 p-6 transition-all duration-300 hover:border-wfblack hover:shadow-[0_16px_40px_-16px_rgba(0,0,0,.2)] hover:-translate-y-1">
+        <div class="w-11 h-11 rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-wfblack group-hover:text-white group-hover:rotate-3"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+        <div class="font-extrabold text-wfblack-dark tracking-tight mb-1.5">끝까지 책임지는 사람</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">우리의 일은 점주님들의 생계와 연결됩니다. 정산 하나, 문의 하나를 가볍게 넘기지 않는 분.</p>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4 mt-8 max-w-4xl mx-auto">
+      <div class="bg-white rounded-2xl border border-gray-200 p-6 transition-all duration-300 hover:border-gray-400 hover:shadow-md">
+        <div class="font-bold text-wfblack-dark mb-3 flex items-center gap-1.5"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>이런 분이면 잘 맞습니다</div>
+        <ul class="space-y-2 text-[13px] text-gray-600 list-disc list-inside">
+          <li>작은 회사에서 넓은 범위의 일을 배우고 싶은 분</li>
+          <li>지시를 기다리기보다 개선점을 먼저 제안하는 분</li>
+          <li>새 툴을 배우는 데 거부감이 없는 분</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-200 p-6 transition-all duration-300 hover:border-gray-400 hover:shadow-md">
+        <div class="font-bold text-wfblack-dark mb-3 flex items-center gap-1.5"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>솔직히, 이런 분과는 맞지 않습니다</div>
+        <ul class="space-y-2 text-[13px] text-gray-600 list-disc list-inside">
+          <li>정해진 매뉴얼 안의 일만 하고 싶은 분</li>
+          <li>피드백을 지적으로 받아들이는 분</li>
+          <li>큰 조직의 체계적인 교육 시스템을 기대하는 분</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 필요 역량 -->
+<section class="relative py-16 lg:py-20 bg-wfblack-darker text-white overflow-hidden">
+  <div class="absolute inset-0 grid-dark [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]"></div>
+  <div class="absolute inset-0" style="background: radial-gradient(700px 300px at 20% 0%, rgba(156,160,164,.12), transparent 70%);"></div>
+  <div class="relative max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center gap-4 mb-3">
+      <span class="text-[11px] font-bold tracking-[0.3em] text-gray-500">CORE COMPETENCIES</span>
+      <span class="h-px flex-1 bg-gradient-to-r from-white/25 to-transparent"></span>
+    </div>
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3 mb-10">
+      <h2 class="text-3xl lg:text-5xl font-black tracking-tighter text-white">우리가 보는 다섯 가지</h2>
+      <p class="text-gray-500 text-sm">스펙보다 이 다섯 가지를 면접에서 확인합니다.</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div class="gcard-dark group"><div class="gcard-in p-5">
+        <div class="text-4xl font-black tracking-tighter text-white/15 group-hover:text-white/40 transition-colors duration-300 mb-4">01</div>
+        <div class="font-bold mb-1.5 tracking-tight">책임감과 꼼꼼함</div>
+        <p class="text-xs text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">맡은 일을 끝까지 마무리하고, 숫자 하나·문의 하나를 흘려보내지 않는 태도.</p>
+      </div></div>
+      <div class="gcard-dark group"><div class="gcard-in p-5">
+        <div class="text-4xl font-black tracking-tighter text-white/15 group-hover:text-white/40 transition-colors duration-300 mb-4">02</div>
+        <div class="font-bold mb-1.5 tracking-tight">데이터 리터러시</div>
+        <p class="text-xs text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">엑셀·스프레드시트로 숫자를 다루고, 데이터에서 문제와 기회를 읽어내는 능력.</p>
+      </div></div>
+      <div class="gcard-dark group"><div class="gcard-in p-5">
+        <div class="text-4xl font-black tracking-tighter text-white/15 group-hover:text-white/40 transition-colors duration-300 mb-4">03</div>
+        <div class="font-bold mb-1.5 tracking-tight">우선순위 감각</div>
+        <p class="text-xs text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">여러 계정·여러 업무가 동시에 돌아가는 환경에서 중요한 것부터 처리하는 판단력.</p>
+      </div></div>
+      <div class="gcard-dark group"><div class="gcard-in p-5">
+        <div class="text-4xl font-black tracking-tighter text-white/15 group-hover:text-white/40 transition-colors duration-300 mb-4">04</div>
+        <div class="font-bold mb-1.5 tracking-tight">AI·자동화 활용</div>
+        <p class="text-xs text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">새 도구를 거부감 없이 배우고, 내 업무를 더 빠르게 만드는 데 적극적으로 쓰는 자세.</p>
+      </div></div>
+      <div class="gcard-dark group col-span-2 md:col-span-1"><div class="gcard-in p-5">
+        <div class="text-4xl font-black tracking-tighter text-white/15 group-hover:text-white/40 transition-colors duration-300 mb-4">05</div>
+        <div class="font-bold mb-1.5 tracking-tight">솔직한 소통</div>
+        <p class="text-xs text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">모르면 모른다고, 실수하면 했다고 말하는 것. 작은 팀은 투명한 소통 위에서만 빠릅니다.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 채용 공고 -->
+<section id="positions" class="py-16 lg:py-20 bg-white">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center gap-4 mb-3">
+      <span class="text-[11px] font-bold tracking-[0.3em] text-gray-400">OPEN POSITIONS</span>
+      <span class="h-px flex-1 bg-gradient-to-r from-gray-300 to-transparent"></span>
+    </div>
+    <h2 class="text-3xl lg:text-5xl font-black tracking-tighter text-wfblack-dark mb-3">열려 있는 자리</h2>
+    <p class="text-gray-500 text-sm mb-10">정규직 · 주 5일 (09:00~18:00) · 동탄 사무실 (경기 화성시 동탄영천로 131, 코너원 스마트타워) · 급여: 면접 후 협의</p>
+    <div class="space-y-4">
+
+      <details class="group rounded-2xl border border-gray-200 transition-all duration-300 hover:border-wfblack open:border-wfblack open:shadow-[0_20px_50px_-20px_rgba(0,0,0,.25)]" open>
+        <summary class="cursor-pointer p-5 lg:p-6 list-none flex items-center justify-between gap-4">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+              <span class="bg-wfblack text-white text-[11px] font-bold tracking-wider px-2.5 py-1 rounded-full">OPERATIONS</span>
+              <span class="border border-gray-300 text-gray-600 text-[11px] font-semibold px-2.5 py-1 rounded-full">정규직</span>
+              <span class="border border-gray-300 text-gray-600 text-[11px] font-semibold px-2.5 py-1 rounded-full">경력 무관</span>
+            </div>
+            <div class="text-xl lg:text-2xl font-extrabold tracking-tight text-wfblack-dark">운영 매니저 <span class="text-gray-400 font-bold">— CS · 주문 · 정산</span></div>
+          </div>
+          <svg class="w-5 h-5 text-wfblack transition-transform duration-300 group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 lg:px-6 pb-6 grid md:grid-cols-2 gap-6 text-sm text-gray-700 leading-relaxed border-t border-gray-100 pt-5">
+          <div>
+            <div class="text-[11px] font-bold tracking-[0.2em] text-gray-400 mb-2">RESPONSIBILITIES</div>
+            <ul class="space-y-1.5 list-disc list-inside">
+              <li>주문 처리, 반품·교환, CS 처리</li>
+              <li>데이터 분석 및 보고서 작성</li>
+              <li>쇼핑몰 계정 및 상품 관리 전반</li>
+            </ul>
+            <div class="text-[11px] font-bold tracking-[0.2em] text-gray-400 mt-5 mb-2">REQUIREMENTS</div>
+            <ul class="space-y-1.5 list-disc list-inside">
+              <li>학력·경력 무관 — 성실함과 꼼꼼함이 스펙입니다</li>
+              <li>정산·CS 하나에도 책임을 다하는 태도</li>
+              <li>엑셀·스프레드시트로 숫자를 다루는 능력</li>
+              <li>여러 계정을 동시 관리하는 우선순위 감각</li>
+              <li>AI·자동화 도구를 배우고 쓰려는 자세</li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-[11px] font-bold tracking-[0.2em] text-gray-400 mb-2">NICE TO HAVE</div>
+            <ul class="space-y-1.5 list-disc list-inside">
+              <li>스마트스토어·쿠팡윙 등 오픈마켓 운영 경험</li>
+              <li>해외직구·구매대행 업무 이해</li>
+              <li>CS·콜센터·리테일 응대 경험</li>
+              <li>ChatGPT 등 AI 툴을 업무에 써본 경험</li>
+            </ul>
+            <div class="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-4 text-xs text-gray-500 leading-relaxed">
+              <span class="font-bold text-wfblack-dark">WF가 일하는 방식</span> — 주문 수집 같은 반복 업무는 자동화 시스템이 처리합니다. 사람은 결과를 검수하고, 예외를 해결하고, 데이터에서 개선점을 찾습니다. 우리의 운영은 점주님들의 생계와 직결되기에 정확함과 신뢰가 최우선입니다. 입사 후 1개월은 선임과 함께하는 온보딩 기간입니다.
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="group rounded-2xl border border-gray-200 transition-all duration-300 hover:border-wfblack open:border-wfblack open:shadow-[0_20px_50px_-20px_rgba(0,0,0,.25)]" open>
+        <summary class="cursor-pointer p-5 lg:p-6 list-none flex items-center justify-between gap-4">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+              <span class="bg-wfblack text-white text-[11px] font-bold tracking-wider px-2.5 py-1 rounded-full">ENGINEERING</span>
+              <span class="border border-gray-300 text-gray-600 text-[11px] font-semibold px-2.5 py-1 rounded-full">정규직</span>
+              <span class="border border-gray-300 text-gray-600 text-[11px] font-semibold px-2.5 py-1 rounded-full">결과물 중심</span>
+            </div>
+            <div class="text-xl lg:text-2xl font-extrabold tracking-tight text-wfblack-dark">개발자 <span class="text-gray-400 font-bold">— 사내 자동화 · AI</span></div>
+          </div>
+          <svg class="w-5 h-5 text-wfblack transition-transform duration-300 group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 lg:px-6 pb-6 grid md:grid-cols-2 gap-6 text-sm text-gray-700 leading-relaxed border-t border-gray-100 pt-5">
+          <div>
+            <div class="text-[11px] font-bold tracking-[0.2em] text-gray-400 mb-2">RESPONSIBILITIES</div>
+            <ul class="space-y-1.5 list-disc list-inside">
+              <li>오픈마켓 API 연동 (상품등록·주문수집·정산)</li>
+              <li>반복 업무 자동화 파이프라인 구축·운영</li>
+              <li>LLM(AI) 활용 자동화 — 상품 정보 가공, CS 초안, 데이터 정리</li>
+              <li>사내 정산·장부 시스템 개선</li>
+            </ul>
+            <div class="text-[11px] font-bold tracking-[0.2em] text-gray-400 mt-5 mb-2">REQUIREMENTS</div>
+            <ul class="space-y-1.5 list-disc list-inside">
+              <li>Python 또는 JavaScript로 실무 코드를 짤 수 있는 분</li>
+              <li>REST API를 읽고 연동해 본 경험</li>
+              <li>학력·전공·경력 무관 — 만들어 본 결과물로 이야기합니다</li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-[11px] font-bold tracking-[0.2em] text-gray-400 mb-2">NICE TO HAVE</div>
+            <ul class="space-y-1.5 list-disc list-inside">
+              <li>쿠팡·스마트스토어 등 커머스 API 연동 경험</li>
+              <li>크롤링·RPA·업무 자동화 프로젝트 경험</li>
+              <li>LLM API(OpenAI·Claude 등)로 무언가 만들어 본 경험</li>
+              <li>셀러툴·ERP 등 커머스 툴 사용 경험</li>
+            </ul>
+            <div class="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-4 text-xs text-gray-500 leading-relaxed">
+              혼자 처음부터 다 만드는 자리가 아닙니다. 이미 돌아가는 자동화 시스템이 있고, 이를 더 안정적이고 더 똑똑하게 만드는 역할입니다. AI 유료 툴은 회사가 전부 지원합니다.
+            </div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- 조건 -->
+<section class="py-16 bg-gray-50 border-y border-gray-100">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center gap-4 mb-3">
+      <span class="text-[11px] font-bold tracking-[0.3em] text-gray-400">BENEFITS</span>
+      <span class="h-px flex-1 bg-gradient-to-r from-gray-300 to-transparent"></span>
+    </div>
+    <h2 class="text-3xl lg:text-5xl font-black tracking-tighter text-wfblack-dark mb-10">일하는 조건</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-200 rounded-2xl overflow-hidden border border-gray-200">
+      <div class="group bg-white p-6 text-center transition-colors duration-300 hover:bg-wfblack">
+        <div class="w-10 h-10 mx-auto rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18M3 8h4M7 3v18M14 3v7a3 3 0 003 3v8M20 3v18"/></svg></div>
+        <div class="font-bold text-sm text-wfblack-dark transition-colors duration-300 group-hover:text-white">식대·점심 지원</div>
+      </div>
+      <div class="group bg-white p-6 text-center transition-colors duration-300 hover:bg-wfblack">
+        <div class="w-10 h-10 mx-auto rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-2.761 0-5 .895-5 2s2.239 2 5 2 5 .895 5 2-2.239 2-5 2m0-8c2.761 0 5 .895 5 2m-5-2V6m0 12v-2m9-4a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div class="font-bold text-sm text-wfblack-dark transition-colors duration-300 group-hover:text-white">성과 인센티브</div>
+      </div>
+      <div class="group bg-white p-6 text-center transition-colors duration-300 hover:bg-wfblack">
+        <div class="w-10 h-10 mx-auto rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/></svg></div>
+        <div class="font-bold text-sm text-wfblack-dark transition-colors duration-300 group-hover:text-white">AI 유료 툴 지원</div>
+      </div>
+      <div class="group bg-white p-6 text-center transition-colors duration-300 hover:bg-wfblack">
+        <div class="w-10 h-10 mx-auto rounded-xl bg-gray-100 text-wfblack flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+        <div class="font-bold text-sm text-wfblack-dark transition-colors duration-300 group-hover:text-white">주 5일 · 4대보험 · 연차</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 지원 방법 -->
+<section id="apply" class="py-16 lg:py-20 bg-white">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center gap-4 mb-3">
+      <span class="text-[11px] font-bold tracking-[0.3em] text-gray-400">HOW TO APPLY</span>
+      <span class="h-px flex-1 bg-gradient-to-r from-gray-300 to-transparent"></span>
+    </div>
+    <h2 class="text-3xl lg:text-5xl font-black tracking-tighter text-wfblack-dark mb-10">지원 방법</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="gcard"><div class="gcard-in p-6">
+        <div class="font-bold text-wfblack-dark mb-3">이메일 지원</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed mb-4">이력서(필수)와 함께 보내주세요. 개발자 지원 시 포트폴리오·GitHub·결과물 링크를 환영합니다. 자기소개서는 자유 양식이며, 짧아도 괜찮습니다.</p>
+        <a href="mailto:wfgroupcoltd@gmail.com?subject=[입사지원]" class="btn-sheen inline-flex items-center gap-2 bg-wfblack hover:bg-wfblack-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">wfgroupcoltd@gmail.com</a>
+        <p class="text-xs text-gray-400 mt-3">메일 제목: [입사지원] 직무_이름 (예: [입사지원] 개발자_홍길동)</p>
+      </div></div>
+      <div class="gcard"><div class="gcard-in p-6">
+        <div class="font-bold text-wfblack-dark mb-3">채용 플랫폼 지원</div>
+        <p class="text-[13px] text-gray-600 leading-relaxed">잡코리아 · 알바몬에서 "더블유에프그룹"을 검색해 온라인 지원하실 수도 있습니다. 어느 경로든 전형은 동일합니다.</p>
+        <div class="mt-5">
+          <div class="text-[11px] font-bold tracking-[0.2em] text-gray-400 mb-3">PROCESS · 평균 1~2주</div>
+          <div class="flex items-center gap-1.5 flex-wrap text-xs font-semibold">
+            <span class="border border-gray-300 rounded-full px-3 py-1.5 transition-colors hover:border-wfblack hover:bg-gray-50">① 서류 검토</span><span class="text-gray-300">—</span>
+            <span class="border border-gray-300 rounded-full px-3 py-1.5 transition-colors hover:border-wfblack hover:bg-gray-50">② 면접 1회</span><span class="text-gray-300">—</span>
+            <span class="border border-gray-300 rounded-full px-3 py-1.5 transition-colors hover:border-wfblack hover:bg-gray-50">③ 처우 협의</span><span class="text-gray-300">—</span>
+            <span class="bg-wfblack text-white rounded-full px-3 py-1.5">④ 입사</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="mt-12">
+      <div class="text-[11px] font-bold tracking-[0.3em] text-gray-400 mb-4">FAQ</div>
+      <div class="space-y-3 max-w-2xl">
+        <details class="group rounded-2xl border border-gray-200 transition-colors duration-300 hover:border-wfblack">
+          <summary class="cursor-pointer p-5 list-none flex items-center justify-between gap-4"><span class="font-bold text-wfblack-dark text-sm"><span class="text-wfsilver mr-2">Q.</span>경력이 없어도 지원할 수 있나요?</span><svg class="w-4 h-4 text-wfblack transition-transform duration-300 group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></summary>
+          <div class="px-5 pb-5 text-[13px] text-gray-600 leading-relaxed">네. 두 포지션 모두 학력·경력 무관입니다. 운영 매니저는 성실함과 꼼꼼함을, 개발자는 만들어 본 결과물을 봅니다.</div>
+        </details>
+        <details class="group rounded-2xl border border-gray-200 transition-colors duration-300 hover:border-wfblack">
+          <summary class="cursor-pointer p-5 list-none flex items-center justify-between gap-4"><span class="font-bold text-wfblack-dark text-sm"><span class="text-wfsilver mr-2">Q.</span>WF GROUP은 어떤 회사인가요?</span><svg class="w-4 h-4 text-wfblack transition-transform duration-300 group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></summary>
+          <div class="px-5 pb-5 text-[13px] text-gray-600 leading-relaxed">해외직구 구매대행 쇼핑몰을 대리점주 대신 만들어 주고 운영을 대행하는 회사입니다. 8년간 누적 사업자 2,000개, 상품 등록 5,120만 건 이상을 운영해 왔습니다. 자세한 내용은 <a href="./business.html" class="underline font-semibold">About WF Business</a>를 참고하세요.</div>
+        </details>
+        <details class="group rounded-2xl border border-gray-200 transition-colors duration-300 hover:border-wfblack">
+          <summary class="cursor-pointer p-5 list-none flex items-center justify-between gap-4"><span class="font-bold text-wfblack-dark text-sm"><span class="text-wfsilver mr-2">Q.</span>AI를 잘 못 다뤄도 되나요?</span><svg class="w-4 h-4 text-wfblack transition-transform duration-300 group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></summary>
+          <div class="px-5 pb-5 text-[13px] text-gray-600 leading-relaxed">입사 시점에는 몰라도 됩니다. 다만 배우려는 태도는 필요합니다. 유료 AI 툴을 회사가 지원하며, 실제 업무에 적극적으로 활용하는 조직입니다.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer class="bg-gray-50 border-t border-gray-200 py-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <div class="mb-4"><img src="./assets/images/wf-symbol.png" alt="WF GROUP" class="h-14" /></div>
+        <p class="text-sm text-gray-600 leading-relaxed">㈜더블유에프그룹<br/>해외직구 대행업 운영대행 8년차<br/>누적 사업자 2,000개 · 상품등록 5,120만건+</p>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">바로가기</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
+          <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
+          <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
+          <li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li>
+          <li><a href="./faq.html" class="hover:text-wfblack">자주 묻는 질문</a></li>
+          <li><a href="./contract.html" class="hover:text-wfblack">계약서</a></li>
+          <li><a href="./careers.html" class="hover:text-wfblack">채용</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-bold text-wfblack-dark mb-4 text-sm">연락처</div>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>이메일: <a href="mailto:wfgroupcoltd@gmail.com" class="hover:text-wfblack">wfgroupcoltd@gmail.com</a></li>
+          <li>주소: 경기도 화성시 동탄영천로 131, 코너원빌딩 530호</li>
+          <li>대표: 김예원</li>
+          <li>사업자등록번호: 718-88-03426</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 pt-6 text-center text-xs text-gray-500">© 2026 ㈜더블유에프그룹 (WF GROUP). All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
+
+</body>
+</html>
