@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>수익 시뮬레이터 · WF GROUP</title>
-<meta name="description" content="WF GROUP 대리점 사업 수익 시뮬레이터 — 모델·계약 기간·조건을 직접 조절하며 통장 흐름과 예상 수익을 확인해 보세요." />
+<meta name="description" content="WF GROUP 파트너 스토어 사업 수익 시뮬레이터 — 모델·계약 기간·조건을 직접 조절하며 통장 흐름과 예상 수익을 확인해 보세요." />
 <link rel="icon" type="image/png" href="./assets/images/wf-symbol.png" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="./assets/css/tw.css" />
@@ -541,7 +541,9 @@
         </ul>
       </div>
     </div>
-    <div class="border-t border-gray-200 pt-6 text-center text-xs text-gray-500">© 2026 ㈜더블유에프그룹 (WF GROUP). All rights reserved.</div>
+    <div class="border-t border-gray-200 pt-6">
+    <p class="text-[11px] text-gray-400 leading-relaxed text-center max-w-3xl mx-auto mb-4">※ ㈜더블유에프그룹의 서비스는 가맹사업법상의 프랜차이즈가 아닌, 독립된 사업자 간의 쇼핑몰 운영 위탁(대행) 서비스입니다. 안내된 수익·매출 수치는 기존 파트너의 평균 데이터이며, 개별 쇼핑몰의 성과는 시장 상황에 따라 다를 수 있습니다.</p>
+    <div class="text-center text-xs text-gray-500">© 2026 ㈜더블유에프그룹 (WF GROUP). All rights reserved.</div></div>
   </div>
 </footer>
 
@@ -604,7 +606,7 @@
     if (saved && typeof saved === "object") hqCfg = Object.assign({}, WFSim.DEFAULT_CFG, saved);
   } catch (e) {}
 
-  // ---- 상태 (점주 조절: 모델·가입월·할부·예치금·사업외소득·과세유형) ----
+  // ---- 상태 (파트너 조절: 모델·가입월·할부·예치금·사업외소득·과세유형) ----
   // 첫 화면 값은 사이트 기본값 파일(assets/js/wf-defaults.js)의 sim 그룹으로 덮어쓸 수 있다
   var SIM_SITE = (WFSim.SITE_DEFAULTS && WFSim.SITE_DEFAULTS.sim) || {};
   function numOr(v, dflt, lo, hi) {
@@ -633,7 +635,7 @@
     var d = WFSim.DEFAULTS[state.model];
     var p = Object.assign({}, d);
     WFSim.applyCfg(p, hqCfg, state.model);
-    p.term = state.term;          // 점주가 고른 계약 개월 수 (본사 설정값이 초기값)
+    p.term = state.term;          // 파트너가 고른 계약 개월 수 (본사 설정값이 초기값)
     p.inst = state.inst;
     p.joinMonth = (state.join === "auto") ? AUTO_JOIN : +state.join;
     p.otherIncome = state.otherMan * MAN;
@@ -652,7 +654,7 @@
   function paintFixedBox(p) {
     $("fx-mp").textContent = man(p.mp * p.ach, 0) + (hqCfg.ach !== 100 ? " (달성률 " + hqCfg.ach + "%)" : "");
     $("fx-st").textContent = p.st > 0 ? p.st + "개월 (매출 0 · 수수료 0)" : "없음 (가입 첫 달부터 매출 발생)";
-    $("fx-fr").textContent = p.fr > 0 ? p.fr + "개월 (점주 100% 수취)" : "면제 없음";
+    $("fx-fr").textContent = p.fr > 0 ? p.fr + "개월 (파트너 100% 수취)" : "면제 없음";
     $("fx-pl").textContent = "매출 발생 " + p.pl + "개월 뒤 20일";
     var nv = Math.round(hqCfg.nvShare / 10);
     $("fx-ch").textContent = "네이버 " + nv + " : 쿠팡 " + (10 - nv) + " (평균)";
@@ -1224,7 +1226,7 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
       sel.appendChild(o);
     }
   })();
-  // ---- 계약 개월 수 (점주 조절 · 본사 설정값이 초기값) ----
+  // ---- 계약 개월 수 (파트너 조절 · 본사 설정값이 초기값) ----
   function paintTermChips() {
     document.querySelectorAll("[data-term]").forEach(function (b) {
       b.classList.toggle("on", +b.dataset.term === state.term);
@@ -1324,9 +1326,9 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
     ["mp30", "평균 월 매출이익 M30 (만원)", 10],
     ["mp50", "평균 월 매출이익 M50 (만원)", 10],
     ["ach", "매출 달성률 (%)", 5],
-    ["shr", "점주 배분율 (%)", 5],
+    ["shr", "파트너 배분율 (%)", 5],
     ["lossRate", "반품·재고 손실률 (매출이익 대비 %)", 1],
-    ["lossShare", "점주 손실 분담률 (%) · 나머지는 본사·위탁사 환불", 5],
+    ["lossShare", "파트너 손실 분담률 (%) · 나머지는 본사·위탁사 환불", 5],
     ["cm", "원가대비 이익률 (%)", 5],
     ["— 세팅 · 수수료 —"],
     ["st", "세팅 소요 개월", 1],
@@ -1761,7 +1763,7 @@ var maxPos = Math.max(p.dep, Math.max.apply(null, r.rows.map(function (x) { retu
   $("hq-save").addEventListener("click", function () {
     hqReadControls();
     try { localStorage.setItem("wf_hq_cfg", JSON.stringify(hqCfg)); } catch (e) {}
-    // 본사가 계약 개월 수를 바꾸면 화면(점주 쪽 입력)도 그 값으로 맞춘다
+    // 본사가 계약 개월 수를 바꾸면 화면(파트너 쪽 입력)도 그 값으로 맞춘다
     state.term = hqCfg.term;
     $("in-term").value = state.term;
     paintTermChips();
