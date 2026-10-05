@@ -42,7 +42,7 @@
       <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
       <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
       <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
-      <li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li>
+      <template data-hidden="simulator"><li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li></template>
           <li><a href="./faq.html" class="text-wfblack font-semibold">자주 묻는 질문</a></li>
       <li><a href="./careers.html" class="hover:text-wfblack">채용</a></li>
     </ul>
@@ -54,7 +54,7 @@
       <li><a href="./index.html" class="block py-2">홈</a></li>
       <li><a href="./business.html" class="block py-2">About WF Business</a></li>
       <li><a href="./strengths.html" class="block py-2">Why WF</a></li>
-      <li><a href="./simulator.html" class="block py-2">수익 시뮬레이터</a></li>
+      <template data-hidden="simulator"><li><a href="./simulator.html" class="block py-2">수익 시뮬레이터</a></li></template>
           <li><a href="./faq.html" class="block py-2 text-wfblack font-semibold">자주 묻는 질문</a></li>
       <li><a href="./careers.html" class="block py-2">채용</a></li>
       <li><a href="./index.html#contact" class="block py-2 text-wfblack font-semibold">상담 신청 →</a></li>
@@ -110,13 +110,14 @@
 
         <details class="group bg-white rounded-2xl shadow-sm border border-gray-100">
           <summary class="cursor-pointer p-6 list-none flex items-center justify-between gap-4">
-            <span class="font-bold text-wfblack-dark text-lg"><span class="text-wfsilver mr-2">Q.</span>평균 월 매출이익 250만원, 진짜인가요?</span>
+            <span class="font-bold text-wfblack-dark text-lg"><span class="text-wfsilver mr-2">Q.</span><span data-orig="평균 월 매출이익 250만원, 진짜인가요?">평균 월 매출이익은 어느 정도인가요?</span></span>
             <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <div class="px-6 pb-6 text-gray-700 leading-relaxed">
+          <template data-hidden="faq-profit"><div class="px-6 pb-6 text-gray-700 leading-relaxed">
             <p>기존 파트너님 데이터 기준 <strong>평균 월 매출이익 250만원(원가 대비 마진율 약 53.7%) 수준</strong>입니다. 세팅 첫 1~2개월은 매출이 적고 <strong>평균 4개월차부터 안정화</strong>됩니다. 팜플렛의 ROI <strong>165.8%(2년차 기준)·72.8%(1년차)</strong>는 매출이 아닌 투자 대비 수익률 기준이며, 성실하게 시스템을 따라오신 분 중 마이너스 사례는 없습니다.</p>
             <p class="mt-3 text-sm text-gray-500">다만 매출은 시장 상황·노력도·운영 협조 정도에 따라 달라질 수 있어 예상 수익으로 안내드리는 점 양해 부탁드립니다.</p>
           </div>
+        </template><div class="px-6 pb-6 text-gray-700 leading-relaxed"><p>기존 파트너님들의 실제 운영 데이터를 기준으로 평균 매출이익·마진율·안정화 시점을 <strong>상담 시 개별 안내</strong>해 드립니다. 매출은 시장 상황·운영 협조 정도에 따라 달라질 수 있어 예상 수익으로 안내드리는 점 양해 부탁드립니다.</p></div>
         </details>
 
         <details class="group bg-white rounded-2xl shadow-sm border border-gray-100">
@@ -124,7 +125,7 @@
             <span class="font-bold text-wfblack-dark text-lg"><span class="text-wfsilver mr-2">Q.</span>초기 투자 비용은 정확히 얼마가 드나요?</span>
             <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <div class="px-6 pb-6 text-gray-700 leading-relaxed">
+          <template data-hidden="faq-cost"><div class="px-6 pb-6 text-gray-700 leading-relaxed">
             <p><strong>가입비·보증금 비용은 전혀 없습니다.</strong> 50개 사업자 모델 기준 연간 고정비용은 다음과 같습니다.</p>
             <ul class="mt-3 space-y-1 list-disc list-inside text-gray-700">
               <li>비상주 사무실 임대차 비용 (50개 사업자): <strong>575만원</strong></li>
@@ -134,6 +135,7 @@
             </ul>
             <p class="mt-3">총 <strong class="text-wfblack">약 750만원</strong>으로 시작 가능하며, 연장 시 연 525만원 유지가 가능하시며, 투자 대비 평균 회수 기간은 약 7~8개월로 예상됩니다.</p>
           </div>
+        </template><div class="px-6 pb-6 text-gray-700 leading-relaxed"><p><strong>가입비·보증금 비용은 전혀 없습니다.</strong> 30개 / 50개 사업자 모델별 연간 고정비용(비상주 사무실·서버·세팅비)과 예상 회수 기간은 <strong>상담 시 개별 안내</strong>해 드립니다.</p></div>
         </details>
 
         <details class="group bg-white rounded-2xl shadow-sm border border-gray-100">
@@ -141,7 +143,7 @@
             <span class="font-bold text-wfblack-dark text-lg"><span class="text-wfsilver mr-2">Q.</span>수익 분배는 어떻게 이뤄지나요?</span>
             <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <div class="px-6 pb-6 text-gray-700 leading-relaxed">
+          <template data-hidden="faq-share"><div class="px-6 pb-6 text-gray-700 leading-relaxed">
             <p>매출 이익금을 기준으로 다음과 같이 분배됩니다 (계약서 제5조).</p>
             <ul class="mt-3 space-y-1 list-disc list-inside">
               <li>본사 (상품 등록·관리 수수료): <strong>40%</strong></li>
@@ -150,13 +152,20 @@
             </ul>
             <p class="mt-3">판매 정산금은 본사 계좌를 거치지 않고 <strong>먼저 파트너님 계좌로 직접 수령</strong> 후, 익월 본사가 제공한 매출보고서를 검토 후 수수료를 본사 계좌로 입금해주시면 됩니다. 매출은 매출 보고서로 언제든 확인 가능합니다.</p>
           </div>
+        </template><div class="px-6 pb-6 text-gray-700 leading-relaxed"><p>매출 이익금을 기준으로 본사·위탁운영사·파트너님이 정해진 비율로 분배하며, 판매 정산금은 본사 계좌를 거치지 않고 <strong>먼저 파트너님 계좌로 직접 수령</strong>합니다. 구체적인 분배 비율과 정산 절차는 <strong>상담 시 개별 안내</strong>해 드립니다.</p></div>
         </details>
       </div>
 
-      <div class="mt-6 bg-gradient-to-r from-wfblack/5 to-wfsilver/5 border-l-4 border-wfsilver rounded-xl p-5">
+<template data-hidden="faq-keyline">      <div class="mt-6 bg-gradient-to-r from-wfblack/5 to-wfsilver/5 border-l-4 border-wfsilver rounded-xl p-5">
         <div class="text-wfsilver-dark font-bold text-sm mb-1">★ 핵심 한 줄</div>
         <p class="text-wfblack-dark text-sm leading-relaxed">
           오프라인 창업(약 5억원)의 약 <strong>1.5% 수준인 750만원으로 시작 가능</strong>하며, 평균 회수 기간은 약 7~8개월로 예상됩니다. 초기 투자 부담 대비 회수율이 가장 큰 강점입니다.
+        </p>
+      </div></template>
+      <div class="mt-6 bg-gradient-to-r from-wfblack/5 to-wfsilver/5 border-l-4 border-wfsilver rounded-xl p-5">
+        <div class="text-wfsilver-dark font-bold text-sm mb-1">★ 핵심 한 줄</div>
+        <p class="text-wfblack-dark text-sm leading-relaxed">
+          오프라인 창업 대비 극히 낮은 초기 비용으로 시작할 수 있으며, 구체적인 금액과 회수 기간은 <strong>상담 시 개별 안내</strong>해 드립니다.
         </p>
       </div>
     </div>
@@ -365,7 +374,7 @@
           <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
           <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
           <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
-          <li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li>
+          <template data-hidden="simulator"><li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li></template>
           <li><a href="./faq.html" class="hover:text-wfblack">자주 묻는 질문</a></li>
       <li><a href="./careers.html" class="hover:text-wfblack">채용</a></li>
         </ul>

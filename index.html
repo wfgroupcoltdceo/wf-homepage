@@ -112,7 +112,7 @@
       <li><a href="./index.html" class="hover:text-wfblack transition-colors">홈</a></li>
       <li><a href="./business.html" class="hover:text-wfblack transition-colors">About WF Business</a></li>
       <li><a href="./strengths.html" class="hover:text-wfblack transition-colors">Why WF</a></li>
-      <li><a href="./simulator.html" class="hover:text-wfblack transition-colors">수익 시뮬레이터</a></li>
+      <template data-hidden="simulator"><li><a href="./simulator.html" class="hover:text-wfblack transition-colors">수익 시뮬레이터</a></li></template>
           <li><a href="./faq.html" class="hover:text-wfblack transition-colors">자주 묻는 질문</a></li>
       <li><a href="./careers.html" class="hover:text-wfblack">채용</a></li>
     </ul>
@@ -126,7 +126,7 @@
       <li><a href="./index.html" class="block py-2">홈</a></li>
       <li><a href="./business.html" class="block py-2">About WF Business</a></li>
       <li><a href="./strengths.html" class="block py-2">Why WF</a></li>
-      <li><a href="./simulator.html" class="block py-2">수익 시뮬레이터</a></li>
+      <template data-hidden="simulator"><li><a href="./simulator.html" class="block py-2">수익 시뮬레이터</a></li></template>
           <li><a href="./faq.html" class="block py-2">자주 묻는 질문</a></li>
       <li><a href="./careers.html" class="block py-2">채용</a></li>
       <li><a href="#contact" class="block py-2 text-wfblack font-semibold">상담 신청 →</a></li>
@@ -184,9 +184,13 @@
         <a href="./business.html" class="inline-flex items-center gap-2 glass hover:bg-white/15 text-white font-semibold px-7 py-3.5 rounded-full transition-all">
           사업 모델 보기
         </a>
-        <a href="./assets/files/WF-Catalog.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 glass hover:bg-white/15 text-white font-semibold px-7 py-3.5 rounded-full transition-all">
+        <template data-hidden="catalog"><a href="./assets/files/WF-Catalog.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 glass hover:bg-white/15 text-white font-semibold px-7 py-3.5 rounded-full transition-all">
           2026 카탈로그 보기
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </a></template>
+        <a href="#contact" class="inline-flex items-center gap-2 glass hover:bg-white/15 text-white font-semibold px-7 py-3.5 rounded-full transition-all">
+          무료 상담 신청
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
       </div>
       <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/10">
@@ -206,12 +210,12 @@
     </div>
     <div class="hidden lg:block">
       <div class="relative max-w-md mx-auto">
-        <a href="./assets/files/WF-Catalog.pdf" download class="block bg-white rounded-3xl p-3 shadow-[0_30px_80px_-15px_rgba(0,0,0,0.6)] rotate-1 hover:rotate-0 transition-transform duration-500 group/cat">
+        <a href="#contact" data-orig-href="./assets/files/WF-Catalog.pdf" data-orig-download="1" class="block bg-white rounded-3xl p-3 shadow-[0_30px_80px_-15px_rgba(0,0,0,0.6)] rotate-1 hover:rotate-0 transition-transform duration-500 group/cat">
           <img src="./assets/images/wf-cover.jpg" alt="WF GROUP 2026 카탈로그" class="no-zoom w-full rounded-2xl block" />
           <div class="absolute inset-3 rounded-2xl bg-wfblack/0 group-hover/cat:bg-wfblack/55 transition-all flex items-center justify-center opacity-0 group-hover/cat:opacity-100">
             <span class="inline-flex items-center gap-2 bg-wfcyan text-white font-bold px-5 py-3 rounded-full text-sm shadow-xl">
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              카탈로그 다운로드
+              카탈로그는 상담 신청 시 발송
             </span>
           </div>
         </a>
@@ -686,10 +690,10 @@
     <div class="space-y-3">
       <details class="group bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 shadow-sm transition-colors">
         <summary class="cursor-pointer p-6 list-none flex items-center justify-between">
-          <span class="font-bold text-wfblack-dark text-lg">평균 월 매출이익 250만원, 진짜인가요?</span>
+          <span class="font-bold text-wfblack-dark text-lg"><span data-orig="평균 월 매출이익 250만원, 진짜인가요?">평균 월 매출이익은 어느 정도인가요?</span></span>
           <svg class="w-5 h-5 text-wfblack transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </summary>
-        <div class="px-6 pb-6 text-gray-700 leading-relaxed text-sm">기존 파트너님 데이터 기준 평균 월 매출이익 250만원(원가 대비 마진율 약 53.7%) 수준입니다. 평균 4개월차부터 안정화됩니다.</div>
+        <div class="px-6 pb-6 text-gray-700 leading-relaxed text-sm"><template data-hidden="faq-profit">기존 파트너님 데이터 기준 평균 월 매출이익 250만원(원가 대비 마진율 약 53.7%) 수준입니다. 평균 4개월차부터 안정화됩니다.</template>기존 파트너님들의 실제 데이터를 기준으로 평균 매출이익과 마진율, 안정화 시점까지 <strong>상담 시 개별 안내</strong>해 드립니다.</div>
       </details>
       <details class="group bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 shadow-sm transition-colors">
         <summary class="cursor-pointer p-6 list-none flex items-center justify-between">
@@ -724,7 +728,7 @@
 
 
 <!-- ============ 자료실 ============ -->
-<section class="py-20 lg:py-28 bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker text-white">
+<template data-hidden="resources"><section class="py-20 lg:py-28 bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker text-white">
   <div class="max-w-5xl mx-auto px-6 lg:px-8">
     <div class="text-center mb-12 scroll-fade">
       <div class="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-wfcyan font-semibold text-sm px-4 py-1.5 rounded-full mb-4">RESOURCES</div>
@@ -763,6 +767,14 @@
       </div>
     </div>
   </div>
+</section></template>
+<section class="py-20 lg:py-28 bg-gradient-to-br from-wfblack via-wfblack-dark to-wfblack-darker text-white">
+  <div class="max-w-3xl mx-auto px-6 lg:px-8 text-center scroll-fade">
+    <div class="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-wfcyan font-semibold text-sm px-4 py-1.5 rounded-full mb-4">RESOURCES</div>
+    <h2 class="text-3xl lg:text-5xl font-extrabold tracking-tight mb-4">자료 안내</h2>
+    <p class="text-gray-300 text-lg mb-8">2026 카탈로그 · 표준 계약서 · FAQ 자료는<br class="hidden sm:block"/><strong class="text-white">상담 신청 시 개별 발송</strong>해 드립니다.</p>
+    <a href="#contact" class="inline-flex items-center gap-2 bg-wfcyan hover:bg-[#0994c4] text-white font-bold px-8 py-4 rounded-full transition-all">무료 상담 신청하기<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>
+  </div>
 </section>
 
 <!-- ============ 푸터 ============ -->
@@ -779,7 +791,7 @@
           <li><a href="./index.html" class="hover:text-wfblack">홈</a></li>
           <li><a href="./business.html" class="hover:text-wfblack">About WF Business</a></li>
           <li><a href="./strengths.html" class="hover:text-wfblack">Why WF</a></li>
-          <li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li>
+          <template data-hidden="simulator"><li><a href="./simulator.html" class="hover:text-wfblack">수익 시뮬레이터</a></li></template>
           <li><a href="./faq.html" class="hover:text-wfblack">자주 묻는 질문</a></li>
       <li><a href="./careers.html" class="hover:text-wfblack">채용</a></li>
         </ul>
